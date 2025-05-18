@@ -29,6 +29,8 @@ axiosInstance.interceptors.request.use(
             "Bearer " + localStorage.getItem("accessToken");
         // 요청 헤더에 accessToken을 Bearer 방식으로 자동 추가함
         // 로그인된 사용자만 접근 가능한 API에서 인증 처리 용도로 사용됨
+        config.headers["X-CSRF-Token"] =
+            axiosInstance.defaults.headers.common["X-CSRF-Token"];
 
         return config;
         // 수정된 config 객체를 다음으로 전달
@@ -67,6 +69,8 @@ export const setCsrfToken = async () => {
 
     axiosInstance.defaults.headers.common["X-CSRF-Token"] = token;
 };
+
+
 
 export default axiosInstance;
 // 설정이 완료된 axios 인스턴스를 export 해서 전체 프로젝트에서 import 해 사용 가능하게 함

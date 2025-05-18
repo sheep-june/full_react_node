@@ -460,13 +460,30 @@ router.delete("/wishlist", auth, async (req, res, next) => {
     }
 });
 
-router.get("/wishlist", auth, async (req, res, next) => {
+
+
+router.get("/myproducts", auth, async (req, res, next) => {
     try {
-        const user = await User.findById(req.user._id).populate("wishlist");
-        return res.status(200).json({ wishlist: user.wishlist });
+        const products = await Product.find({ writer: req.user._id }).sort({
+            createdAt: -1,
+        });
+        return res.status(200).json({ products });
     } catch (error) {
         next(error);
     }
 });
+
+// 찜한 상품 전체 조회
+router.get("/wishlist", auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).populate("wishlist");
+
+        res.json({ products: user.wishlist });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("서버 오류");
+    }
+});
+
 
 module.exports = router;

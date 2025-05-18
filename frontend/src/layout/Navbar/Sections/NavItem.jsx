@@ -64,6 +64,7 @@
 // };
 
 // export default NavItem;
+
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -111,7 +112,7 @@ const NavItem = ({ mobile }) => {
                 mobile ? "flex-col bg-gray-900" : ""
             } items-center justify-center`}
         >
-            {/* 장바구니는 항상 단독으로 */}
+            {/* 장바구니 */}
             <li className="relative">
                 <Link to="/user/cart">
                     <AiOutlineShoppingCart className="text-xl" />
@@ -121,16 +122,18 @@ const NavItem = ({ mobile }) => {
                 </Link>
             </li>
 
-            {/* 마이페이지 드롭다운 */}
+            {/* 마이페이지 전체 영역에 hover 적용 */}
             <li
                 className="relative"
                 onMouseEnter={() => setDropdownOpen(true)}
                 onMouseLeave={() => setDropdownOpen(false)}
             >
-                <button className="hover:underline">마이페이지</button>
+                <button className="px-4 py-2 text-white hover:underline">
+                    마이페이지
+                </button>
 
                 {dropdownOpen && (
-                    <ul className="absolute right-0 z-20 w-40 py-2 mt-2 bg-white border rounded shadow-lg text-black text-sm">
+                    <ul className="absolute top-full right-0 z-20 w-40 py-2 bg-white border rounded shadow-lg text-black text-sm">
                         <li className="px-4 py-2 hover:bg-gray-100">
                             <Link to="/history">주문 목록</Link>
                         </li>

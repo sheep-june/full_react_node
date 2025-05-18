@@ -55,13 +55,21 @@ const CartPage = () => {
         // 장바구니 상세 목록이 변경되면 합계 다시 계산
     }, [cartDetail]);
 
+    // const calculateTotal = (cartItems) => {
+    //     let total = 0;
+    //     cartItems.map((item) => (total += item.price * item.quantity));
+    //     // 각 상품의 가격 * 수량을 누적해서 합계 계산
+
+    //     setTotal(total);
+    //     // 상태 저장
+    // };
+
     const calculateTotal = (cartItems) => {
+        if (!Array.isArray(cartItems)) return; // 배열 아니면 조용히 종료
+
         let total = 0;
         cartItems.map((item) => (total += item.price * item.quantity));
-        // 각 상품의 가격 * 수량을 누적해서 합계 계산
-
         setTotal(total);
-        // 상태 저장
     };
 
     const handleRemoveCartItem = (productId) => {

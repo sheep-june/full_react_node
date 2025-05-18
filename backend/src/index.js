@@ -3,8 +3,8 @@
 // const app = express();
 
 // const cors = require("cors");
-// const helmet = require("helmet"); 
-// const cookieParser = require("cookie-parser"); 
+// const helmet = require("helmet");
+// const cookieParser = require("cookie-parser");
 // const port = 4000;
 
 // const mongoose = require("mongoose");
@@ -15,14 +15,13 @@
 
 // app.use(
 //   cors({
-//     origin: "http://localhost:5173", 
-//     credentials: true, 
+//     origin: "http://localhost:5173",
+//     credentials: true,
 //   })
 // );
 
-// app.use(cookieParser()); 
+// app.use(cookieParser());
 // app.use(express.json());
-
 
 // app.use(cors());
 // app.use(express.json());
@@ -50,9 +49,6 @@
 // app.use('/users',require('./routes/users'));
 // app.use('/products', require('./routes/products'));
 // app.use("/api/admin", require("./routes/admin"));
-
-
-
 
 // app.use((error, req, res, next) => {
 //     res.status(error.status || 500);
@@ -99,11 +95,9 @@
 //   },
 // });
 
-
 // app.use(cookieParser());        // 1. 쿠키 파싱
 // app.use(express.json());        // 2. JSON 파싱
 // app.use(csrfProtection);        // 3. CSRF 검사
-
 
 // mongoose
 //   .connect(process.env.MONGO_URI)
@@ -146,17 +140,12 @@
 // // // 정적 파일 제공
 // // app.use(express.static(path.join(__dirname, "../uploads")));
 
-
-
-
-
 // // 서버 실행
 // app.listen(port, () => {
 //   console.log(`${port}번에서 실행이 되었습니다.`);
 // });
 
 //절취선---------------------------------------------------------
-
 const express = require("express");
 const path = require("path");
 const app = express();
@@ -171,80 +160,66 @@ dotenv.config();
 
 const port = 4000;
 
-/**
- * ✅ 정적 파일 라우팅은 맨 위에서 설정해야 CSRF에 방해받지 않음
- * (React에서 이미지 깨지는 문제 해결)
- */
-app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+// ✅ 1. 정적 이미지 먼저 등록
+app.use(
+    "/uploads",
+    cors({
+        origin: "http://localhost:5173",
+        credentials: true,
+    }),
+    express.static(path.join(__dirname, "../uploads"))
+);
 
-/**
- * ✅ 보안 관련 미들웨어들
- */
-app.use(helmet());
-app.use(cors({
-  origin: "http://localhost:5173",
-  credentials: true
-}));
+// ✅ 2. helmet 설정 (CORP 끄기)
+app.use(
+    helmet({
+        crossOriginResourcePolicy: false,
+    })
+);
+
+// ✅ 3. 일반 보안 및 JSON 파싱
+app.use(
+    cors({
+        origin: "http://localhost:5173",
+        credentials: true,
+    })
+);
 app.use(cookieParser());
 app.use(express.json());
 
-/**
- * ✅ CSRF 보호 (쿠키 기반)
- */
 const csrfProtection = csrf({
-  cookie: {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: false
-  }
+    cookie: {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: false,
+    },
 });
 app.use(csrfProtection);
 
-/**
- * ✅ MongoDB 연결
- */
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("연결완료"))
-  .catch((err) => console.log(err));
+mongoose
+    .connect(process.env.MONGO_URI)
+    .then(() => console.log("MongoDB 연결 성공"))
+    .catch((err) => console.error(err));
 
-/**
- * ✅ CSRF 토큰 발급 엔드포인트
- */
 app.get("/csrf-token", (req, res) => {
-  res.json({ csrfToken: req.csrfToken() });
+    res.json({ csrfToken: req.csrfToken() });
 });
 
-/**
- * ✅ 라우터 등록
- */
 app.use("/users", require("./routes/users"));
 app.use("/products", require("./routes/products"));
 app.use("/api/admin", require("./routes/admin"));
 
-/**
- * ✅ 테스트용 루트 및 POST
- */
-app.get("/", (req, res, next) => {
-  setImmediate(() => {
-    next(new Error("it is an error"));
-  });
-});
-app.post("/", (req, res) => {
-  console.log(req.body);
-  res.json(req.body);
+// ✅ 8. 테스트용
+app.get("/", (req, res) => {
+    res.send("서버 실행 중");
 });
 
-/**
- * ✅ 에러 핸들러
- */
-app.use((error, req, res, next) => {
-  res.status(error.status || 500);
-  res.send(error.message || "서버 에러");
+// ✅ 9. 에러 핸들러
+app.use((err, req, res, next) => {
+    res.status(err.status || 500).send(err.message || "서버 에러");
 });
 
-/**
- * ✅ 서버 실행
- */
+// ✅ 10. 서버 실행
 app.listen(port, () => {
-  console.log(`${port}번에서 실행이 되었습니다.`);
+    console.log(`${port}번에서 실행 중`);
 });

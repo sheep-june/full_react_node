@@ -261,4 +261,25 @@ router.post("/", auth, async (req, res, next) => {
     }
 });
 
+// 🔥 내가 올린 상품 삭제 (작성자만 가능)
+router.delete("/:id", auth, async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+
+        if (!product) {
+            return res.status(404).send("상품을 찾을 수 없습니다.");
+        }
+
+        if (product.writer.toString() !== req.user._id.toString()) {
+            return res.status(403).send("삭제 권한이 없습니다.");
+        }
+
+        await Product.findByIdAndDelete(req.params.id);
+        res.send("상품이 삭제되었습니다.");
+    } catch (err) {
+        console.error("상품 삭제 오류:", err);
+        res.status(500).send("서버 오류로 삭제에 실패했습니다.");
+    }
+});
+
 module.exports = router;

@@ -48,6 +48,9 @@ import DetailProductPage from "./pages/DetailProductPage/index";
 import AdminLoginPage from "./pages/AdminLoginPage";
 import AdminProtectedRoutes from "./components/AdminProtectedRoutes";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
+import MyProductsPage from "./pages/MyProductPage";
+import { setCsrfToken } from "./utils/axios";
+import WishlistPage from "./pages/WishlistPage";
 
 //관리자 페이지
 
@@ -91,6 +94,10 @@ function App() {
     // Redux 액션을 보낼 수 있도록 설정합니다
 
     useEffect(() => {
+        setCsrfToken(); // ✅ 여기에 추가
+    }, []);
+
+    useEffect(() => {
         if (isAuth) {
             dispatch(authUser());
         }
@@ -127,6 +134,9 @@ function App() {
                     />
                     <Route path="/user/cart" element={<CartPage />} />
                     <Route path="/history" element={<HistoryPage />} />
+                    <Route path="/user/myproducts" element={<MyProductsPage />} />
+                    <Route path="/user/wishlist" element={<WishlistPage />} />
+
                 </Route>
                 
                 {/* 관리자 로그인 페이지 */}
