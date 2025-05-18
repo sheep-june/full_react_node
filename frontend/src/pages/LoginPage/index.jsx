@@ -1,14 +1,11 @@
-// React 컴포넌트를 만들기 위한 import
-import React from "react";
-
-// react-hook-form: 폼 상태와 유효성 검사를 간단하게 처리할 수 있는 라이브러리
+import React, { useEffect } from "react"; // ✅ useEffect 추가
 import { useForm } from "react-hook-form";
-
-// Redux의 dispatch를 사용하기 위한 훅
 import { useDispatch } from "react-redux";
-
-// 로그인 요청을 보내는 thunk 비동기 함수 import
 import { loginUser } from "../../store/thunkFunctions";
+import { setCsrfToken } from "../../utils/axios"; // ✅ CSRF 설정 함수 import
+
+
+
 
 // LoginPage 컴포넌트 정의
 const LoginPage = () => {
@@ -22,6 +19,10 @@ const LoginPage = () => {
 
     // Redux dispatch 함수 초기화 (액션 실행용)
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        setCsrfToken();
+    }, []);
 
     // 실제 로그인 버튼을 눌렀을 때 실행되는 콜백 함수
     const onSubmit = ({ email, password }) => {

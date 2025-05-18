@@ -51,6 +51,11 @@ const userSchema = mongoose.Schema({
         // 결제 완료 후 구매 이력이 기록되는 배열
         // 과거 결제 내역을 관리하기 위해 사용된다
     },
+    wishlist: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "Product",
+        default: [],
+    },
 
     image: String,
     // 프로필 사진의 이미지 URL 또는 파일 경로를 문자열로 저장

@@ -5,7 +5,6 @@ import qs from "qs";
 // 객체를 쿼리 스트링으로 변환해주는 유틸리티 라이브러리.
 // 배열 쿼리 등에서 URL을 깔끔하게 직렬화하기 위해 사용.
 
-
 // const axiosInstance = axios.create({
 //     baseURL: import.meta.env.PROD ? "" : "http://localhost:4000",
 //     // 개발 모드에서는 로컬 백엔드로, 배포 모드(PROD)에서는 상대경로로 요청하도록 설정.
@@ -15,12 +14,11 @@ import qs from "qs";
 //     // 예: { genre: ['action', 'drama'] } → genre[]=action&genre[]=drama
 // });
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.PROD ? "" : "http://localhost:4000",
-  withCredentials: true, // ✅ 쿠키 전송 허용 (CSRF 방어 필수)
-  paramsSerializer: (params) =>
-    qs.stringify(params, { arrayFormat: "brackets" }),
+    baseURL: import.meta.env.PROD ? "" : "http://localhost:4000",
+    withCredentials: true, 
+    paramsSerializer: (params) =>
+        qs.stringify(params, { arrayFormat: "brackets" }),
 });
-
 
 // 요청 시 Authorization 헤더 추가
 axiosInstance.interceptors.request.use(
@@ -61,12 +59,14 @@ axiosInstance.interceptors.response.use(
 );
 
 export const setCsrfToken = async () => {
-  const res = await axiosInstance.get("/csrf-token");
-  const token = res.data.csrfToken;
+    const res = await axiosInstance.get("/csrf-token", {
+        withCredentials: true,
+    });
 
-  axiosInstance.defaults.headers.common["X-CSRF-Token"] = token;
+    const token = res.data.csrfToken;
+
+    axiosInstance.defaults.headers.common["X-CSRF-Token"] = token;
 };
-
 
 export default axiosInstance;
 // 설정이 완료된 axios 인스턴스를 export 해서 전체 프로젝트에서 import 해 사용 가능하게 함

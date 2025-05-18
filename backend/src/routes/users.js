@@ -26,6 +26,16 @@ const async = require("async");
 
 const { body, validationResult } = require("express-validator");
 
+const rateLimit = require("express-rate-limit");
+// 15분 동안 최대 5회 시도 가능
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15분
+    max: 5, // 최대 5회 요청 허용
+    message: "Too many attempts. Please try again later.",
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
 router.get("/auth", auth, async (req, res) => {
     // /auth 경로에 대한 GET 요청을 처리한다.
     // auth 미들웨어를 거친 후 실행되므로, 로그인된 사용자만 접근할 수 있다.
@@ -78,29 +88,30 @@ router.get("/auth", auth, async (req, res) => {
 // });
 
 router.post(
-  "/register",
-  [
-    body("email").isEmail().withMessage("유효한 이메일을 입력하세요."),
-    body("password")
-      .isLength({ min: 6 })
-      .withMessage("비밀번호는 최소 6자 이상이어야 합니다."),
-    body("name").notEmpty().withMessage("이름을 입력하세요."),
-  ],
-  async (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      // 에러 메시지를 배열로 반환
-      return res.status(400).json({ errors: errors.array() });
-    }
+    "/register",
+    authLimiter,
+    [
+        body("email").isEmail().withMessage("유효한 이메일을 입력하세요."),
+        body("password")
+            .isLength({ min: 6 })
+            .withMessage("비밀번호는 최소 6자 이상이어야 합니다."),
+        body("name").notEmpty().withMessage("이름을 입력하세요."),
+    ],
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            // 에러 메시지를 배열로 반환
+            return res.status(400).json({ errors: errors.array() });
+        }
 
-    try {
-      const user = new User(req.body);
-      await user.save();
-      return res.sendStatus(200);
-    } catch (error) {
-      next(error);
+        try {
+            const user = new User(req.body);
+            await user.save();
+            return res.sendStatus(200);
+        } catch (error) {
+            next(error);
+        }
     }
-  }
 );
 
 // router.post("/login", async (req, res, next) => {
@@ -151,40 +162,39 @@ router.post(
 
 // 로그인 라우터 수정
 router.post(
-  "/login",
-  [
-    body("email").isEmail().withMessage("유효한 이메일을 입력하세요."),
-    body("password")
-      .notEmpty()
-      .withMessage("비밀번호를 입력하세요."),
-  ],
-  async (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+    "/login",
+    authLimiter,
+    [
+        body("email").isEmail().withMessage("유효한 이메일을 입력하세요."),
+        body("password").notEmpty().withMessage("비밀번호를 입력하세요."),
+    ],
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        try {
+            const user = await User.findOne({ email: req.body.email });
+            if (!user) {
+                return res.status(400).send("Auth failed, email not found");
+            }
+
+            const isMatch = await user.comparePassword(req.body.password);
+            if (!isMatch) {
+                return res.status(400).send("Wrong password");
+            }
+
+            const payload = { userId: user._id.toHexString() };
+            const accessToken = jwt.sign(payload, process.env.JWT_SECRET, {
+                expiresIn: "1h",
+            });
+
+            return res.json({ user, accessToken });
+        } catch (error) {
+            next(error);
+        }
     }
-
-    try {
-      const user = await User.findOne({ email: req.body.email });
-      if (!user) {
-        return res.status(400).send("Auth failed, email not found");
-      }
-
-      const isMatch = await user.comparePassword(req.body.password);
-      if (!isMatch) {
-        return res.status(400).send("Wrong password");
-      }
-
-      const payload = { userId: user._id.toHexString() };
-      const accessToken = jwt.sign(payload, process.env.JWT_SECRET, {
-        expiresIn: "1h",
-      });
-
-      return res.json({ user, accessToken });
-    } catch (error) {
-      next(error);
-    }
-  }
 );
 
 router.post("/logout", auth, async (req, res, next) => {
@@ -336,25 +346,14 @@ router.post("/payment", auth, async (req, res) => {
     req.body.cartDetail.forEach((item) => {
         history.push({
             dateOfPurchase: new Date().toISOString(),
-            // 현재 시간을 ISO 문자열 형식으로 저장한다 (예: 2024-05-14T12:34:56.789Z)
-
-            name: item.title,
-            // 상품 이름
-
+            name: item.title, // ✅ 상품명 저장
             id: item._id,
-            // 상품의 MongoDB 고유 ID
-
             price: item.price,
-            // 결제 당시의 가격 정보
-
             quantity: item.quantity,
-            // 해당 상품의 구매 수량
-
             paymentId: crypto.randomUUID(),
-            // 결제 건 고유 식별자. Node.js 내장 crypto 모듈로 UUID 생성
-            // 한 주문 내 여러 상품에 같은 paymentId가 부여됨
         });
     });
+
     // 장바구니 상품들을 순회하면서, 각 항목의 정보를 history 배열에 누적한다.
 
     // Payment Collection 안에 자세한 결제 정보들 넣어주기
@@ -424,6 +423,50 @@ router.post("/payment", auth, async (req, res) => {
     );
     // async.eachSeries를 사용해 모든 상품의 판매량을 순차적으로 업데이트함
     // 비동기 루프를 동기적으로 제어할 때 유용한 방식이다
+});
+
+router.post("/wishlist", auth, async (req, res, next) => {
+    try {
+        const user = await User.findById(req.user._id);
+        const productId = req.body.productId;
+
+        // 이미 찜한 상품이면 중복 방지
+        if (user.wishlist.includes(productId)) {
+            return res.status(400).json({ message: "이미 찜한 상품입니다." });
+        }
+
+        user.wishlist.push(productId);
+        await user.save();
+
+        return res.status(200).json({ wishlist: user.wishlist });
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.delete("/wishlist", auth, async (req, res, next) => {
+    try {
+        const user = await User.findById(req.user._id);
+        const productId = req.query.productId;
+
+        user.wishlist = user.wishlist.filter(
+            (id) => id.toString() !== productId
+        );
+        await user.save();
+
+        return res.status(200).json({ wishlist: user.wishlist });
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.get("/wishlist", auth, async (req, res, next) => {
+    try {
+        const user = await User.findById(req.user._id).populate("wishlist");
+        return res.status(200).json({ wishlist: user.wishlist });
+    } catch (error) {
+        next(error);
+    }
 });
 
 module.exports = router;
