@@ -1,133 +1,193 @@
 import React, { useEffect, useState } from "react";
-// React 기본, 그리고 사이드 이펙트 처리용 useEffect, 상태값 관리용 useState
-
+import axiosInstance, { setCsrfToken } from "../../utils/axios";
 import { useDispatch, useSelector } from "react-redux";
-// Redux의 dispatch와 전역 상태 값 접근용 useSelector
-
-import {
-    getCartItems,
-    payProducts,
-    removeCartItem,
-} from "../../store/thunkFunctions";
-// 장바구니 관련 API 처리 함수들 가져옴
-
-import CartTable from "./Sections/CartTable";
-// 장바구니 항목들을 테이블 형식으로 출력하는 하위 컴포넌트
+import { fetchUserCart } from "../../store/userSlice";
 
 const CartPage = () => {
-    const userData = useSelector((state) => state.user?.userData);
-    // Redux store에서 로그인된 사용자 정보 가져옴
-
-    const cartDetail = useSelector((state) => state.user?.cartDetail);
-    // 장바구니 안에 담긴 상품의 상세 정보 목록 가져옴
-
     const dispatch = useDispatch();
-    // thunk dispatch 함수
-
-    const [total, setTotal] = useState(0);
-    // 장바구니 총 금액을 저장하는 로컬 상태
-
-    useEffect(() => {
-        let cartItemIds = [];
-
-        if (userData?.cart && userData.cart.length > 0) {
-            // 유저의 장바구니에 항목이 있다면
-
-            userData.cart.forEach((item) => {
-                cartItemIds.push(item.id);
-                // 각 상품의 ID만 추출하여 배열에 저장
-            });
-
-            const body = {
-                cartItemIds,
-                userCart: userData.cart,
-                // ID + 수량 정보를 함께 전달 (수량 병합 용도)
-            };
-
-            dispatch(getCartItems(body));
-            // 상품 상세정보를 가져오기 위한 thunk 요청
-        }
-    }, [dispatch, userData]);
-    // userData가 바뀔 때마다 실행됨
+    const cartDetail = useSelector((state) => state.user.cartDetail);
+    const [cartItems, setCartItems] = useState([]); // ✅ 수량 변경 렌더링용
+    const [selected, setSelected] = useState([]);
 
     useEffect(() => {
-        calculateTotal(cartDetail);
-        // 장바구니 상세 목록이 변경되면 합계 다시 계산
+        dispatch(fetchUserCart());
+    }, [dispatch]);
+
+    useEffect(() => {
+        setCartItems(JSON.parse(JSON.stringify(cartDetail)));
     }, [cartDetail]);
 
-    // const calculateTotal = (cartItems) => {
-    //     let total = 0;
-    //     cartItems.map((item) => (total += item.price * item.quantity));
-    //     // 각 상품의 가격 * 수량을 누적해서 합계 계산
-
-    //     setTotal(total);
-    //     // 상태 저장
-    // };
-
-    const calculateTotal = (cartItems) => {
-        if (!Array.isArray(cartItems)) return; // 배열 아니면 조용히 종료
-
-        let total = 0;
-        cartItems.map((item) => (total += item.price * item.quantity));
-        setTotal(total);
+    const handleCheck = (id) => {
+        setSelected((prev) =>
+            prev.includes(id) ? prev.filter((pid) => pid !== id) : [...prev, id]
+        );
     };
 
-    const handleRemoveCartItem = (productId) => {
-        dispatch(removeCartItem(productId));
-        // 특정 상품 ID를 제거하는 thunk 실행
+    const handleQuantity = async (productId, type) => {
+        console.log("수량 변경 요청 전", productId, type);
+        await setCsrfToken();
+        try {
+            const res = await axiosInstance.put("/users/cart/quantity", {
+                productId,
+                type,
+            });
+            console.log("수량 변경 응답", res.data);
+            await dispatch(fetchUserCart());
+        } catch (err) {
+            console.error("수량 변경 실패:", err);
+        }
     };
 
-    const handlePaymentClick = () => {
-        dispatch(payProducts({ cartDetail }));
-        // 현재 장바구니 상품들을 결제하는 thunk 실행
+    const handlePaymentClick = async () => {
+        try {
+            await setCsrfToken();
+            const selectedItems = cartItems.filter((item) =>
+                selected.includes(item._id)
+            );
+
+            if (!selectedItems.length) {
+                alert("결제할 상품을 선택하세요.");
+                return;
+            }
+
+            await axiosInstance.post("/users/payment", {
+                cartDetail: selectedItems,
+            });
+            alert("결제가 완료되었습니다.");
+            dispatch(fetchUserCart());
+            setSelected([]);
+        } catch (err) {
+            console.error("결제 실패:", err);
+            alert("결제 중 오류 발생");
+        }
     };
+
+    const handleDeleteSelected = async () => {
+        try {
+            await setCsrfToken();
+            for (const productId of selected) {
+                await axiosInstance.delete("/users/cart", {
+                    params: { productId },
+                });
+            }
+            dispatch(fetchUserCart());
+            setSelected([]);
+        } catch (err) {
+            console.error("삭제 실패:", err);
+            alert("삭제 중 오류 발생");
+        }
+    };
+
+    const totalPrice = cartItems
+        ?.filter((item) => selected.includes(item._id))
+        ?.reduce((acc, cur) => acc + cur.price * cur.quantity, 0);
 
     return (
-        <section>
-            {/* 전체 장바구니 페이지 섹션을 감싸는 태그 */}
+        <section className="max-w-5xl mx-auto p-4">
+            <h2 className="text-2xl font-semibold text-center mb-6">
+                나의 장바구니
+            </h2>
 
-            <div className="text-center m-7">
-                {/* 페이지 상단 제목 영역. 가운데 정렬 + 마진 */}
-                <h2 className="text-2xl">나의 장바구니</h2>
-                {/* 제목 텍스트 */}
-            </div>
-
-            {cartDetail?.length > 0 ? (
-                // 장바구니에 상품이 하나라도 있으면
-
+            {cartItems?.length === 0 ? (
+                <p className="text-center text-gray-500">
+                    장바구니가 비었습니다.
+                </p>
+            ) : (
                 <>
-                    <CartTable
-                        products={cartDetail}
-                        onRemoveItem={handleRemoveCartItem}
-                    />
-                    {/* 장바구니 목록을 테이블 형식으로 출력하는 컴포넌트 호출 */}
+                    <table className="w-full text-center border">
+                        <thead>
+                            <tr className="bg-gray-100">
+                                <th></th>
+                                <th>사진</th>
+                                <th>개수</th>
+                                <th>가격</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {cartItems.map((product) => (
+                                <tr
+                                    key={`${product._id}-${product.quantity}`}
+                                    className="border-b"
+                                >
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            checked={selected.includes(
+                                                product._id
+                                            )}
+                                            onChange={() =>
+                                                handleCheck(product._id)
+                                            }
+                                        />
+                                    </td>
+                                    <td className="p-2">
+                                        <img
+                                            src={`http://localhost:4000/uploads/${product.images[0]}`}
+                                            alt={product.title}
+                                            className="w-20 h-20 object-cover inline-block"
+                                        />
+                                        <div>{product.title}</div>
+                                    </td>
+                                    <td>
+                                        <div className="flex items-center justify-center gap-2">
+                                            <button
+                                                className="px-2"
+                                                onClick={() =>
+                                                    handleQuantity(
+                                                        product._id,
+                                                        "dec"
+                                                    )
+                                                }
+                                            >
+                                                🔽
+                                            </button>
+                                            {product.quantity} 개
+                                            <button
+                                                className="px-2"
+                                                onClick={() =>
+                                                    handleQuantity(
+                                                        product._id,
+                                                        "inc"
+                                                    )
+                                                }
+                                            >
+                                                🔼
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {(
+                                            product.price * product.quantity
+                                        ).toLocaleString()}{" "}
+                                        원
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
 
-                    <div className="mt-10">
-                        {/* 결제 정보 영역 - 위에서 여백 줌 */}
-
-                        <p>
-                            <span className="font-bold">합계:</span>
-                            {/* '합계:' 텍스트 굵게 표시 */}
-                            {total} 원{/* 총 금액 출력 */}
-                        </p>
-
-                        <button
-                            className="px-4 py-2 mt-5 text-white bg-black rounded-md hover:bg-gray-500"
-                            // 패딩 + 배경색 + 흰 글씨 + 호버 효과
-
-                            onClick={handlePaymentClick}
-                            // 클릭 시 결제 처리 함수 실행
-                        >
-                            결제하기
-                            {/* 버튼 내부 텍스트 */}
-                        </button>
+                    <div className="flex justify-between mt-6">
+                        <div className="text-lg font-bold">
+                            합계: {totalPrice?.toLocaleString() || 0} 원
+                        </div>
+                        <div className="flex gap-2">
+                            <button
+                                onClick={handleDeleteSelected}
+                                disabled={selected.length === 0}
+                                className="bg-red-500 text-white px-4 py-2 rounded disabled:opacity-50"
+                            >
+                                삭제
+                            </button>
+                            <button
+                                onClick={handlePaymentClick}
+                                disabled={selected.length === 0}
+                                className="bg-black text-white px-4 py-2 rounded disabled:opacity-50"
+                            >
+                                결제하기
+                            </button>
+                        </div>
                     </div>
                 </>
-            ) : (
-                // 장바구니에 아무것도 없으면
-
-                <p>장바구니가 비었습니다.</p>
-                // 텍스트로 빈 장바구니 표시
             )}
         </section>
     );

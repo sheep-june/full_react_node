@@ -18,7 +18,6 @@ const adminSchema = new mongoose.Schema({
     },
 });
 
-// 비밀번호 해시
 adminSchema.pre("save", async function (next) {
     if (!this.isModified("password")) return next();
     try {
@@ -30,7 +29,6 @@ adminSchema.pre("save", async function (next) {
     }
 });
 
-// 비밀번호 비교 메서드
 adminSchema.methods.comparePassword = function (plainPassword) {
     return bcrypt.compare(plainPassword, this.password);
 };

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const Admin = require('./src/models/Admin'); // 상대 경로 주의
+const Admin = require('./src/models/Admin'); 
 
 dotenv.config();
 
@@ -9,11 +9,11 @@ mongoose
   .then(async () => {
     console.log("✅ DB 연결됨");
 
-    await Admin.deleteMany({}); // 기존 관리자 전부 삭제 (원하면 생략)
+    await Admin.deleteMany({}); 
 
     await Admin.create({
       email: 'admin@example.com',
-      password: 'admin123', // 암호화는 Admin 모델에서 pre-save hook으로 진행됨
+      password: 'admin123', 
     });
 
     console.log("✅ 관리자 계정 생성 완료!");

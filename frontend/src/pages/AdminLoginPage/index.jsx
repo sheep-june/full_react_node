@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import axiosInstance, { setCsrfToken } from "../../utils/axios";
 
 const AdminLoginPage = () => {
     const navigate = useNavigate();
@@ -23,10 +24,11 @@ const AdminLoginPage = () => {
         e.preventDefault();
 
         try {
-            const res = await axios.post("/api/admin/login", form);
+            await setCsrfToken();
+
+            const res = await axiosInstance.post("/api/admin/login", form); // ✅ axios → axiosInstance
 
             const { token } = res.data;
-
             localStorage.setItem("adminToken", token);
             navigate("/admin/dashboard");
         } catch (err) {
@@ -37,7 +39,9 @@ const AdminLoginPage = () => {
     return (
         <section className="flex flex-col justify-center mt-20 max-w-[400px] m-auto">
             <div className="p-6 bg-white rounded-md shadow-md">
-                <h1 className="text-3xl font-semibold text-center">관리자 로그인</h1>
+                <h1 className="text-3xl font-semibold text-center">
+                    관리자 로그인
+                </h1>
                 <form className="mt-6" onSubmit={handleSubmit}>
                     <div className="mb-2">
                         <label className="text-sm font-semibold text-gray-800">

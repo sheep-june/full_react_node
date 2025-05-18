@@ -1,4 +1,3 @@
-// pages/AdminDashboardPage/Sections/PostSection.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 

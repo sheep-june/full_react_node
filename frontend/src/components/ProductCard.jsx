@@ -1,4 +1,3 @@
-// 📁 src/components/ProductCard.jsx
 import React from "react";
 import { Link } from "react-router-dom";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
@@ -22,7 +21,7 @@ const ProductCard = ({ product, refreshWishlist }) => {
                 });
             }
 
-            refreshWishlist(); // 찜 상태 갱신
+            refreshWishlist();
         } catch (err) {
             console.error("찜 처리 오류:", err);
         }

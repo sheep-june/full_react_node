@@ -1,88 +1,159 @@
-// // React의 기본 컴포넌트 기능을 사용하기 위한 import
-// import React from "react";
-
-// // 페이지 이동을 위한 Link 컴포넌트 import (SPA에서 새로고침 없이 이동 가능)
+// import React, { useEffect, useState } from "react";
 // import { Link } from "react-router-dom";
-
-// // 상품 이미지 슬라이더 컴포넌트 import (여러 장의 이미지를 순차적으로 보여줌)
 // import ImageSlider from "../../../components/ImageSlider";
+// import { FaHeart, FaRegHeart } from "react-icons/fa";
+// import axiosInstance, { setCsrfToken } from "../../../utils/axios";
+// import { useSelector } from "react-redux";
 
-// // 상품 카드 컴포넌트 정의
-// const CardItem = ({ product }) => {
-//   // 부모 컴포넌트에서 전달받은 product 객체를 구조 분해하여 사용
+// const CardItem = ({ product, refreshWishlist }) => {
+//     const user = useSelector((state) => state.user);
+
+//     const [wished, setWished] = useState(
+//         () => user?.userData?.wishlist?.includes(product._id) || false
+//     );
+
+//     useEffect(() => {
+//         if (user?.userData?.wishlist?.includes && product?._id) {
+//             setWished(user.userData.wishlist.includes(product._id));
+//         }
+//     }, [user.userData?.wishlist, product._id]);
+
+//     // const handleToggleWish = async (e) => {
+//     //     e.preventDefault();
+
+//     //     try {
+//     //         if (wished) {
+//     //             await axiosInstance.delete("/users/wishlist", {
+//     //                 params: { productId: product._id },
+//     //             });
+//     //             setWished(false);
+//     //         } else {
+//     //             await axiosInstance.post("/users/wishlist", {
+//     //                 productId: product._id,
+//     //             });
+//     //             setWished(true);
+//     //         }
+
+//     //         if (refreshWishlist) refreshWishlist();
+//     //     } catch (err) {
+//     //         const msg = err.response?.data?.message || err.message;
+//     //         console.error("찜 처리 실패:", msg);
+//     //         if (msg === "이미 찜한 상품입니다.") {
+//     //             alert("이미 찜한 상품이에요.");
+//     //             setWished(true);
+//     //         }
+//     //     }
+//     // };
+
+//     const handleToggleWish = async (e) => {
+//         e.preventDefault();
+
+//         try {
+//             // 🟡 CSRF 토큰을 명시적으로 받아옵니다
+//             await setCsrfToken();
+
+//             if (wished) {
+//                 await axiosInstance.delete("/users/wishlist", {
+//                     params: { productId: product._id },
+//                 });
+//                 setWished(false);
+//             } else {
+//                 await axiosInstance.post("/users/wishlist", {
+//                     productId: product._id,
+//                 });
+//                 setWished(true);
+//             }
+
+//             if (refreshWishlist) refreshWishlist();
+//         } catch (err) {
+//             const msg = err.response?.data?.message || err.message;
+//             console.error("찜 처리 실패:", msg);
+//             if (msg === "이미 찜한 상품입니다.") {
+//                 alert("이미 찜한 상품이에요.");
+//                 setWished(true);
+//             }
+//         }
+//     };
 
 //     return (
-//         <div className="border-[1px] border-gray-300">
-//             {/* 카드 전체 컨테이너 */}
-//             {/* border-[1px]: 테두리 두께를 1px로 설정 */}
-//             {/* border-gray-300: 테두리 색상을 연한 회색 (#D1D5DB)으로 설정 */}
-
+//         <div className="relative border-[1px] border-gray-300">
 //             <ImageSlider images={product.images} />
-//             {/* 상품 이미지 배열을 props로 전달 */}
-//             {/* 여러 장의 이미지를 슬라이드 형태로 출력 */}
+
+//             <button
+//                 onClick={handleToggleWish}
+//                 className="absolute top-2 right-2 text-red-500 text-xl z-10"
+//             >
+//                 {wished ? <FaHeart /> : <FaRegHeart />}
+//             </button>
 
 //             <Link to={`/product/${product._id}`}>
-//                 {/* 상품 상세 페이지로 이동할 수 있는 링크 */}
-//                 {/* to 속성: 이동할 경로를 지정 (상품 ID를 포함한 동적 라우팅) */}
-
 //                 <p className="p-1">{product.title}</p>
-//                 {/* 상품 제목 출력 */}
-//                 {/* p-1: 내부 여백(padding) 0.25rem */}
-
 //                 <p className="p-1">{product.continents}</p>
-//                 {/* 상품의 대륙 정보 출력 (예: 1이면 Asia 등으로 매핑되어야 함) */}
-
 //                 <p className="p-1 text-xs text-gray-500">{product.price}원</p>
-//                 {/* 상품 가격 출력 */}
-//                 {/* p-1: 패딩 0.25rem */}
-//                 {/* text-xs: 폰트 크기 매우 작게 (0.75rem) */}
-//                 {/* text-gray-500: 글자색 회색 (#6B7280) */}
 //             </Link>
 //         </div>
 //     );
 // };
 
 // export default CardItem;
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+
+
+
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import ImageSlider from "../../../components/ImageSlider";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import axiosInstance from "../../../utils/axios";
+import axiosInstance, { setCsrfToken } from "../../../utils/axios";
 import { useSelector } from "react-redux";
 
 const CardItem = ({ product, refreshWishlist }) => {
     const user = useSelector((state) => state.user);
+    const navigate = useNavigate();
 
-    // 로컬 상태에서 찜 여부 추적 (Redux와 연동 X)
-    const [wished, setWished] = useState(
-        user.userData?.wishlist?.includes(product._id)
-    );
+    const [wished, setWished] = useState(false);
+    const [ready, setReady] = useState(false); // ✅ 찜 상태 반영 완료 여부
+
+    useEffect(() => {
+        if (user.isAuth && Array.isArray(user.userData?.wishlist)) {
+            setWished(user.userData.wishlist.includes(product._id));
+        }
+        setReady(true); // ✅ 무조건 true로 바꿔 렌더링 가능하게
+    }, [user.userData?.wishlist, user.isAuth, product._id]);
 
     const handleToggleWish = async (e) => {
         e.preventDefault();
 
+        // ✅ 아직 준비 안 됐으면 무시
+        if (!ready) return;
+
+        // ✅ 비로그인 → 로그인 페이지로 이동
+        if (!user.isAuth) {
+            return navigate("/login");
+        }
+
         try {
+            await setCsrfToken();
+
             if (wished) {
                 await axiosInstance.delete("/users/wishlist", {
                     params: { productId: product._id },
                 });
-                setWished(false); // 즉시 반영
+                setWished(false);
             } else {
                 await axiosInstance.post("/users/wishlist", {
                     productId: product._id,
                 });
-                setWished(true); // 즉시 반영
+                setWished(true);
             }
 
             if (refreshWishlist) refreshWishlist();
         } catch (err) {
             const msg = err.response?.data?.message || err.message;
             console.error("찜 처리 실패:", msg);
-            // 중복 요청 등은 alert 처리해도 좋음
             if (msg === "이미 찜한 상품입니다.") {
-                alert("이미 찜한 상품이에요.");
                 setWished(true);
             }
+            alert(msg);
         }
     };
 
@@ -90,13 +161,16 @@ const CardItem = ({ product, refreshWishlist }) => {
         <div className="relative border-[1px] border-gray-300">
             <ImageSlider images={product.images} />
 
-            {/* 하트 버튼 */}
-            <button
-                onClick={handleToggleWish}
-                className="absolute top-2 right-2 text-red-500 text-xl z-10"
-            >
-                {wished ? <FaHeart /> : <FaRegHeart />}
-            </button>
+            {/* ✅ 준비 완료 후에만 하트 렌더링 */}
+            {ready && (
+                <button
+                    onClick={handleToggleWish}
+                    disabled={!ready} // ✅ 클릭도 방지
+                    className="absolute top-2 right-2 text-red-500 text-xl z-10"
+                >
+                    {wished ? <FaHeart /> : <FaRegHeart />}
+                </button>
+            )}
 
             <Link to={`/product/${product._id}`}>
                 <p className="p-1">{product.title}</p>
