@@ -7,12 +7,11 @@ const ImageSlider = ({ images }) => {
             {images.map((image) => (
                 <div key={image}>
                     <img
-                        src={`${
-                            import.meta.env.VITE_SERVER_URL
-                        }/uploads/${image}`}
-                        alt={image}
-                        className="w-full max-h-[150px]"
-                    />
+  src={`${import.meta.env.VITE_API_URL}/uploads/${image}`}
+  alt={image}
+  className="w-full max-h-[150px]"
+/>
+
                 </div>
             ))}
         </Carousel>

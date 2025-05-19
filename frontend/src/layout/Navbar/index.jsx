@@ -7,32 +7,35 @@ const Navbar = () => {
 
     const handleMenu = () => {
         setMenu(!menu);
-    }
+    };
+
     return (
-        <nav className='relative z-10 text-white bg-gray-900 '>
+        <nav className='relative z-10 bg-white text-[#00C4C4]'>
             <div className='w-full'>
-        <div className='flex items-center justify-between mx-5 sm:mx-10 lg:mx-20'>
+                <div className='flex items-center justify-between mx-5 sm:mx-10 lg:mx-20'>
 
-          <div className='flex items-center text-2xl h-14'>
-            <Link to="/" >買い物テスト</Link>
-          </div>
+                    <div className='flex items-center text-2xl h-14 font-bold'>
+                        <Link to="/">買い物テスト</Link>
+                    </div>
 
-          <div className='text-2xl sm:hidden'>
-            <button onClick={handleMenu}>{menu ? "-" : "+"}</button>
-          </div>
+                    <div className='text-2xl sm:hidden'>
+                        <button onClick={handleMenu}>
+                            {menu ? "-" : "+"}
+                        </button>
+                    </div>
 
-          <div className='hidden sm:block'>
-            <NavItem />
-          </div>
+                    <div className='hidden sm:block'>
+                        <NavItem />
+                    </div>
 
-        </div>
+                </div>
 
-        <div className='block sm:hidden'>
-          {menu && <NavItem mobile />}
-        </div>
-      </div>
+                <div className='block sm:hidden'>
+                    {menu && <NavItem mobile />}
+                </div>
+            </div>
         </nav>
-    )
+    );
 };
 
 export default Navbar;
