@@ -63,6 +63,7 @@ router.get("/", async (req, res, next) => {
     const limit = parsed.limit ? Number(parsed.limit) : 20;
     const skip = parsed.skip ? Number(parsed.skip) : 0;
     const term = parsed.searchTerm;
+
     let findArgs = {};
     for (let key in parsed.filters) {
         if (parsed.filters[key].length > 0) {
@@ -90,6 +91,7 @@ router.get("/", async (req, res, next) => {
 
         const productsTotal = await Product.countDocuments(findArgs);
         const hasMore = skip + limit < productsTotal ? true : false;
+
         return res.status(200).json({
             products,
             hasMore,
@@ -98,7 +100,6 @@ router.get("/", async (req, res, next) => {
         next(error);
     }
 });
-
 router.post("/", auth, async (req, res, next) => {
     try {
         const product = new Product(req.body);

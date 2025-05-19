@@ -39,10 +39,6 @@ const ProductInfo = ({ product }) => {
                     </span>{" "}
                     {product.sold} 개
                 </li>
-                <li>
-                    <span className="font-semibold text-gray-900">설명:</span>{" "}
-                    {product.description}
-                </li>
             </ul>
 
             <div className="mt-3 flex space-x-2">

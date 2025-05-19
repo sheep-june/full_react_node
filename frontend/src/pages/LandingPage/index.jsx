@@ -4,7 +4,7 @@ import RadioBox from "./Sections/RadioBox";
 import SearchInput from "./Sections/SearchInput";
 import CardItem from "./Sections/CardItem";
 import axiosInstance, { setCsrfToken } from "../../utils/axios";
-import { continents, prices } from "../../utils/filterData";
+import { categories, prices } from "../../utils/filterData";
 import { useSelector } from "react-redux";
 
 const LandingPage = () => {
@@ -16,7 +16,7 @@ const LandingPage = () => {
     const [skip, setSkip] = useState(0);
     const [hasMore, setHasMore] = useState(false);
     const [filters, setFilters] = useState({
-        continents: [],
+        categories: [],
         price: [],
     });
 
@@ -25,34 +25,6 @@ const LandingPage = () => {
         fetchProducts({ skip, limit });
     }, []);
 
-    // const fetchProducts = async ({
-    //     skip,
-    //     limit,
-    //     loadMore = false,
-    //     filters = {},
-    //     searchTerm = "",
-    // }) => {
-    //     const params = {
-    //         skip,
-    //         limit,
-    //         filters,
-    //         searchTerm,
-    //     };
-
-    //     try {
-    //         const response = await axiosInstance.get("/products", { params });
-
-    //         if (loadMore) {
-    //             setProducts([...products, ...response.data.products]);
-    //         } else {
-    //             setProducts(response.data.products);
-    //         }
-
-    //         setHasMore(response.data.hasMore);
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // };
     const fetchProducts = async ({
         skip,
         limit,
@@ -75,7 +47,6 @@ const LandingPage = () => {
             console.error(error);
         }
     };
-    
 
     const handleLoadMore = () => {
         const body = {
@@ -149,11 +120,9 @@ const LandingPage = () => {
             <div className="flex gap-3">
                 <div className="w-1/2">
                     <CheckBox
-                        continents={continents}
-                        checkedContinents={filters.continents}
-                        onFilters={(filters) =>
-                            handleFilters(filters, "continents")
-                        }
+                        items={categories}
+                        checkedItems={filters.categories}
+                        onFilters={(filters) => handleFilters(filters, "categories")}
                     />
                 </div>
 

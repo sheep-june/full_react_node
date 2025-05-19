@@ -6,6 +6,7 @@ import ImageSlider from "../../../components/ImageSlider";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import axiosInstance, { setCsrfToken } from "../../../utils/axios";
 import { useSelector } from "react-redux";
+const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 const CardItem = ({ product, refreshWishlist }) => {
     const user = useSelector((state) => state.user);
@@ -13,6 +14,10 @@ const CardItem = ({ product, refreshWishlist }) => {
 
     const [wished, setWished] = useState(false);
     const [ready, setReady] = useState(false); 
+
+    const imageUrls = product.images?.map(
+    (imageName) => `${serverUrl}/uploads/${imageName}`
+  ) || [];
 
     useEffect(() => {
         if (user.isAuth && Array.isArray(user.userData?.wishlist)) {
@@ -60,9 +65,9 @@ const CardItem = ({ product, refreshWishlist }) => {
 
     return (
         <div className="relative border-[1px] border-gray-300">
-            <ImageSlider images={product.images} />
+            {/* <ImageSlider images={product.images} /> */}
+<ImageSlider images={imageUrls} />
 
-            {/* ✅ 준비 완료 후에만 하트 렌더링 */}
             {ready && (
                 <button
                     onClick={handleToggleWish}

@@ -1,12 +1,12 @@
 import React from "react";
 
-const CheckBox = ({ continents, checkedContinents, onFilters }) => {
-    const handleToggle = (continentId) => {
-        const currentIndex = checkedContinents.indexOf(continentId);
-        const newChecked = [...checkedContinents];
+const CheckBox = ({ items, checkedItems, onFilters }) => {
+    const handleToggle = (itemId) => {
+        const currentIndex = checkedItems.indexOf(itemId);
+        const newChecked = [...checkedItems];
 
         if (currentIndex === -1) {
-            newChecked.push(continentId);
+            newChecked.push(itemId);
         } else {
             newChecked.splice(currentIndex, 1);
         }
@@ -16,17 +16,14 @@ const CheckBox = ({ continents, checkedContinents, onFilters }) => {
 
     return (
         <div className="p-2 mb-3 bg-gray-100 rounded-md">
-            {continents?.map((continent) => (
-                <div key={continent._id}>
+            {items?.map((item) => (
+                <div key={item._id}>
                     <input
                         type="checkbox"
-                        onChange={() => handleToggle(continent._id)}
-                        checked={
-                            checkedContinents.indexOf(continent._id) !== -1
-                        }
+                        onChange={() => handleToggle(item._id)}
+                        checked={checkedItems.includes(item._id)}
                     />
-
-                    <label>{continent.name}</label>
+                    <label className="ml-2">{item.name}</label>
                 </div>
             ))}
         </div>

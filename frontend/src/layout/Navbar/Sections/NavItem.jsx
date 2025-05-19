@@ -30,7 +30,7 @@ const NavItem = ({ mobile }) => {
                 } items-center justify-center`}
             >
                 <li>
-                    <Link to="/login">로그인</Link>
+                    <Link to="/auth">로그인</Link>
                 </li>
                 <li>
                     <Link to="/register">회원가입</Link>
@@ -58,7 +58,7 @@ const NavItem = ({ mobile }) => {
                 onMouseEnter={() => setDropdownOpen(true)}
                 onMouseLeave={() => setDropdownOpen(false)}
             >
-                <button className="px-4 py-2 text-white hover:underline">
+                <button className="px-4 py-2 text-[#00C4C4] hover:underline">
                     마이페이지
                 </button>
 
