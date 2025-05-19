@@ -156,6 +156,7 @@ import MyProductsPage from "./pages/MyProductPage";
 import { setCsrfToken } from "./utils/axios";
 import WishlistPage from "./pages/WishlistPage";
 import AuthPage from "./pages/AuthPage/Index"; // <- 풀스크린 적용할 페이지
+import EditProductPage from "./pages/EditProductPage";
 
 function Layout() {
   const location = useLocation();
@@ -217,6 +218,7 @@ function App() {
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/user/myproducts" element={<MyProductsPage />} />
           <Route path="/user/wishlist" element={<WishlistPage />} />
+          <Route path="/product/edit/:productId" element={<EditProductPage />} />
         </Route>
 
         <Route path="/admin/login" element={<AdminLoginPage />} />
