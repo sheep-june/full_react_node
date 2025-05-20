@@ -6,6 +6,7 @@ import CardItem from "./Sections/CardItem";
 import axiosInstance, { setCsrfToken } from "../../utils/axios";
 import { categories, prices } from "../../utils/filterData";
 import { useSelector } from "react-redux";
+import AdSlider from "../../components/AdSlider";
 
 const LandingPage = () => {
     const user = useSelector((state) => state.user);
@@ -116,6 +117,8 @@ const LandingPage = () => {
             <div className="text-center m-7">
                 <h2 className="text-2xl">買い物テスト</h2>
             </div>
+
+            <AdSlider />
 
             <div className="flex gap-3">
                 <div className="w-1/2">

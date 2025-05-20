@@ -1,4 +1,3 @@
-// ✅ utils/axios.js (전체 교체)
 import axios from "axios";
 import qs from "qs";
 
@@ -9,9 +8,15 @@ const axiosInstance = axios.create({
         qs.stringify(params, { arrayFormat: "brackets" }),
 });
 
+// ✅ 요청 인터셉터
 axiosInstance.interceptors.request.use(
     function (config) {
-        const token = localStorage.getItem("accessToken");
+        // 방어 코드: 헤더가 없으면 생성
+        if (!config.headers) {
+            config.headers = {};
+        }
+
+        const token = localStorage.getItem("accessToken") || localStorage.getItem("adminToken");
         const csrf = localStorage.getItem("csrfToken");
 
         if (token) {
@@ -29,13 +34,15 @@ axiosInstance.interceptors.request.use(
     }
 );
 
+// ✅ CSRF 토큰 수동 설정 함수
 export const setCsrfToken = async () => {
-    const res = await axiosInstance.get("/csrf-token", {
-        withCredentials: true,
-    });
-
-    const token = res.data.csrfToken;
-    localStorage.setItem("csrfToken", token);
+    try {
+        const res = await axiosInstance.get("/csrf-token");
+        const token = res.data.csrfToken;
+        localStorage.setItem("csrfToken", token);
+    } catch (err) {
+        console.error("❌ CSRF 토큰 요청 실패:", err);
+    }
 };
 
 export default axiosInstance;
