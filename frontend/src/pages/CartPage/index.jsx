@@ -6,7 +6,7 @@ import { fetchUserCart } from "../../store/userSlice";
 const CartPage = () => {
     const dispatch = useDispatch();
     const cartDetail = useSelector((state) => state.user.cartDetail);
-    const [cartItems, setCartItems] = useState([]); // ✅ 수량 변경 렌더링용
+    const [cartItems, setCartItems] = useState([]); 
     const [selected, setSelected] = useState([]);
 
     useEffect(() => {

@@ -32,6 +32,8 @@ app.use(
 );
 
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+app.use("/reviews", require("./routes/reviews"));
+
 
 const csrfProtection = csrf({
     cookie: {
@@ -67,3 +69,4 @@ app.use((err, req, res, next) => {
 app.listen(port, () => {
     console.log(`${port}번에서 실행 중`);
 });
+
