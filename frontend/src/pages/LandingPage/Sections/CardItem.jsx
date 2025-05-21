@@ -12,7 +12,7 @@ const CardItem = ({ product, refreshWishlist }) => {
     const navigate = useNavigate();
 
     const [wished, setWished] = useState(false);
-    const [ready, setReady] = useState(false); 
+    const [ready, setReady] = useState(false);
 
     const imageUrls =
         product.images?.map(
@@ -62,8 +62,14 @@ const CardItem = ({ product, refreshWishlist }) => {
     };
 
     return (
-        <div className="relative border-[1px] border-gray-300 rounded-md overflow-hidden">
-            <ImageSlider images={imageUrls} />
+        <div className="relative border-[1px] border-gray-300 rounded-md overflow-hidden w-full max-w-[230px] mx-auto">
+            {/* ✅ 이미지 크기 고정 */}
+            <div className="w-full h-[180px]">
+                <ImageSlider
+                    images={imageUrls}
+                    className="w-full h-full object-cover"
+                />
+            </div>
 
             {ready && (
                 <button
@@ -77,14 +83,18 @@ const CardItem = ({ product, refreshWishlist }) => {
 
             <Link to={`/product/${product._id}`}>
                 <div className="p-2 space-y-1">
-                    <p className="font-semibold">{product.title}</p>
-
+                    <p className="font-semibold truncate">{product.title}</p>
                     <div className="flex items-center gap-1 text-yellow-500 text-sm">
                         <FaStar />
-                        <span>{product.averageRating ?? "0.0"}</span>
+                        <span>
+                            {typeof product.averageRating === "number"
+                                ? product.averageRating.toFixed(1)
+                                : "0.0"}
+                        </span>
                     </div>
-
-                    <p className="text-sm text-gray-700">{product.price}원</p>
+                    <p className="text-sm text-gray-700">
+                        {product.price.toLocaleString()}원
+                    </p>
                 </div>
             </Link>
         </div>
@@ -92,4 +102,3 @@ const CardItem = ({ product, refreshWishlist }) => {
 };
 
 export default CardItem;
-

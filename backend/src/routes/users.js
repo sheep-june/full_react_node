@@ -325,5 +325,17 @@ router.delete("/wishlist/batch", auth, async (req, res) => {
         res.status(500).send("서버 오류");
     }
 });
+router.get("/myproducts", auth, async (req, res) => {
+    try {
+        const products = await Product.find({ writer: req.user._id }).sort({
+            createdAt: -1,
+        });
+        return res.status(200).json({ products });
+    } catch (error) {
+        console.error("내가 올린 상품 불러오기 실패:", error);
+        return res.status(500).send("서버 오류");
+    }
+});
+
 
 module.exports = router;

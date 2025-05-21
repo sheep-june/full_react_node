@@ -1,3 +1,173 @@
+// import React, { useEffect, useState } from "react";
+// import CheckBox from "./Sections/CheckBox";
+// import RadioBox from "./Sections/RadioBox";
+// import SearchInput from "./Sections/SearchInput";
+// import CardItem from "./Sections/CardItem";
+// import axiosInstance, { setCsrfToken } from "../../utils/axios";
+// import { categories, prices } from "../../utils/filterData";
+// import { useSelector } from "react-redux";
+// import AdSlider from "../../components/AdSlider/AdSlider";
+
+// const LandingPage = () => {
+//     const user = useSelector((state) => state.user);
+
+//     const limit = 4;
+//     const [searchTerm, setSearchTerm] = useState("");
+//     const [products, setProducts] = useState([]);
+//     const [skip, setSkip] = useState(0);
+//     const [hasMore, setHasMore] = useState(false);
+//     const [filters, setFilters] = useState({
+//         categories: [],
+//         price: [],
+//     });
+
+//     useEffect(() => {
+//         setCsrfToken();
+//         fetchProducts({ skip, limit });
+//     }, []);
+
+//     const fetchProducts = async ({
+//         skip,
+//         limit,
+//         loadMore = false,
+//         filters = {},
+//         searchTerm = "",
+//     }) => {
+//         try {
+//             const params = { skip, limit, filters, searchTerm };
+//             const response = await axiosInstance.get("/products", { params });
+
+//             if (loadMore) {
+//                 setProducts((prev) => [...prev, ...response.data.products]);
+//             } else {
+//                 setProducts(response.data.products);
+//             }
+
+//             setHasMore(response.data.hasMore);
+//         } catch (error) {
+//             console.error(error);
+//         }
+//     };
+
+//     const handleLoadMore = () => {
+//         const body = {
+//             skip: skip + limit,
+//             limit,
+//             loadMore: true,
+//             filters,
+//             searchTerm,
+//         };
+
+//         fetchProducts(body);
+//         setSkip(skip + limit);
+//     };
+
+//     const handleFilters = (newFilteredData, category) => {
+//         const newFilters = { ...filters };
+//         newFilters[category] = newFilteredData;
+
+//         if (category === "price") {
+//             const priceValues = handlePrice(newFilteredData);
+//             newFilters[category] = priceValues;
+//         }
+
+//         showFilteredResults(newFilters);
+//         setFilters(newFilters);
+//     };
+
+//     const handlePrice = (value) => {
+//         let array = [];
+
+//         for (let key in prices) {
+//             if (prices[key]._id === parseInt(value, 10)) {
+//                 array = prices[key].array;
+//             }
+//         }
+
+//         return array;
+//     };
+
+//     const showFilteredResults = (filters) => {
+//         const body = {
+//             skip: 0,
+//             limit,
+//             filters,
+//             searchTerm,
+//         };
+
+//         fetchProducts(body);
+//         setSkip(0);
+//     };
+
+//     const handleSearchTerm = (event) => {
+//         const body = {
+//             skip: 0,
+//             limit,
+//             filters,
+//             searchTerm: event.target.value,
+//         };
+
+//         setSkip(0);
+//         setSearchTerm(event.target.value);
+//         fetchProducts(body);
+//     };
+
+//     return (
+//         <section>
+//             <div className="text-center m-7">
+//                 <h2 className="text-2xl">買い物テスト</h2>
+//             </div>
+
+//             <AdSlider />
+
+//             <div className="flex gap-3">
+//                 <div className="w-1/2">
+//                     <CheckBox
+//                         items={categories}
+//                         checkedItems={filters.categories}
+//                         onFilters={(filters) => handleFilters(filters, "categories")}
+//                     />
+//                 </div>
+
+//                 <div className="w-1/2">
+//                     <RadioBox
+//                         prices={prices}
+//                         checkedPrice={filters.price}
+//                         onFilters={(filters) => handleFilters(filters, "price")}
+//                     />
+//                 </div>
+//             </div>
+
+//             <div className="flex justify-end mb-3">
+//                 <SearchInput
+//                     searchTerm={searchTerm}
+//                     onSearch={handleSearchTerm}
+//                 />
+//             </div>
+
+//             <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+//                 {products.map((product) => (
+//                     <CardItem product={product} key={product._id} />
+//                 ))}
+//             </div>
+
+//             {hasMore && (
+//                 <div className="flex justify-center mt-5">
+//                     <button
+//                         onClick={handleLoadMore}
+//                         className="px-4 py-2 mt-5 text-white bg-black rounded-md hover:bg-gray-500"
+//                     >
+//                         더 보기
+//                     </button>
+//                 </div>
+//             )}
+//         </section>
+//     );
+// };
+
+// export default LandingPage;
+
+
 import React, { useEffect, useState } from "react";
 import CheckBox from "./Sections/CheckBox";
 import RadioBox from "./Sections/RadioBox";
@@ -6,163 +176,194 @@ import CardItem from "./Sections/CardItem";
 import axiosInstance, { setCsrfToken } from "../../utils/axios";
 import { categories, prices } from "../../utils/filterData";
 import { useSelector } from "react-redux";
-import AdSlider from "../../components/AdSlider";
+import AdSlider from "../../components/AdSlider/AdSlider";
+import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
-    const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
+  const navigate = useNavigate();
 
-    const limit = 4;
-    const [searchTerm, setSearchTerm] = useState("");
-    const [products, setProducts] = useState([]);
-    const [skip, setSkip] = useState(0);
-    const [hasMore, setHasMore] = useState(false);
-    const [filters, setFilters] = useState({
-        categories: [],
-        price: [],
-    });
+  const limit = 4;
+  const [searchTerm, setSearchTerm] = useState("");
+  const [products, setProducts] = useState([]);
+  const [skip, setSkip] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
+  const [filters, setFilters] = useState({
+    categories: [],
+    price: [],
+  });
 
-    useEffect(() => {
-        setCsrfToken();
-        fetchProducts({ skip, limit });
-    }, []);
+  const [quickSearch, setQuickSearch] = useState("");
 
-    const fetchProducts = async ({
-        skip,
-        limit,
-        loadMore = false,
-        filters = {},
-        searchTerm = "",
-    }) => {
-        try {
-            const params = { skip, limit, filters, searchTerm };
-            const response = await axiosInstance.get("/products", { params });
+  useEffect(() => {
+    setCsrfToken();
+    fetchProducts({ skip, limit });
+  }, []);
 
-            if (loadMore) {
-                setProducts((prev) => [...prev, ...response.data.products]);
-            } else {
-                setProducts(response.data.products);
-            }
+  const fetchProducts = async ({
+    skip,
+    limit,
+    loadMore = false,
+    filters = {},
+    searchTerm = "",
+  }) => {
+    try {
+      const params = { skip, limit, filters, searchTerm };
+      const response = await axiosInstance.get("/products", { params });
 
-            setHasMore(response.data.hasMore);
-        } catch (error) {
-            console.error(error);
-        }
+      if (loadMore) {
+        setProducts((prev) => [...prev, ...response.data.products]);
+      } else {
+        setProducts(response.data.products);
+      }
+
+      setHasMore(response.data.hasMore);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleLoadMore = () => {
+    const body = {
+      skip: skip + limit,
+      limit,
+      loadMore: true,
+      filters,
+      searchTerm,
     };
 
-    const handleLoadMore = () => {
-        const body = {
-            skip: skip + limit,
-            limit,
-            loadMore: true,
-            filters,
-            searchTerm,
-        };
+    fetchProducts(body);
+    setSkip(skip + limit);
+  };
 
-        fetchProducts(body);
-        setSkip(skip + limit);
+  const handleFilters = (newFilteredData, category) => {
+    const newFilters = { ...filters };
+    newFilters[category] = newFilteredData;
+
+    if (category === "price") {
+      const priceValues = handlePrice(newFilteredData);
+      newFilters[category] = priceValues;
+    }
+
+    showFilteredResults(newFilters);
+    setFilters(newFilters);
+  };
+
+  const handlePrice = (value) => {
+    let array = [];
+
+    for (let key in prices) {
+      if (prices[key]._id === parseInt(value, 10)) {
+        array = prices[key].array;
+      }
+    }
+
+    return array;
+  };
+
+  const showFilteredResults = (filters) => {
+    const body = {
+      skip: 0,
+      limit,
+      filters,
+      searchTerm,
     };
 
-    const handleFilters = (newFilteredData, category) => {
-        const newFilters = { ...filters };
-        newFilters[category] = newFilteredData;
+    fetchProducts(body);
+    setSkip(0);
+  };
 
-        if (category === "price") {
-            const priceValues = handlePrice(newFilteredData);
-            newFilters[category] = priceValues;
-        }
-
-        showFilteredResults(newFilters);
-        setFilters(newFilters);
+  const handleSearchTerm = (event) => {
+    const body = {
+      skip: 0,
+      limit,
+      filters,
+      searchTerm: event.target.value,
     };
 
-    const handlePrice = (value) => {
-        let array = [];
+    setSkip(0);
+    setSearchTerm(event.target.value);
+    fetchProducts(body);
+  };
 
-        for (let key in prices) {
-            if (prices[key]._id === parseInt(value, 10)) {
-                array = prices[key].array;
-            }
-        }
+  const handleQuickSearch = (e) => {
+    if (e.key === "Enter" && quickSearch.trim()) {
+      navigate(`/search?query=${encodeURIComponent(quickSearch.trim())}`);
+    }
+  };
 
-        return array;
-    };
+  const handleClickSearch = () => {
+    if (quickSearch.trim()) {
+      navigate(`/search?query=${encodeURIComponent(quickSearch.trim())}`);
+    }
+  };
 
-    const showFilteredResults = (filters) => {
-        const body = {
-            skip: 0,
-            limit,
-            filters,
-            searchTerm,
-        };
+  return (
+    <section>
+      {/* ✅ 검색창 (원래는 "買い物テスト" 위치) */}
+      <div className="flex justify-center items-center gap-2 mt-8 mb-5">
+        <input
+          type="text"
+          value={quickSearch}
+          onChange={(e) => setQuickSearch(e.target.value)}
+          onKeyDown={handleQuickSearch}
+          placeholder="상품을 검색해보세요"
+          className="w-full max-w-md border border-gray-300 p-2 rounded-md"
+        />
+        <button
+          onClick={handleClickSearch}
+          className="px-4 py-2 bg-black text-white rounded hover:bg-gray-700"
+        >
+          검색
+        </button>
+      </div>
 
-        fetchProducts(body);
-        setSkip(0);
-    };
+      <AdSlider />
 
-    const handleSearchTerm = (event) => {
-        const body = {
-            skip: 0,
-            limit,
-            filters,
-            searchTerm: event.target.value,
-        };
+      <div className="flex gap-3">
+        <div className="w-1/2">
+          <CheckBox
+            items={categories}
+            checkedItems={filters.categories}
+            onFilters={(filters) => handleFilters(filters, "categories")}
+          />
+        </div>
 
-        setSkip(0);
-        setSearchTerm(event.target.value);
-        fetchProducts(body);
-    };
+        <div className="w-1/2">
+          <RadioBox
+            prices={prices}
+            checkedPrice={filters.price}
+            onFilters={(filters) => handleFilters(filters, "price")}
+          />
+        </div>
+      </div>
 
-    return (
-        <section>
-            <div className="text-center m-7">
-                <h2 className="text-2xl">買い物テスト</h2>
-            </div>
+      <div className="flex justify-end mb-3">
+        <SearchInput
+          searchTerm={searchTerm}
+          onSearch={handleSearchTerm}
+        />
+      </div>
 
-            <AdSlider />
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        {products.map((product) => (
+          <CardItem product={product} key={product._id} />
+        ))}
+      </div>
 
-            <div className="flex gap-3">
-                <div className="w-1/2">
-                    <CheckBox
-                        items={categories}
-                        checkedItems={filters.categories}
-                        onFilters={(filters) => handleFilters(filters, "categories")}
-                    />
-                </div>
-
-                <div className="w-1/2">
-                    <RadioBox
-                        prices={prices}
-                        checkedPrice={filters.price}
-                        onFilters={(filters) => handleFilters(filters, "price")}
-                    />
-                </div>
-            </div>
-
-            <div className="flex justify-end mb-3">
-                <SearchInput
-                    searchTerm={searchTerm}
-                    onSearch={handleSearchTerm}
-                />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-                {products.map((product) => (
-                    <CardItem product={product} key={product._id} />
-                ))}
-            </div>
-
-            {hasMore && (
-                <div className="flex justify-center mt-5">
-                    <button
-                        onClick={handleLoadMore}
-                        className="px-4 py-2 mt-5 text-white bg-black rounded-md hover:bg-gray-500"
-                    >
-                        더 보기
-                    </button>
-                </div>
-            )}
-        </section>
-    );
+      {hasMore && (
+        <div className="flex justify-center mt-5">
+          <button
+            onClick={handleLoadMore}
+            className="px-4 py-2 mt-5 text-white bg-black rounded-md hover:bg-gray-500"
+          >
+            더 보기
+          </button>
+        </div>
+      )}
+    </section>
+  );
 };
 
 export default LandingPage;
+
