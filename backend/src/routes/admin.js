@@ -7,7 +7,6 @@ const jwt = require("jsonwebtoken");
 const adminAuth = require("../middleware/adminAuth");
 
 
-// 📁 backend/src/routes/admin.js
 
 router.post("/login", async (req, res) => {
     const { email, password } = req.body;

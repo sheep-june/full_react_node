@@ -1,4 +1,3 @@
-// 📁 backend/src/middleware/authAdmin.js
 const jwt = require("jsonwebtoken");
 
 exports.authAdmin = (req, res, next) => {

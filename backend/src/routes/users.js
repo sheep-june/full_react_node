@@ -6,8 +6,10 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const auth = require("../middleware/auth");
 const async = require("async");
+const crypto = require("crypto");
 const { body, validationResult } = require("express-validator");
 const rateLimit = require("express-rate-limit");
+
 const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 5,
@@ -15,22 +17,15 @@ const authLimiter = rateLimit({
     standardHeaders: true,
     legacyHeaders: false,
 });
-const authMiddleware = require("../middleware/auth");
 
 router.get("/auth", auth, async (req, res) => {
     return res.status(200).json({
         id: req.user.id,
-
         email: req.user.email,
-
         name: req.user.name,
-
         role: req.user.role,
-
         image: req.user.image,
-
         cart: req.user.cart,
-
         history: req.user.history,
     });
 });
@@ -40,15 +35,12 @@ router.post(
     authLimiter,
     [
         body("email").isEmail().withMessage("유효한 이메일을 입력하세요."),
-        body("password")
-            .isLength({ min: 6 })
-            .withMessage("비밀번호는 최소 6자 이상이어야 합니다."),
+        body("password").isLength({ min: 6 }).withMessage("비밀번호는 최소 6자 이상이어야 합니다."),
         body("name").notEmpty().withMessage("이름을 입력하세요."),
     ],
     async (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            // 에러 메시지를 배열로 반환
             return res.status(400).json({ errors: errors.array() });
         }
 
@@ -77,19 +69,13 @@ router.post(
 
         try {
             const user = await User.findOne({ email: req.body.email });
-            if (!user) {
-                return res.status(400).send("Auth failed, email not found");
-            }
+            if (!user) return res.status(400).send("Auth failed, email not found");
 
             const isMatch = await user.comparePassword(req.body.password);
-            if (!isMatch) {
-                return res.status(400).send("Wrong password");
-            }
+            if (!isMatch) return res.status(400).send("Wrong password");
 
             const payload = { userId: user._id.toHexString() };
-            const accessToken = jwt.sign(payload, process.env.JWT_SECRET, {
-                expiresIn: "1h",
-            });
+            const accessToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
 
             return res.json({ user, accessToken });
         } catch (error) {
@@ -111,17 +97,15 @@ router.post("/cart", auth, async (req, res, next) => {
         const userInfo = await User.findOne({ _id: req.user._id });
         let duplicate = false;
         userInfo.cart.forEach((item) => {
-            if (item.id === req.body.productId) {
-                duplicate = true;
-            }
+            if (item.id === req.body.productId) duplicate = true;
         });
+
         if (duplicate) {
             const user = await User.findOneAndUpdate(
                 { _id: req.user._id, "cart.id": req.body.productId },
                 { $inc: { "cart.$.quantity": 1 } },
                 { new: true }
             );
-
             return res.status(201).send(user.cart);
         } else {
             const user = await User.findOneAndUpdate(
@@ -137,7 +121,6 @@ router.post("/cart", auth, async (req, res, next) => {
                 },
                 { new: true }
             );
-
             return res.status(201).send(user.cart);
         }
     } catch (error) {
@@ -149,31 +132,75 @@ router.delete("/cart", auth, async (req, res, next) => {
     try {
         const userInfo = await User.findOneAndUpdate(
             { _id: req.user._id },
-            {
-                $pull: { cart: { id: req.query.productId } },
-            },
+            { $pull: { cart: { id: req.query.productId } } },
             { new: true }
         );
         const cart = userInfo.cart;
-        const array = cart.map((item) => {
-            return item.id;
-        });
-        const productInfo = await Product.find({
-            _id: { $in: array },
-        }).populate("writer");
-        return res.json({
-            productInfo,
-            cart,
-        });
+        const array = cart.map((item) => item.id);
+        const productInfo = await Product.find({ _id: { $in: array } }).populate("writer");
+
+        return res.json({ productInfo, cart });
     } catch (error) {
         next(error);
     }
 });
 
-router.post("/payment", auth, async (req, res) => {
-    let history = [];
+router.get("/cart", auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        const cart = user.cart;
+        const cartItemIds = cart.map((item) => item.id);
+        const cartDetail = await Product.find({ _id: { $in: cartItemIds } });
 
-    let transactionData = {};
+        const merged = cartDetail.map((product) => {
+            const matched = cart.find((item) => item.id.toString() === product._id.toString());
+            return { ...product.toObject(), quantity: matched?.quantity || 0 };
+        });
+
+        res.json({ cart, cartDetail: merged });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("서버 오류");
+    }
+});
+
+// ✅ 장바구니 수량 변경 API
+router.put("/cart/quantity", auth, async (req, res) => {
+    try {
+        const { productId, type, quantity } = req.body;
+        const user = await User.findById(req.user._id);
+        const cartItem = user.cart.find((item) => item.id.toString() === productId.toString());
+
+        if (!cartItem) return res.status(404).send("상품이 장바구니에 없습니다.");
+
+        if (type === "inc") {
+            cartItem.quantity += 1;
+        } else if (type === "dec") {
+            cartItem.quantity = Math.max(1, cartItem.quantity - 1);
+        } else if (type === "set") {
+            cartItem.quantity = Math.max(1, parseInt(quantity));
+        }
+
+        await user.save();
+
+        const cartItemIds = user.cart.map((item) => item.id);
+        const productList = await Product.find({ _id: { $in: cartItemIds } });
+
+        const cartDetail = productList.map((product) => {
+            const match = user.cart.find((item) => item.id.toString() === product._id.toString());
+            return { ...product.toObject(), quantity: match?.quantity || 0 };
+        });
+
+        return res.status(200).json({ cart: user.cart, cartDetail });
+    } catch (err) {
+        console.error("수량 변경 실패:", err);
+        return res.status(500).send("수량 변경 실패");
+    }
+});
+
+router.post("/payment", auth, async (req, res) => {
+    const history = [];
+    const transactionData = {};
 
     req.body.cartDetail.forEach((item) => {
         history.push({
@@ -185,45 +212,34 @@ router.post("/payment", auth, async (req, res) => {
             paymentId: crypto.randomUUID(),
         });
     });
+
     transactionData.user = {
         id: req.user._id,
         name: req.user.name,
         email: req.user.email,
     };
     transactionData.product = history;
+
     await User.findOneAndUpdate(
         { _id: req.user._id },
-        {
-            $push: { history: { $each: history } },
-
-            $set: { cart: [] },
-        }
+        { $push: { history: { $each: history } }, $set: { cart: [] } }
     );
-    const payment = new Payment(transactionData);
 
+    const payment = new Payment(transactionData);
     const paymentDocs = await payment.save();
 
-    let products = [];
-
-    paymentDocs.product.forEach((item) => {
-        products.push({ id: item.id, quantity: item.quantity });
-    });
+    const products = paymentDocs.product.map((item) => ({
+        id: item.id,
+        quantity: item.quantity,
+    }));
 
     async.eachSeries(
         products,
         async (item) => {
-            await Product.updateOne(
-                { _id: item.id },
-                {
-                    $inc: {
-                        sold: item.quantity,
-                    },
-                }
-            );
+            await Product.updateOne({ _id: item.id }, { $inc: { sold: item.quantity } });
         },
         (err) => {
             if (err) return res.status(500).send(err);
-
             return res.sendStatus(200);
         }
     );
@@ -240,7 +256,6 @@ router.post("/wishlist", auth, async (req, res, next) => {
 
         user.wishlist.push(productId);
         await user.save();
-
         return res.status(200).json({ wishlist: user.wishlist });
     } catch (error) {
         next(error);
@@ -252,23 +267,9 @@ router.delete("/wishlist", auth, async (req, res, next) => {
         const user = await User.findById(req.user._id);
         const productId = req.query.productId;
 
-        user.wishlist = user.wishlist.filter(
-            (id) => id.toString() !== productId
-        );
+        user.wishlist = user.wishlist.filter((id) => id.toString() !== productId);
         await user.save();
-
         return res.status(200).json({ wishlist: user.wishlist });
-    } catch (error) {
-        next(error);
-    }
-});
-
-router.get("/myproducts", auth, async (req, res, next) => {
-    try {
-        const products = await Product.find({ writer: req.user._id }).sort({
-            createdAt: -1,
-        });
-        return res.status(200).json({ products });
     } catch (error) {
         next(error);
     }
@@ -277,7 +278,6 @@ router.get("/myproducts", auth, async (req, res, next) => {
 router.get("/wishlist", auth, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).populate("wishlist");
-
         res.json({ products: user.wishlist });
     } catch (err) {
         console.error(err);
@@ -285,19 +285,14 @@ router.get("/wishlist", auth, async (req, res) => {
     }
 });
 
-// 장바구니에 여러 상품 추가 (배치 추가)
-router.post("/cart/batch", authMiddleware, async (req, res) => {
+router.post("/cart/batch", auth, async (req, res) => {
     try {
         const { productIds } = req.body;
-
         if (!Array.isArray(productIds)) {
-            return res
-                .status(400)
-                .json({ message: "상품 ID 배열이 필요합니다." });
+            return res.status(400).json({ message: "상품 ID 배열이 필요합니다." });
         }
 
         const user = await User.findById(req.user.id);
-
         productIds.forEach((pid) => {
             const exists = user.cart.some((item) => item.id === pid);
             if (!exists) {
@@ -313,94 +308,21 @@ router.post("/cart/batch", authMiddleware, async (req, res) => {
     }
 });
 
-router.delete("/wishlist/batch", authMiddleware, async (req, res) => {
+router.delete("/wishlist/batch", auth, async (req, res) => {
     try {
         const { productIds } = req.body;
-
         if (!Array.isArray(productIds)) {
-            return res
-                .status(400)
-                .json({ message: "상품 ID 배열이 필요합니다." });
+            return res.status(400).json({ message: "상품 ID 배열이 필요합니다." });
         }
 
         const user = await User.findById(req.user.id);
-        user.wishlist = user.wishlist.filter(
-            (pid) => !productIds.includes(String(pid))
-        );
+        user.wishlist = user.wishlist.filter((pid) => !productIds.includes(String(pid)));
 
         await user.save();
         res.send("삭제 성공");
     } catch (err) {
         console.error(err);
         res.status(500).send("서버 오류");
-    }
-});
-// GET /users/cart
-router.get("/cart", auth, async (req, res) => {
-    try {
-        const user = await User.findById(req.user._id);
-        const cart = user.cart;
-        const cartItemIds = cart.map((item) => item.id);
-
-        const cartDetail = await Product.find({ _id: { $in: cartItemIds } });
-
-        const merged = cartDetail.map((product) => {
-            const matched = cart.find(
-                (item) => item.id.toString() === product._id.toString()
-            );
-            const quantity = matched?.quantity || 0;
-            return { ...product.toObject(), quantity };
-        });
-
-        res.json({
-            cart,
-            cartDetail: merged,
-        });
-    } catch (err) {
-        console.error(err);
-        res.status(500).send("서버 오류");
-    }
-});
-
-// PUT /users/cart/quantity
-router.put("/cart/quantity", auth, async (req, res) => {
-    try {
-        const { productId, type } = req.body;
-        const user = await User.findById(req.user._id);
-
-        const cartItem = user.cart.find(
-            (item) => item.id.toString() === productId.toString()
-        );
-
-        if (!cartItem)
-            return res.status(404).send("상품이 장바구니에 없습니다.");
-
-        if (type === "inc") {
-            cartItem.quantity += 1;
-        } else if (type === "dec") {
-            cartItem.quantity = Math.max(1, cartItem.quantity - 1);
-        }
-
-        await user.save();
-
-        const cartItemIds = user.cart.map((item) => item.id);
-        const cartDetail = await Product.find({ _id: { $in: cartItemIds } });
-
-        const merged = cartDetail.map((product) => {
-            const matched = user.cart.find(
-                (item) => item.id.toString() === product._id.toString()
-            );
-            const quantity = matched?.quantity || 0;
-            return { ...product.toObject(), quantity };
-        });
-
-        res.json({
-            cart: user.cart,
-            cartDetail: merged,
-        });
-    } catch (err) {
-        console.error(err);
-        res.status(500).send("수량 변경 실패");
     }
 });
 

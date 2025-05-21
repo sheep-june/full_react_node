@@ -1,3 +1,4 @@
+// ✅ 1. frontend/src/pages/CartPage/index.jsx
 import React, { useEffect, useState } from "react";
 import axiosInstance, { setCsrfToken } from "../../utils/axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,15 +25,29 @@ const CartPage = () => {
     };
 
     const handleQuantity = async (productId, type) => {
-        console.log("수량 변경 요청 전", productId, type);
+        console.log("버튼 클릭됨:", productId, type);
         await setCsrfToken();
         try {
             const res = await axiosInstance.put("/users/cart/quantity", {
                 productId,
                 type,
             });
-            console.log("수량 변경 응답", res.data);
-            await dispatch(fetchUserCart());
+            dispatch(fetchUserCart());
+        } catch (err) {
+            console.error("수량 변경 실패:", err);
+        }
+    };
+
+    const handleQuantityInput = async (productId, quantity) => {
+        const newQty = Math.max(1, parseInt(quantity));
+        await setCsrfToken();
+        try {
+            await axiosInstance.put("/users/cart/quantity", {
+                productId,
+                type: "set",
+                quantity: newQty,
+            });
+            dispatch(fetchUserCart());
         } catch (err) {
             console.error("수량 변경 실패:", err);
         }
@@ -112,12 +127,8 @@ const CartPage = () => {
                                     <td>
                                         <input
                                             type="checkbox"
-                                            checked={selected.includes(
-                                                product._id
-                                            )}
-                                            onChange={() =>
-                                                handleCheck(product._id)
-                                            }
+                                            checked={selected.includes(product._id)}
+                                            onChange={() => handleCheck(product._id)}
                                         />
                                     </td>
                                     <td className="p-2">
@@ -156,10 +167,7 @@ const CartPage = () => {
                                         </div>
                                     </td>
                                     <td>
-                                        {(
-                                            product.price * product.quantity
-                                        ).toLocaleString()}{" "}
-                                        원
+                                        {(product.price * product.quantity).toLocaleString()} 원
                                     </td>
                                 </tr>
                             ))}

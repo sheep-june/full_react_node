@@ -9,14 +9,12 @@ router.post("/", auth, async (req, res) => {
 
     try {
         const user = await User.findById(req.user._id);
-
         const hasPurchased = user.history.some(
             (item) => item.id.toString() === productId
         );
         if (!hasPurchased) {
             return res.status(403).json({ message: "구매한 사용자만 리뷰 작성 가능" });
         }
-
         const existingReview = await Review.findOne({
             product: productId,
             user: req.user._id,
@@ -24,7 +22,6 @@ router.post("/", auth, async (req, res) => {
         if (existingReview) {
             return res.status(400).json({ message: "이미 리뷰를 작성하셨습니다." });
         }
-
         const review = new Review({
             product: productId,
             user: req.user._id,
