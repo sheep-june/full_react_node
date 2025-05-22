@@ -1,11 +1,9 @@
-// ✅ src/pages/EditProductPage/index.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axiosInstance, { setCsrfToken } from "../../utils/axios";
 import FileUpload from "../../components/FileUpload";
 
-// ✅ category 목록은 utils/filterData에서 불러오기
 import { categories } from "../../utils/filterData";
 
 const EditProductPage = () => {

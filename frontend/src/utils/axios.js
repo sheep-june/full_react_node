@@ -8,7 +8,6 @@ const axiosInstance = axios.create({
         qs.stringify(params, { arrayFormat: "brackets" }),
 });
 
-// ✅ 요청 인터셉터
 axiosInstance.interceptors.request.use(
     function (config) {
         // 방어 코드: 헤더가 없으면 생성
@@ -34,7 +33,6 @@ axiosInstance.interceptors.request.use(
     }
 );
 
-// ✅ CSRF 토큰 수동 설정 함수
 export const setCsrfToken = async () => {
     try {
         const res = await axiosInstance.get("/csrf-token");

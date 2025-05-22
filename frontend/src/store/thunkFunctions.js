@@ -1,26 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-// Redux Toolkit에서 비동기 액션 생성을 위한 createAsyncThunk를 가져옵니다.
-
 import axiosInstance from "../utils/axios";
-// axios의 공통 설정 인스턴스를 가져옵니다 (baseURL, interceptors 등 적용됨)
 
-// 회원가입 요청을 위한 비동기 thunk 액션 생성
 export const registerUser = createAsyncThunk(
     "user/registerUser",
-    // 이 thunk 액션의 이름 (type prefix)
-    // 'user' 슬라이스에서 처리될 비동기 액션 이름으로 사용됨
 
     async (body, thunkAPI) => {
-        // 비동기 요청 처리 함수
-        // body: 회원가입 폼에서 전달된 사용자 입력값 객체
-        // thunkAPI: dispatch, getState 등 redux-thunk에서 제공하는 유틸 객체
 
         try {
             const response = await axiosInstance.post(
                 "/users/register",
-                // 서버의 회원가입 API 경로에 POST 요청을 보냄
                 body
-                // 요청 본문에 사용자 입력 데이터 포함
             );
 
             return response.data;

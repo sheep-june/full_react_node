@@ -1,4 +1,3 @@
-// ✅ 1. frontend/src/pages/CartPage/index.jsx
 import React, { useEffect, useState } from "react";
 import axiosInstance, { setCsrfToken } from "../../utils/axios";
 import { useDispatch, useSelector } from "react-redux";

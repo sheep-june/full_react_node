@@ -1,4 +1,3 @@
-// src/App.jsx
 import { Outlet, Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
 import LoginPage from "./pages/LoginPage";
@@ -32,12 +31,10 @@ import SearchPage from "./pages/SearchPage";
 function Layout() {
   const location = useLocation();
 
-  // ✅ /auth는 레이아웃 없이 풀스크린
   if (location.pathname === "/auth") {
     return <Outlet />;
   }
 
-  // ✅ /search 페이지는 본문 여백 없이 full width
   const isSearchPage = location.pathname.startsWith("/search");
 
   return (
@@ -77,10 +74,10 @@ function App() {
 
   return (
     <Routes>
-      {/* ✅ /auth는 풀스크린 별도 처리 */}
+      {/*  /auth는 풀스크린 별도 처리 */}
       <Route path="/auth" element={<AuthPage />} />
 
-      {/* ✅ 그 외는 공통 레이아웃 */}
+      {/*  그 외는 공통 레이아웃 */}
       <Route path="/" element={<Layout />}>
         <Route index element={<LandingPage />} />
         <Route path="/search" element={<SearchPage />} />

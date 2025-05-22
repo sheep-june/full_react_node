@@ -3,18 +3,21 @@ const router = express.Router();
 const auth = require("../middleware/auth");
 const Review = require("../models/Review");
 const Product = require("../models/Product");
+const User = require("../models/User"); 
 
 router.post("/", auth, async (req, res) => {
     const { productId, rating, comment } = req.body;
 
     try {
-        const user = await User.findById(req.user._id);
+        const user = await User.findById(req.user._id); 
+
         const hasPurchased = user.history.some(
             (item) => item.id.toString() === productId
         );
         if (!hasPurchased) {
             return res.status(403).json({ message: "구매한 사용자만 리뷰 작성 가능" });
         }
+
         const existingReview = await Review.findOne({
             product: productId,
             user: req.user._id,
@@ -22,6 +25,7 @@ router.post("/", auth, async (req, res) => {
         if (existingReview) {
             return res.status(400).json({ message: "이미 리뷰를 작성하셨습니다." });
         }
+
         const review = new Review({
             product: productId,
             user: req.user._id,
@@ -46,8 +50,7 @@ router.post("/", auth, async (req, res) => {
     }
 });
 
-
-// GET /reviews/:productId
+// GET /reviews/:productId - 리뷰 목록 조회
 router.get("/:productId", async (req, res) => {
     try {
         const { productId } = req.params;

@@ -11,7 +11,7 @@ import {
 } from "./thunkFunctions";
 import { toast } from "react-toastify";
 import axiosInstance from "../utils/axios";
-// userSlice.js 안에 있음
+
 const initialState = {
     userData: {
         id: "",
@@ -24,10 +24,9 @@ const initialState = {
     isAuth: false,
     isLoading: false,
     error: "",
-    cartDetail: [], // ✅ 이 줄이 없으면 추가
+    cartDetail: [], 
 };
 
-// ✅ 유저 장바구니 불러오기 Thunk 함수
 export const fetchUserCart = createAsyncThunk(
     "user/fetchUserCart",
     async (_, thunkAPI) => {
