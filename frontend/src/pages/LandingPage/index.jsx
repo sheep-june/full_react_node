@@ -130,7 +130,6 @@ const LandingPage = () => {
 
   return (
     <section>
-      {/* ✅ 검색창 (원래는 "買い物テスト" 위치) */}
       <div className="flex justify-center items-center gap-2 mt-8 mb-5">
         <input
           type="text"
@@ -150,7 +149,7 @@ const LandingPage = () => {
 
       <AdSlider />
 
-      <div className="flex gap-3">
+      {/* <div className="flex gap-3">
         <div className="w-1/2">
           <CheckBox
             items={categories}
@@ -166,14 +165,14 @@ const LandingPage = () => {
             onFilters={(filters) => handleFilters(filters, "price")}
           />
         </div>
-      </div>
+      </div> */}
 
-      <div className="flex justify-end mb-3">
+      {/* <div className="flex justify-end mb-3">
         <SearchInput
           searchTerm={searchTerm}
           onSearch={handleSearchTerm}
         />
-      </div>
+      </div> */}
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {products.map((product) => (

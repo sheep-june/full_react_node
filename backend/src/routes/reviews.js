@@ -3,13 +3,13 @@ const router = express.Router();
 const auth = require("../middleware/auth");
 const Review = require("../models/Review");
 const Product = require("../models/Product");
-const User = require("../models/User"); 
+const User = require("../models/User");
 
 router.post("/", auth, async (req, res) => {
     const { productId, rating, comment } = req.body;
 
     try {
-        const user = await User.findById(req.user._id); 
+        const user = await User.findById(req.user._id);
 
         const hasPurchased = user.history.some(
             (item) => item.id.toString() === productId

@@ -73,28 +73,28 @@ const AdminAdSection = () => {
     };
 
     const moveAd = async (fromIndex, toIndex) => {
-    if (toIndex < 0 || toIndex >= ads.length) return;
+        if (toIndex < 0 || toIndex >= ads.length) return;
 
-    const reordered = [...ads];
-    const moved = reordered.splice(fromIndex, 1)[0];
-    reordered.splice(toIndex, 0, moved);
+        const reordered = [...ads];
+        const moved = reordered.splice(fromIndex, 1)[0];
+        reordered.splice(toIndex, 0, moved);
 
-    try {
-        // 디버깅용 로그 (토큰 제대로 들어갔는지 확인)
-        console.log("💬 adminToken:", localStorage.getItem("adminToken"));
-        console.log("💬 csrfToken:", localStorage.getItem("csrfToken"));
+        try {
+            // 디버깅용 로그 (토큰 제대로 들어갔는지 확인)
+            console.log("💬 adminToken:", localStorage.getItem("adminToken"));
+            console.log("💬 csrfToken:", localStorage.getItem("csrfToken"));
 
-        // axiosInstance 사용 + CSRF, Authorization 자동 주입
-        await axiosInstance.post("/api/admin/ads/reorder", {
-            ads: reordered.map((ad) => ad._id),
-        });
+            // axiosInstance 사용 + CSRF, Authorization 자동 주입
+            await axiosInstance.post("/api/admin/ads/reorder", {
+                ads: reordered.map((ad) => ad._id),
+            });
 
-        setAds(reordered);
-    } catch (err) {
-        console.error("순서 변경 실패:", err);
-        alert("광고 순서 변경에 실패했습니다.");
-    }
-};
+            setAds(reordered);
+        } catch (err) {
+            console.error("순서 변경 실패:", err);
+            alert("광고 순서 변경에 실패했습니다.");
+        }
+    };
 
 
     const filteredProducts = products.filter((p) =>
@@ -121,11 +121,10 @@ const AdminAdSection = () => {
                     {filteredProducts.map((product) => (
                         <div
                             key={product._id}
-                            className={`p-2 cursor-pointer border rounded ${
-                                selectedProduct?._id === product._id
+                            className={`p-2 cursor-pointer border rounded ${selectedProduct?._id === product._id
                                     ? "bg-blue-100 border-blue-500"
                                     : "hover:bg-gray-100"
-                            }`}
+                                }`}
                             onClick={() => setSelectedProduct(product)}
                         >
                             {product.title}

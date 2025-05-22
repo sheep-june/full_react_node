@@ -40,7 +40,7 @@ const WishlistPage = () => {
 
     const handleDeleteWishlist = async () => {
         try {
-            await setCsrfToken(); 
+            await setCsrfToken();
             await axiosInstance.delete("/users/wishlist/batch", {
                 data: { productIds: selected },
             });

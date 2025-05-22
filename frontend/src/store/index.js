@@ -3,14 +3,14 @@ import userReducer from "./userSlice";
 import storage from "redux-persist/lib/storage";
 
 import {
-    FLUSH, 
+    FLUSH,
     PAUSE,
-    PERSIST, 
+    PERSIST,
     PURGE,
     REGISTER,
     REHYDRATE,
-    persistReducer, 
-    persistStore, 
+    persistReducer,
+    persistStore,
 } from "redux-persist";
 
 export const rootReducer = combineReducers({
@@ -18,8 +18,8 @@ export const rootReducer = combineReducers({
 });
 
 const persistConfig = {
-    key: "root", 
-    storage, 
+    key: "root",
+    storage,
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -30,12 +30,12 @@ export const store = configureStore({
         getDefaultMiddleware({
             serializableCheck: {
                 ignoreActions: [
-                    FLUSH, 
+                    FLUSH,
                     REHYDRATE,
-                    PAUSE, 
+                    PAUSE,
                     PERSIST,
-                    PURGE, 
-                    REGISTER, 
+                    PURGE,
+                    REGISTER,
                 ],
             },
         }),

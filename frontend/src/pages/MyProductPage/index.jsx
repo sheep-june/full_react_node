@@ -79,11 +79,11 @@ const MyProductsPage = () => {
                                     상세보기
                                 </Link>
                                 <Link
-  to={`/product/edit/${product._id}`}
-  className="text-yellow-600 text-sm hover:underline"
->
-  수정
-</Link>
+                                    to={`/product/edit/${product._id}`}
+                                    className="text-yellow-600 text-sm hover:underline"
+                                >
+                                    수정
+                                </Link>
 
                                 <button
                                     onClick={() => handleDelete(product._id)}

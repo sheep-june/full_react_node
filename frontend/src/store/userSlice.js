@@ -24,7 +24,7 @@ const initialState = {
     isAuth: false,
     isLoading: false,
     error: "",
-    cartDetail: [], 
+    cartDetail: [],
 };
 
 export const fetchUserCart = createAsyncThunk(

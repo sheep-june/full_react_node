@@ -11,7 +11,7 @@ const sortOptions = [
   { id: "rating", label: "별점순" },
   { id: "lowPrice", label: "가격 낮은순" },
   { id: "highPrice", label: "가격 높은순" },
-  { id: "sold", label: "판매순" }, // ✅ 추가
+  { id: "sold", label: "판매순" },
 ];
 
 const SearchPage = () => {
@@ -131,11 +131,10 @@ const SearchPage = () => {
               <button
                 key={option.id}
                 onClick={() => setSortBy(option.id)}
-                className={`text-sm px-2 py-1 rounded border-b-2 transition-all duration-150 ${
-                  sortBy === option.id
-                    ? "border-black font-semibold"
-                    : "border-transparent text-gray-500"
-                }`}
+                className={`text-sm px-2 py-1 rounded border-b-2 transition-all duration-150 ${sortBy === option.id
+                  ? "border-black font-semibold"
+                  : "border-transparent text-gray-500"
+                  }`}
               >
                 {option.label}
               </button>
@@ -147,7 +146,7 @@ const SearchPage = () => {
               <CardItem
                 key={product._id}
                 product={product}
-                refreshWishlist={() => {}}
+                refreshWishlist={() => { }}
               />
             ))}
           </div>

@@ -6,8 +6,6 @@ const Product = require("../models/Product");
 const jwt = require("jsonwebtoken");
 const adminAuth = require("../middleware/adminAuth");
 
-
-
 router.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
@@ -19,7 +17,7 @@ router.post("/login", async (req, res) => {
 
     const payload = {
         id: admin._id,
-        role: admin.role, 
+        role: admin.role,
         name: admin.name,
     };
 

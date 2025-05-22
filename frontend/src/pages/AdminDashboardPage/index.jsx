@@ -13,22 +13,20 @@ const AdminDashboardPage = () => {
             {/* ✅ 섹션 전환 버튼 */}
             <div className="mb-6 space-x-2">
                 <button
-                    className={`px-4 py-2 rounded ${
-                        section === "users"
+                    className={`px-4 py-2 rounded ${section === "users"
                             ? "bg-black text-white"
                             : "bg-gray-200"
-                    }`}
+                        }`}
                     onClick={() => setSection("users")}
                 >
                     전체 사용자 보기
                 </button>
 
                 <button
-                    className={`px-4 py-2 rounded ${
-                        section === "posts"
+                    className={`px-4 py-2 rounded ${section === "posts"
                             ? "bg-black text-white"
                             : "bg-gray-200"
-                    }`}
+                        }`}
                     onClick={() => setSection("posts")}
                 >
                     전체 게시글 보기

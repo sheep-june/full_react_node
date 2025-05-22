@@ -30,7 +30,7 @@ const csrfProtection = csrf({
   cookie: {
     httpOnly: true,
     sameSite: "lax",
-    secure: false, 
+    secure: false,
   },
 });
 app.use(csrfProtection);

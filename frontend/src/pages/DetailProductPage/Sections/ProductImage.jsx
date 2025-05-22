@@ -9,12 +9,10 @@ const ProductImage = ({ product }) => {
 
             product.images.map((imageName) => {
                 return images.push({
-                    original: `${
-                        import.meta.env.VITE_SERVER_URL
-                    }/uploads/${imageName}`,
-                    thumbnail: `${
-                        import.meta.env.VITE_SERVER_URL
-                    }/uploads/${imageName}`,
+                    original: `${import.meta.env.VITE_SERVER_URL
+                        }/uploads/${imageName}`,
+                    thumbnail: `${import.meta.env.VITE_SERVER_URL
+                        }/uploads/${imageName}`,
                 });
             });
 
