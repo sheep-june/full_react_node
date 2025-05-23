@@ -4,8 +4,18 @@ import qs from "qs";
 const axiosInstance = axios.create({
     baseURL: import.meta.env.PROD ? "" : "http://localhost:4000",
     withCredentials: true,
-    paramsSerializer: (params) =>
-        qs.stringify(params, { arrayFormat: "brackets" }),
+    // paramsSerializer: (params) =>
+    //     qs.stringify(params, { arrayFormat: "brackets" }),
+    paramsSerializer: (params) => {
+  if (params.filters) {
+    return qs.stringify({
+      ...params,
+      filters: JSON.stringify(params.filters),
+    });
+  }
+  return qs.stringify(params);
+},
+
 });
 
 axiosInstance.interceptors.request.use(

@@ -50,20 +50,25 @@ const UploadProductPage = () => {
     };
 
     const handleSubmit = async (event) => {
-        event.preventDefault();
+    event.preventDefault();
 
-        const body = {
-            writer: userData.id,
-            ...product,
-        };
-
-        try {
-            await axiosInstance.post("/products", body);
-            navigate("/");
-        } catch (error) {
-            console.error(error);
-        }
+    const body = {
+        writer: userData.id,
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        category: product.continents, // ✅ 여기서 category로 보냄
+        images: product.images,
     };
+
+    try {
+        await axiosInstance.post("/products", body);
+        navigate("/");
+    } catch (error) {
+        console.error(error);
+    }
+};
+
 
     return (
         <section>

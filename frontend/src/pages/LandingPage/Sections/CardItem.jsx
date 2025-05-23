@@ -7,7 +7,8 @@ import { useSelector } from "react-redux";
 
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
-const CardItem = ({ product, refreshWishlist }) => {
+const CardItem = ({ product, refreshWishlist, wishlist }) => {
+
     const user = useSelector((state) => state.user);
     const navigate = useNavigate();
 
@@ -25,6 +26,9 @@ const CardItem = ({ product, refreshWishlist }) => {
         }
         setReady(true);
     }, [user.userData?.wishlist, user.isAuth, product._id]);
+    
+
+
 
     const handleToggleWish = async (e) => {
         e.preventDefault();
@@ -61,44 +65,7 @@ const CardItem = ({ product, refreshWishlist }) => {
         }
     };
 
-    // return (
-    //     <div className="relative border-[1px] border-gray-300 rounded-md overflow-hidden w-full max-w-[230px] mx-auto">
-    //         {/* ✅ 이미지 크기 고정 */}
-    //         <div className="w-full h-[180px]">
-    //             <ImageSlider
-    //                 images={imageUrls}
-    //                 className="w-full h-full object-cover"
-    //             />
-    //         </div>
-
-    //         {ready && (
-    //             <button
-    //                 onClick={handleToggleWish}
-    //                 disabled={!ready}
-    //                 className="absolute top-2 right-2 text-red-500 text-xl z-10"
-    //             >
-    //                 {wished ? <FaHeart /> : <FaRegHeart />}
-    //             </button>
-    //         )}
-
-    //         <Link to={`/product/${product._id}`}>
-    //             <div className="p-2 space-y-1">
-    //                 <p className="font-semibold truncate">{product.title}</p>
-    //                 <div className="flex items-center gap-1 text-yellow-500 text-sm">
-    //                     <FaStar />
-    //                     <span>
-    //                         {typeof product.averageRating === "number"
-    //                             ? product.averageRating.toFixed(1)
-    //                             : "0.0"}
-    //                     </span>
-    //                 </div>
-    //                 <p className="text-sm text-gray-700">
-    //                     {product.price.toLocaleString()}원
-    //                 </p>
-    //             </div>
-    //         </Link>
-    //     </div>
-    // );
+    
     return (
         <div className="relative border-[1px] border-gray-300 rounded-md overflow-hidden w-full max-w-[230px] mx-auto">
             {/* ✅ 이미지 크기 고정 */}
