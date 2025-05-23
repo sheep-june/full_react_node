@@ -57,7 +57,7 @@ const AdSlider = () => {
       </button>
 
       <div
-        className="flex transition-transform duration-700 w-full h-full"
+        className="flex transition-transform duration-700 h-full"
         style={{
           transform: `translateX(-${currentIndex * 100}%)`,
           width: `${ads.length * 100}%`,
@@ -67,7 +67,7 @@ const AdSlider = () => {
         {ads.map((ad) => (
           <div
             key={ad._id}
-            className="w-full h-full flex-shrink-0 bg-black flex items-center justify-center"
+            className="relative w-full h-full flex-shrink-0 bg-black cursor-pointer"
             onClick={() => navigate(`/product/${ad.product?._id}`)}
           >
             <video
@@ -77,8 +77,9 @@ const AdSlider = () => {
               loop
               playsInline
               preload="auto"
-              className="h-full max-h-full w-full object-contain bg-black"
+              className="max-w-full max-h-full object-contain"
             />
+
           </div>
         ))}
       </div>

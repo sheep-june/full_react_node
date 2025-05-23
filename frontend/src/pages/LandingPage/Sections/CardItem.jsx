@@ -36,7 +36,7 @@ const CardItem = ({ product, refreshWishlist, wishlist }) => {
         if (!ready) return;
 
         if (!user.isAuth) {
-            return navigate("/login");
+            return navigate("/auth");
         }
 
         try {
