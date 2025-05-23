@@ -14,6 +14,7 @@ const CartPage = () => {
     }, [dispatch]);
 
     useEffect(() => {
+        // 프론트용 로컬 복사본 유지
         setCartItems(JSON.parse(JSON.stringify(cartDetail)));
     }, [cartDetail]);
 
@@ -23,33 +24,18 @@ const CartPage = () => {
         );
     };
 
-    const handleQuantity = async (productId, type) => {
-        console.log("버튼 클릭됨:", productId, type);
-        await setCsrfToken();
-        try {
-            const res = await axiosInstance.put("/users/cart/quantity", {
-                productId,
-                type,
-            });
-            dispatch(fetchUserCart());
-        } catch (err) {
-            console.error("수량 변경 실패:", err);
-        }
-    };
-
-    const handleQuantityInput = async (productId, quantity) => {
-        const newQty = Math.max(1, parseInt(quantity));
-        await setCsrfToken();
-        try {
-            await axiosInstance.put("/users/cart/quantity", {
-                productId,
-                type: "set",
-                quantity: newQty,
-            });
-            dispatch(fetchUserCart());
-        } catch (err) {
-            console.error("수량 변경 실패:", err);
-        }
+    const handleQuantity = (productId, type) => {
+        const updatedItems = cartItems.map((item) => {
+            if (item._id === productId) {
+                const newQty =
+                    type === "inc"
+                        ? item.quantity + 1
+                        : Math.max(1, item.quantity - 1);
+                return { ...item, quantity: newQty };
+            }
+            return item;
+        });
+        setCartItems(updatedItems);
     };
 
     const handlePaymentClick = async () => {
@@ -120,7 +106,7 @@ const CartPage = () => {
                         <tbody>
                             {cartItems.map((product) => (
                                 <tr
-                                    key={`${product._id}-${product.quantity}`}
+                                    key={product._id}
                                     className="border-b"
                                 >
                                     <td>
@@ -143,10 +129,7 @@ const CartPage = () => {
                                             <button
                                                 className="px-2"
                                                 onClick={() =>
-                                                    handleQuantity(
-                                                        product._id,
-                                                        "dec"
-                                                    )
+                                                    handleQuantity(product._id, "dec")
                                                 }
                                             >
                                                 🔽
@@ -155,16 +138,14 @@ const CartPage = () => {
                                             <button
                                                 className="px-2"
                                                 onClick={() =>
-                                                    handleQuantity(
-                                                        product._id,
-                                                        "inc"
-                                                    )
+                                                    handleQuantity(product._id, "inc")
                                                 }
                                             >
                                                 🔼
                                             </button>
                                         </div>
                                     </td>
+
                                     <td>
                                         {(product.price * product.quantity).toLocaleString()} 원
                                     </td>
