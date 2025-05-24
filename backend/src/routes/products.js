@@ -21,24 +21,49 @@ router.post("/image", auth, (req, res) => {
 });
 
 // 상품 상세 조회
+// router.get("/:id", async (req, res, next) => {
+//     try {
+//         const product = await Product.findById(req.params.id).populate("writer");
+//         const reviews = await Review.find({ product: req.params.id }).populate("user", "name");
+
+//         const averageRating = reviews.length
+//             ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length
+//             : 0;
+
+//         res.status(200).json({
+//             product,
+//             reviews,
+//             averageRating,
+//         });
+//     } catch (error) {
+//         next(error);
+//     }
+// });
+
+// 상품 상세 조회 + 조회수 증가
 router.get("/:id", async (req, res, next) => {
-    try {
-        const product = await Product.findById(req.params.id).populate("writer");
-        const reviews = await Review.find({ product: req.params.id }).populate("user", "name");
+  try {
+    // ✅ 조회수 1 증가
+    await Product.findByIdAndUpdate(req.params.id, { $inc: { views: 1 } });
 
-        const averageRating = reviews.length
-            ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length
-            : 0;
+    const product = await Product.findById(req.params.id).populate("writer");
+    const reviews = await Review.find({ product: req.params.id }).populate("user", "name");
 
-        res.status(200).json({
-            product,
-            reviews,
-            averageRating,
-        });
-    } catch (error) {
-        next(error);
-    }
+    const averageRating = reviews.length
+      ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length
+      : 0;
+
+    res.status(200).json({
+      product,
+      reviews,
+      averageRating,
+    });
+  } catch (error) {
+    next(error);
+  }
 });
+
+
 
 router.get("/", async (req, res) => {
     try {
@@ -54,11 +79,20 @@ router.get("/", async (req, res) => {
 
         const query = {};
 
-        if (searchTerm) {
-            query.title = { $regex: searchTerm, $options: "i" };
-        }
+        // if (searchTerm) {
+        //     query.title = { $regex: searchTerm, $options: "i" };
+        // }
 
-                // ✅ 이렇게 고쳐야 DB의 category 필드에 필터 적용됨
+        // 이 부분만 교체하면 됨
+if (searchTerm) {
+  query.$or = [
+    { title: { $regex: searchTerm, $options: "i" } },
+    { description: { $regex: searchTerm, $options: "i" } },
+  ];
+}
+
+
+        // ✅ 이렇게 고쳐야 DB의 category 필드에 필터 적용됨
         if (filters.continents && filters.continents.length > 0) {
             query.category = { $in: filters.continents };
         }
