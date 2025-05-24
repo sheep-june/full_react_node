@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance, { setCsrfToken } from "../../utils/axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+// import { Link, useNavigate } from "react-router-dom";
 
 const WishlistPage = () => {
     const [wishlist, setWishlist] = useState([]);
     const [selected, setSelected] = useState([]);
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const fetchWishlist = async () => {
         try {

@@ -24,7 +24,9 @@ const DetailProductPage = () => {
                 );
                 setProduct(response.data.product);
 
-                const reviewRes = await axiosInstance.get(`/reviews/${productId}`);
+                const reviewRes = await axiosInstance.get(
+                    `/reviews/${productId}`
+                );
                 setReviews(reviewRes.data.reviews);
                 setAverageRating(reviewRes.data.averageRating);
             } catch (error) {
@@ -52,7 +54,9 @@ const DetailProductPage = () => {
             setComment("");
             setRating(0);
 
-            const reviewRes = await axiosInstance.get(`/reviews/${product._id}`);
+            const reviewRes = await axiosInstance.get(
+                `/reviews/${product._id}`
+            );
             setReviews(reviewRes.data.reviews);
             setAverageRating(reviewRes.data.averageRating);
         } catch (error) {
@@ -116,7 +120,10 @@ const DetailProductPage = () => {
 
             {/* 리뷰 작성 폼 */}
             {user.isAuth && (
-                <form onSubmit={handleSubmitReview} className="mt-6 p-4 border rounded">
+                <form
+                    onSubmit={handleSubmitReview}
+                    className="mt-6 p-4 border rounded"
+                >
                     <h3 className="text-lg font-semibold mb-2">리뷰 작성</h3>
 
                     <div className="flex items-center mb-2">
@@ -127,7 +134,9 @@ const DetailProductPage = () => {
                                 onClick={() => setRating(i)}
                                 className="text-xl text-yellow-400"
                             >
-                                <FaStar color={i <= rating ? "#facc15" : "#e5e7eb"} />
+                                <FaStar
+                                    color={i <= rating ? "#facc15" : "#e5e7eb"}
+                                />
                             </button>
                         ))}
                     </div>

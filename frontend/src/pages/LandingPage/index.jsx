@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
-import CheckBox from "./Sections/CheckBox";
-import RadioBox from "./Sections/RadioBox";
-import SearchInput from "./Sections/SearchInput";
+// import CheckBox from "./Sections/CheckBox";
+// import RadioBox from "./Sections/RadioBox";
+// import SearchInput from "./Sections/SearchInput";
 import CardItem from "./Sections/CardItem";
 import axiosInstance, { setCsrfToken } from "../../utils/axios";
-import { categories, prices } from "../../utils/filterData";
-import { useSelector } from "react-redux";
+// import { categories, prices } from "../../utils/filterData";
+import { prices } from "../../utils/filterData";
+// import { useSelector } from "react-redux";
 import AdSlider from "../../components/AdSlider/AdSlider";
 import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
-  const user = useSelector((state) => state.user);
+  // const user = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   const limit = 4;
@@ -28,7 +29,7 @@ const LandingPage = () => {
   useEffect(() => {
     setCsrfToken();
     fetchProducts({ skip, limit });
-  }, []);
+  }, [skip]);
 
   const fetchProducts = async ({
     skip,

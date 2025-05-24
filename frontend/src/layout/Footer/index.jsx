@@ -1,5 +1,5 @@
 import React from "react";
-import { AiOutlineSmile } from "react-icons/ai";
+// import { AiOutlineSmile } from "react-icons/ai";
 
 const Footer = () => {
     return (

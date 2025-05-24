@@ -20,50 +20,33 @@ router.post("/image", auth, (req, res) => {
     });
 });
 
-// 상품 상세 조회
-// router.get("/:id", async (req, res, next) => {
-//     try {
-//         const product = await Product.findById(req.params.id).populate("writer");
-//         const reviews = await Review.find({ product: req.params.id }).populate("user", "name");
-
-//         const averageRating = reviews.length
-//             ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length
-//             : 0;
-
-//         res.status(200).json({
-//             product,
-//             reviews,
-//             averageRating,
-//         });
-//     } catch (error) {
-//         next(error);
-//     }
-// });
-
 // 상품 상세 조회 + 조회수 증가
 router.get("/:id", async (req, res, next) => {
-  try {
-    // ✅ 조회수 1 증가
-    await Product.findByIdAndUpdate(req.params.id, { $inc: { views: 1 } });
+    try {
+        // ✅ 조회수 1 증가
+        await Product.findByIdAndUpdate(req.params.id, { $inc: { views: 1 } });
 
-    const product = await Product.findById(req.params.id).populate("writer");
-    const reviews = await Review.find({ product: req.params.id }).populate("user", "name");
+        const product = await Product.findById(req.params.id).populate(
+            "writer"
+        );
+        const reviews = await Review.find({ product: req.params.id }).populate(
+            "user",
+            "name"
+        );
 
-    const averageRating = reviews.length
-      ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length
-      : 0;
+        const averageRating = reviews.length
+            ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length
+            : 0;
 
-    res.status(200).json({
-      product,
-      reviews,
-      averageRating,
-    });
-  } catch (error) {
-    next(error);
-  }
+        res.status(200).json({
+            product,
+            reviews,
+            averageRating,
+        });
+    } catch (error) {
+        next(error);
+    }
 });
-
-
 
 router.get("/", async (req, res) => {
     try {
@@ -79,24 +62,17 @@ router.get("/", async (req, res) => {
 
         const query = {};
 
-        // if (searchTerm) {
-        //     query.title = { $regex: searchTerm, $options: "i" };
-        // }
-
-        // 이 부분만 교체하면 됨
-if (searchTerm) {
-  query.$or = [
-    { title: { $regex: searchTerm, $options: "i" } },
-    { description: { $regex: searchTerm, $options: "i" } },
-  ];
-}
-
+        if (searchTerm) {
+            query.$or = [
+                { title: { $regex: searchTerm, $options: "i" } },
+                { description: { $regex: searchTerm, $options: "i" } },
+            ];
+        }
 
         // ✅ 이렇게 고쳐야 DB의 category 필드에 필터 적용됨
         if (filters.continents && filters.continents.length > 0) {
             query.category = { $in: filters.continents };
         }
-
 
         if (filters.price && filters.price.length === 2) {
             query.price = {
@@ -112,10 +88,14 @@ if (searchTerm) {
         const productsWithRating = await Promise.all(
             rawProducts.map(async (product) => {
                 const reviews = await Review.find({ product: product._id });
-                const avg = reviews.reduce((acc, r) => acc + r.rating, 0) / (reviews.length || 1);
+                const avg =
+                    reviews.reduce((acc, r) => acc + r.rating, 0) /
+                    (reviews.length || 1);
                 return {
                     ...product._doc,
-                    averageRating: reviews.length ? parseFloat(avg.toFixed(1)) : 0,
+                    averageRating: reviews.length
+                        ? parseFloat(avg.toFixed(1))
+                        : 0,
                 };
             })
         );
@@ -138,24 +118,24 @@ if (searchTerm) {
                 sorted.sort((a, b) => b.sold - a.sold);
                 break;
             default:
-                sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                sorted.sort(
+                    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+                );
         }
 
         const totalCount = await Product.countDocuments(query);
         const hasMore = parseInt(skip) + parseInt(limit) < totalCount;
 
         res.status(200).json({
-    products: sorted,
-    hasMore,
-    totalCount, // ✅ 추가
-});
-
+            products: sorted,
+            hasMore,
+            totalCount, // ✅ 추가
+        });
     } catch (err) {
         console.error("❌ 상품 목록 조회 실패:", err);
         res.status(400).send("상품 목록 조회 실패");
     }
 });
-
 
 // 상품 등록
 router.post("/", auth, async (req, res, next) => {

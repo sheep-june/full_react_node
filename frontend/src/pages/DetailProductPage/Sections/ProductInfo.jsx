@@ -1,16 +1,31 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../../store/thunkFunctions";
 import axiosInstance from "../../../utils/axios";
+import { useNavigate } from "react-router-dom";
 
 const ProductInfo = ({ product }) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const user = useSelector((state) => state.user);
 
     const handleCartClick = () => {
+        // ✅ 로그인 안된 경우 로그인 페이지로 이동
+        if (!user.isAuth) {
+            alert("로그인이 필요합니다.");
+            navigate("/auth");
+            return;
+        }
         dispatch(addToCart({ productId: product._id }));
     };
 
     const handleWishlistClick = async () => {
+        // ✅ 로그인 안된 경우 로그인 페이지로 이동
+        if (!user.isAuth) {
+            alert("로그인이 필요합니다.");
+            navigate("/auth");
+            return;
+        }
         try {
             const res = await axiosInstance.post("/users/wishlist", {
                 productId: product._id,
