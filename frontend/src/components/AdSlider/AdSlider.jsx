@@ -40,6 +40,7 @@ const AdSlider = () => {
 
   return (
     <div className="relative w-full aspect-video bg-black mb-8 overflow-hidden">
+
       {/* 왼쪽 버튼 */}
       <button
         className="absolute left-2 top-1/2 z-20 transform -translate-y-1/2 text-white text-3xl"

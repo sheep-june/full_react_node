@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from "react";
-// import CheckBox from "./Sections/CheckBox";
-// import RadioBox from "./Sections/RadioBox";
-// import SearchInput from "./Sections/SearchInput";
 import CardItem from "./Sections/CardItem";
 import axiosInstance, { setCsrfToken } from "../../utils/axios";
-// import { categories, prices } from "../../utils/filterData";
 import { prices } from "../../utils/filterData";
-// import { useSelector } from "react-redux";
 import AdSlider from "../../components/AdSlider/AdSlider";
 import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
-  // const user = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   const limit = 4;
@@ -138,42 +132,22 @@ const LandingPage = () => {
           onChange={(e) => setQuickSearch(e.target.value)}
           onKeyDown={handleQuickSearch}
           placeholder="상품을 검색해보세요"
-          className="w-full max-w-md border border-[#00C4C4] p-2 rounded-md"
+          className="w-full max-w-md border border-[#00C4C4] p-2 rounded-md 
+             focus:outline-none focus:ring-0 focus:border-2 focus:border-[#00C4C4]"
         />
+
         <button
           onClick={handleClickSearch}
           className="px-4 py-2 bg-white text-[#00C4C4] border border-[#00C4C4] rounded hover:bg-gray-100"
+        // className="px-4 py-2 bg-white text-[#00C4C4] border border-[#00C4C4] rounded 
+        //      hover:bg-gray-100 active:bg-white focus:outline-none focus:ring-0"
+        // 
         >
           검색
         </button>
       </div>
 
       <AdSlider />
-
-      {/* <div className="flex gap-3">
-        <div className="w-1/2">
-          <CheckBox
-            items={categories}
-            checkedItems={filters.categories}
-            onFilters={(filters) => handleFilters(filters, "categories")}
-          />
-        </div>
-
-        <div className="w-1/2">
-          <RadioBox
-            prices={prices}
-            checkedPrice={filters.price}
-            onFilters={(filters) => handleFilters(filters, "price")}
-          />
-        </div>
-      </div> */}
-
-      {/* <div className="flex justify-end mb-3">
-        <SearchInput
-          searchTerm={searchTerm}
-          onSearch={handleSearchTerm}
-        />
-      </div> */}
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {products.map((product) => (

@@ -96,7 +96,6 @@ function App() {
                 <Route element={<NotAuthRoutes isAuth={isAuth} />}>
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
-
                 </Route>
 
                 {/* 🔒 로그인 유저만 접근 */}
@@ -108,10 +107,7 @@ function App() {
                     <Route path="/user/myproducts" element={<MyProductsPage />} />
                     <Route path="/user/wishlist" element={<WishlistPage />} />
                     <Route path="/product/edit/:productId" element={<EditProductPage />} />
-
-                    {/* ✅ 게시판 */}
                     <Route path="/board" element={<BoardPage />} />
-
                     <Route path="/board/question" element={<QuestionPage />} />
                 </Route>
 
