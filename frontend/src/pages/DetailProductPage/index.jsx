@@ -19,10 +19,15 @@ const DetailProductPage = () => {
     useEffect(() => {
         async function fetchProduct() {
             try {
-                const response = await axiosInstance.get(
-                    `/products/${productId}?type=single`
-                );
-                setProduct(response.data.product);
+                // const response = await axiosInstance.get(
+                //     `/products/${productId}?type=single`
+                // );
+                // setProduct(response.data.product);
+                const response = await axiosInstance.get(`/products/${productId}`);
+                setProduct(response.data.product); // ← 이제 제대로 들어옴
+                setReviews(response.data.reviews);
+                setAverageRating(response.data.averageRating);
+
 
                 const reviewRes = await axiosInstance.get(
                     `/reviews/${productId}`

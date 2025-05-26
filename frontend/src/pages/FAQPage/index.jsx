@@ -75,8 +75,9 @@ const FAQPage = () => {
       {faqs.length === 0 ? (
         <p className="text-gray-500">FAQ가 없습니다.</p>
       ) : (
-        faqs.map((faq) => <FaqItem key={faq._id} faq={faq} />)
+        faqs.map((faq) => <FaqItem key={faq._id} faq={faq} onUpdate={fetchFaqs} />)
       )}
+
     </div>
   );
 };

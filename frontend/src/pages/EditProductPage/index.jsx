@@ -58,6 +58,10 @@ const EditProductPage = () => {
         }
     };
 
+    if (!product || !product.images) {
+        return <p className="text-center mt-10">상품 정보를 불러오는 중입니다...</p>;
+    }
+
     return (
         <section>
             <div className="text-center m-7">

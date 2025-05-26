@@ -6,10 +6,13 @@ import { toast } from "react-toastify";
 
 const FaqWritePage = () => {
   const [form, setForm] = useState({ title: "", content: "" });
-  const user = useSelector((state) => state.user?.userData);
   const navigate = useNavigate();
 
-  const isAdmin = user?.role === "admin";
+  // const isAdmin = user?.role === "admin";
+  // const user = useSelector((state) => state.user?.userData);
+
+  const isAdmin = !!localStorage.getItem("adminToken");
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,7 +21,16 @@ const FaqWritePage = () => {
     }
 
     try {
-      await axios.post("/api/faq", form, { withCredentials: true });
+      // await axios.post("/api/faq", form, { withCredentials: true });
+      const token = localStorage.getItem("adminToken");
+
+      await axios.post("/api/faq", form, {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       toast.success("FAQ 작성 완료!");
       navigate("/board/faq");
     } catch (err) {

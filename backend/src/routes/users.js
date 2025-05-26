@@ -566,48 +566,110 @@ router.put("/cart/quantity", auth, async (req, res) => {
     }
 });
 
+// router.post("/payment", auth, async (req, res) => {
+//     const history = [];
+//     const transactionData = {};
+
+//     req.body.cartDetail.forEach((item) => {
+//         history.push({
+//             dateOfPurchase: new Date().toISOString(),
+//             name: item.title,
+//             id: item._id,
+//             price: item.price,
+//             quantity: item.quantity,
+//             paymentId: crypto.randomUUID(),
+//         });
+//     });
+
+//     transactionData.user = {
+//         id: req.user._id,
+//         name: req.user.name,
+//         email: req.user.email,
+//     };
+//     transactionData.product = history;
+
+//     await User.findOneAndUpdate(
+//         { _id: req.user._id },
+//         { $push: { history: { $each: history } }, $set: { cart: [] } }
+//     );
+
+//     const payment = new Payment(transactionData);
+//     const paymentDocs = await payment.save();
+
+//     const products = paymentDocs.product.map((item) => ({
+//         id: item.id,
+//         quantity: item.quantity,
+//     }));
+
+//     async.eachSeries(products, async (item) => {
+//         await Product.updateOne({ _id: item.id }, { $inc: { sold: item.quantity } });
+//     }, (err) => {
+//         if (err) return res.status(500).send(err);
+//         return res.sendStatus(200);
+//     });
+// });
+
 router.post("/payment", auth, async (req, res) => {
-    const history = [];
-    const transactionData = {};
+    try {
+        const { cartDetail } = req.body;
+        const user = await User.findById(req.user._id);
+        if (!user) return res.status(404).send("유저 없음");
 
-    req.body.cartDetail.forEach((item) => {
-        history.push({
-            dateOfPurchase: new Date().toISOString(),
-            name: item.title,
-            id: item._id,
-            price: item.price,
-            quantity: item.quantity,
-            paymentId: crypto.randomUUID(),
+        const history = [];
+        const paidIds = []; // ✅ 결제한 상품 ID 모음
+
+        cartDetail.forEach((item) => {
+            history.push({
+                dateOfPurchase: new Date().toISOString(),
+                name: item.title,
+                id: item._id,
+                price: item.price,
+                quantity: item.quantity,
+                paymentId: crypto.randomUUID(),
+            });
+            paidIds.push(item._id); // ✅ 추적
         });
-    });
 
-    transactionData.user = {
-        id: req.user._id,
-        name: req.user.name,
-        email: req.user.email,
-    };
-    transactionData.product = history;
+        const transactionData = {
+            user: {
+                id: req.user._id,
+                name: req.user.name,
+                email: req.user.email,
+            },
+            product: history,
+        };
 
-    await User.findOneAndUpdate(
-        { _id: req.user._id },
-        { $push: { history: { $each: history } }, $set: { cart: [] } }
-    );
+        // ✅ 결제한 상품만 cart에서 제거
+        await User.findByIdAndUpdate(
+            req.user._id,
+            {
+                $push: { history: { $each: history } },
+                $pull: { cart: { id: { $in: paidIds } } },
+            },
+            { new: true }
+        );
 
-    const payment = new Payment(transactionData);
-    const paymentDocs = await payment.save();
+        // ✅ 결제 내역 저장
+        const payment = new Payment(transactionData);
+        const saved = await payment.save();
 
-    const products = paymentDocs.product.map((item) => ({
-        id: item.id,
-        quantity: item.quantity,
-    }));
+        // ✅ 판매량 증가
+        await Promise.all(
+            saved.product.map((item) =>
+                Product.updateOne(
+                    { _id: item.id },
+                    { $inc: { sold: item.quantity } }
+                )
+            )
+        );
 
-    async.eachSeries(products, async (item) => {
-        await Product.updateOne({ _id: item.id }, { $inc: { sold: item.quantity } });
-    }, (err) => {
-        if (err) return res.status(500).send(err);
-        return res.sendStatus(200);
-    });
+        res.sendStatus(200);
+    } catch (err) {
+        console.error("❌ 결제 오류:", err);
+        res.status(500).send("결제 처리 중 오류 발생");
+    }
 });
+
 
 router.post("/wishlist", auth, async (req, res, next) => {
     try {

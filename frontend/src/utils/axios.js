@@ -30,7 +30,8 @@ axiosInstance.interceptors.request.use(
     }
 
     if (csrf) {
-      config.headers["X-CSRF-Token"] = csrf;
+      // config.headers["X-CSRF-Token"] = csrf;
+      config.headers["x-xsrf-token"] = csrf;
     }
 
     return config;
@@ -51,7 +52,8 @@ export const setCsrfToken = async () => {
     localStorage.setItem("csrfToken", token);
 
     // ✅ 헤더에도 등록
-    axiosInstance.defaults.headers.common["X-CSRF-Token"] = token;
+    // axiosInstance.defaults.headers.common["X-CSRF-Token"] = token;
+    axiosInstance.defaults.headers.common["x-xsrf-token"] = token;
 
     // ✅ 쿠키에도 등록 ← 이게 핵심
     document.cookie = `XSRF-TOKEN=${token}; path=/;`;
