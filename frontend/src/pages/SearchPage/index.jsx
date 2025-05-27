@@ -127,13 +127,13 @@ const SearchPage = () => {
                 >
                     검색
                 </button>
-
             </form>
 
             <div className="flex gap-6">
                 <div className="w-[250px] space-y-4">
                     <div>
-                        <h3 className="font-semibold mb-1">카테고리</h3>
+                        <h3 className="font-semibold mb-1 text-center">카테고리</h3>
+
                         <CheckBox
                             items={categories}
                             checkedItems={filters.continents}
