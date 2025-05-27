@@ -14,7 +14,7 @@ const sortOptions = [
     { id: "sold", label: "판매순" },
 ];
 
-const ITEMS_PER_PAGE = 15;
+const ITEMS_PER_PAGE = 18;
 
 const SearchPage = () => {
     const [searchParams] = useSearchParams();
@@ -132,7 +132,9 @@ const SearchPage = () => {
             <div className="flex gap-6">
                 <div className="w-[250px] space-y-4">
                     <div>
-                        <h3 className="font-semibold mb-1 text-center">카테고리</h3>
+                        <h3 className="text-[#00C4C4] font-semibold mb-1 text-center">
+                            카테고리
+                        </h3>
 
                         <CheckBox
                             items={categories}
@@ -143,7 +145,7 @@ const SearchPage = () => {
                         />
                     </div>
                     <div>
-                        <h3 className="font-semibold mb-1">가격</h3>
+                        <h3 className="text-[#00C4C4] font-semibold text-center mb-1">가격</h3>
                         <RadioBox
                             prices={prices}
                             checkedPrice={
@@ -166,22 +168,24 @@ const SearchPage = () => {
                             <button
                                 key={option.id}
                                 onClick={() => handleSortChange(option.id)}
-                                className={`text-sm px-2 py-1 rounded border-b-2 transition-all duration-150 ${sortBy === option.id
+                                className={`text-sm px-2 py-1 rounded border-b-2 transition-all duration-150 ${
+                                    sortBy === option.id
                                         ? "border-black font-semibold"
                                         : "border-transparent text-gray-500"
-                                    }`}
+                                }`}
                             >
                                 {option.label}
                             </button>
                         ))}
                     </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                    {/* <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3"> */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
                         {products.map((product) => (
                             <CardItem
                                 key={product._id}
                                 product={product}
-                                refreshWishlist={() => { }}
+                                refreshWishlist={() => {}}
                             />
                         ))}
                     </div>
@@ -191,38 +195,49 @@ const SearchPage = () => {
                         <button
                             onClick={() => changePage(1)}
                             disabled={currentPage === 1}
+                            className="px-3 py-1 border border-[#00C4C4] text-[#00C4C4] rounded hover:bg-[#00C4C4] hover:text-white disabled:opacity-50"
                         >
                             처음
                         </button>
                         <button
                             onClick={() => changePage(currentPage - 1)}
                             disabled={currentPage === 1}
+                            className="px-3 py-1 border border-[#00C4C4] text-[#00C4C4] rounded hover:bg-[#00C4C4] hover:text-white disabled:opacity-50"
                         >
                             이전
                         </button>
 
-                        {[...Array(totalPages)].map((_, index) => (
-                            <button
-                                key={index + 1}
-                                onClick={() => changePage(index + 1)}
-                                className={`px-3 py-1 border rounded ${currentPage === index + 1
-                                        ? "bg-black text-white"
-                                        : ""
-                                    }`}
-                            >
-                                {index + 1}
-                            </button>
-                        ))}
+                        {[...Array(totalPages)].map((_, index) => {
+                            const pageNum = index + 1;
+                            const isActive = currentPage === pageNum;
+
+                            return (
+                                <button
+                                    key={pageNum}
+                                    onClick={() => changePage(pageNum)}
+                                    className={`px-3 py-1 border border-[#00C4C4] rounded transition-all
+          ${
+              isActive
+                  ? "bg-[#00C4C4] text-white"
+                  : "text-[#00C4C4] hover:bg-[#00C4C4] hover:text-white"
+          }`}
+                                >
+                                    {pageNum}
+                                </button>
+                            );
+                        })}
 
                         <button
                             onClick={() => changePage(currentPage + 1)}
                             disabled={currentPage === totalPages}
+                            className="px-3 py-1 border border-[#00C4C4] text-[#00C4C4] rounded hover:bg-[#00C4C4] hover:text-white disabled:opacity-50"
                         >
                             다음
                         </button>
                         <button
                             onClick={() => changePage(totalPages)}
                             disabled={currentPage === totalPages}
+                            className="px-3 py-1 border border-[#00C4C4] text-[#00C4C4] rounded hover:bg-[#00C4C4] hover:text-white disabled:opacity-50"
                         >
                             마지막
                         </button>

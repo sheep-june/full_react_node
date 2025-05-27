@@ -30,11 +30,11 @@ const SliderSection = ({ title, sort }) => {
   const settings = {
     dots: false,
     infinite: true,
-    slidesToShow: 4,
+    slidesToShow: 6,
     slidesToScroll: 1,
     autoplay: true,
-    speed: 2000,
-    autoplaySpeed: 2000,
+    speed: 2500,
+    autoplaySpeed: 1500,
     cssEase: "linear",
     pauseOnHover: true,
     responsive: [

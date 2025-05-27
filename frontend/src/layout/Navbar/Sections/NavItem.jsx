@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { logoutUser } from "../../../store/thunkFunctions";
-import { AiOutlineShoppingCart } from "react-icons/ai";
+import { AiOutlineShoppingCart, AiOutlineUser } from "react-icons/ai";
 import { setCsrfToken } from "../../../utils/axios";
 import { isProtectedPath } from "../../../utils/protectedPaths";
 
@@ -86,9 +86,12 @@ const NavItem = ({ mobile }) => {
                 onMouseEnter={() => setDropdownOpen(true)}
                 onMouseLeave={() => setDropdownOpen(false)}
             >
-                <button className="px-4 py-2 text-[#00C4C4] hover:underline">
-                    마이페이지
-                </button>
+                <Link
+                    to="/user/mypage"
+                    className="text-xl text-[#00C4C4] hover:underline flex items-center gap-1"
+                >
+                    <AiOutlineUser />
+                </Link>
 
                 {dropdownOpen && (
                     <ul className="absolute top-full right-0 z-20 w-40 py-2 bg-white border rounded shadow-lg text-black text-sm">

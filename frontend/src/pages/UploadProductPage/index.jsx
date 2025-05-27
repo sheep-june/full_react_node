@@ -137,7 +137,7 @@ const UploadProductPage = () => {
                         id="description"
                         name="description"
                         className="w-full px-4 py-2 mt-2 bg-white border rounded-md"
-                        rows={6}
+                        rows={10}
                         placeholder="상품에 대한 설명을 입력하세요"
                         onChange={handleChange}
                         value={product.description}
@@ -147,7 +147,7 @@ const UploadProductPage = () => {
                 <div className="mt-4">
                     <button
                         type="submit"
-                        className="w-full px-4 py-2 text-white bg-black rounded-md hover:bg-gray-700"
+                        className="w-full px-4 py-2 text-[#00C4C4] border border-[#00C4C4] bg-white rounded-md hover:bg-[#00C4C4] hover:text-white transition"
                     >
                         생성하기
                     </button>

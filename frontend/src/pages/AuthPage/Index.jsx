@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import { loginUser, registerUser } from "../../store/thunkFunctions";
 import { setCsrfToken } from "../../utils/axios";
 import { useNavigate, useSearchParams } from "react-router-dom";
-// import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 
 const AuthPage = () => {
     const dispatch = useDispatch();
@@ -142,7 +141,7 @@ const AuthPage = () => {
                     onSubmit={handleLoginSubmit(onLogin)}
                     className="bg-white flex flex-col items-center justify-center h-full px-10 text-center"
                 >
-                    <h1 className="text-2xl font-bold mb-2">로그인</h1>
+                    <h1 className="text-2xl text-[#00C4C4] mb-2">로그인</h1>
                     <input
                         type="email"
                         placeholder="Email"
