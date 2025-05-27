@@ -4,6 +4,7 @@ import axiosInstance, { setCsrfToken } from "../../utils/axios";
 import { prices } from "../../utils/filterData";
 import AdSlider from "../../components/AdSlider/AdSlider";
 import { useNavigate } from "react-router-dom";
+import SliderSection from "../../components/SliderSection"; // 상단에 추가
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -138,17 +139,19 @@ const LandingPage = () => {
 
         <button
           onClick={handleClickSearch}
-          className="px-4 py-2 bg-white text-[#00C4C4] border border-[#00C4C4] rounded hover:bg-gray-100"
-        // className="px-4 py-2 bg-white text-[#00C4C4] border border-[#00C4C4] rounded 
-        //      hover:bg-gray-100 active:bg-white focus:outline-none focus:ring-0"
-        // 
+          className="px-4 py-2 bg-white text-[#00C4C4] border border-[#00C4C4] rounded 
+             hover:bg-[#00C4C4] hover:text-white"
         >
           검색
         </button>
+
       </div>
 
       <AdSlider />
 
+      <SliderSection title="🔥 판매순 TOP 10" sort="sold" />
+      <SliderSection title="👀 조회순 TOP 10" sort="views" />
+      <SliderSection title="⭐️ 별점순 TOP 10" sort="rating" />
       {/* <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {products.map((product) => (
           <CardItem product={product} key={product._id} />
@@ -165,6 +168,7 @@ const LandingPage = () => {
           </button>
         </div>
       )} */}
+
     </section>
   );
 };

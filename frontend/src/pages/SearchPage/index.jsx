@@ -110,21 +110,24 @@ const SearchPage = () => {
             {/* 검색창 */}
             <form
                 onSubmit={handleSearchSubmit}
-                className="mb-4 flex justify-center"
+                className="mb-4 flex justify-center gap-2"
             >
                 <input
                     type="text"
                     value={searchTerm}
                     onChange={handleSearchInputChange}
-                    className="border p-2 w-full max-w-xl rounded-l"
+                    className="w-full max-w-xl border border-[#00C4C4] p-2 rounded-md 
+             focus:outline-none focus:ring-0 focus:border-2 focus:border-[#00C4C4]"
                     placeholder="검색어를 입력하세요"
                 />
                 <button
                     type="submit"
-                    className="bg-black text-white px-4 rounded-r"
+                    className="px-4 py-2 bg-white text-[#00C4C4] border border-[#00C4C4] rounded 
+             hover:bg-[#00C4C4] hover:text-white"
                 >
                     검색
                 </button>
+
             </form>
 
             <div className="flex gap-6">
@@ -163,11 +166,10 @@ const SearchPage = () => {
                             <button
                                 key={option.id}
                                 onClick={() => handleSortChange(option.id)}
-                                className={`text-sm px-2 py-1 rounded border-b-2 transition-all duration-150 ${
-                                    sortBy === option.id
+                                className={`text-sm px-2 py-1 rounded border-b-2 transition-all duration-150 ${sortBy === option.id
                                         ? "border-black font-semibold"
                                         : "border-transparent text-gray-500"
-                                }`}
+                                    }`}
                             >
                                 {option.label}
                             </button>
@@ -179,7 +181,7 @@ const SearchPage = () => {
                             <CardItem
                                 key={product._id}
                                 product={product}
-                                refreshWishlist={() => {}}
+                                refreshWishlist={() => { }}
                             />
                         ))}
                     </div>
@@ -203,11 +205,10 @@ const SearchPage = () => {
                             <button
                                 key={index + 1}
                                 onClick={() => changePage(index + 1)}
-                                className={`px-3 py-1 border rounded ${
-                                    currentPage === index + 1
+                                className={`px-3 py-1 border rounded ${currentPage === index + 1
                                         ? "bg-black text-white"
                                         : ""
-                                }`}
+                                    }`}
                             >
                                 {index + 1}
                             </button>

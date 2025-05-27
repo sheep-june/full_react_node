@@ -26,7 +26,7 @@ const CardItem = ({ product, refreshWishlist, wishlist }) => {
         }
         setReady(true);
     }, [user.userData?.wishlist, user.isAuth, product._id]);
-    
+
 
 
 
@@ -65,10 +65,12 @@ const CardItem = ({ product, refreshWishlist, wishlist }) => {
         }
     };
 
-    
+
     return (
-        <div className="relative border-[1px] border-gray-300 rounded-md overflow-hidden w-full max-w-[230px] mx-auto">
-            {/* ✅ 이미지 크기 고정 */}
+        <Link
+            to={`/product/${product._id}`}
+            className="block relative border-2 border-[#a0f0f0] rounded-md overflow-hidden w-full max-w-[230px] mx-auto hover:border-[#00C4C4] transition-colors duration-200"
+        >
             <div className="w-full h-[180px]">
                 <ImageSlider
                     images={imageUrls}
@@ -78,7 +80,10 @@ const CardItem = ({ product, refreshWishlist, wishlist }) => {
 
             {ready && (
                 <button
-                    onClick={handleToggleWish}
+                    onClick={(e) => {
+                        e.preventDefault(); // ✅ 링크 클릭 막고 찜만 처리
+                        handleToggleWish(e);
+                    }}
                     disabled={!ready}
                     className="absolute top-2 right-2 text-red-500 text-xl z-10"
                 >
@@ -86,19 +91,18 @@ const CardItem = ({ product, refreshWishlist, wishlist }) => {
                 </button>
             )}
 
-            <Link to={`/product/${product._id}`}>
-                <div className="p-2 space-y-1">
-                    <p className="font-semibold truncate">{product.title}</p>
-                    <div className="flex items-center gap-1 text-yellow-500 text-sm">
-                        <FaStar />
-                        <span>{Number(product.averageRating || 0).toFixed(1)}</span>
-                    </div>
-                    <p className="text-sm text-gray-700">
-                        {product.price.toLocaleString()}원
-                    </p>
+            <div className="p-2 space-y-1">
+                <p className="font-semibold truncate">{product.title}</p>
+                <div className="flex items-center gap-1 text-yellow-500 text-sm">
+                    <FaStar />
+                    <span>{Number(product.averageRating || 0).toFixed(1)}</span>
                 </div>
-            </Link>
-        </div>
+                <p className="text-sm text-gray-700">
+                    {product.price.toLocaleString()}원
+                </p>
+            </div>
+        </Link>
+
     );
 
 };
