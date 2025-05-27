@@ -37,6 +37,10 @@ import QuestionPage from "./pages/QuestionPage";
 import BoardSection from "./pages/AdminDashboardPage/Sections/BoardSection";
 import FaqWritePage from "./pages/FaqWritePage";
 
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+
 function Layout() {
     const location = useLocation();
 

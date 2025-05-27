@@ -149,13 +149,13 @@ const LandingPage = () => {
 
       <AdSlider />
 
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+      {/* <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {products.map((product) => (
           <CardItem product={product} key={product._id} />
         ))}
-      </div>
+      </div> */}
 
-      {hasMore && (
+      {/* {hasMore && (
         <div className="flex justify-center mt-5">
           <button
             onClick={handleLoadMore}
@@ -164,7 +164,7 @@ const LandingPage = () => {
             더 보기
           </button>
         </div>
-      )}
+      )} */}
     </section>
   );
 };
