@@ -71,14 +71,15 @@ const WishlistPage = () => {
                         <button
                             onClick={handleAddToCart}
                             disabled={selected.length === 0}
-                            className="bg-green-500 text-white px-4 py-2 rounded disabled:opacity-50"
+                            className="px-4 py-2 border border-[#00C4C4] text-[#00C4C4] bg-white rounded hover:bg-[#00C4C4] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
                         >
                             장바구니 추가
                         </button>
+
                         <button
                             onClick={handleDeleteWishlist}
                             disabled={selected.length === 0}
-                            className="bg-red-500 text-white px-4 py-2 rounded disabled:opacity-50"
+                            className="px-4 py-2 border border-red-500 text-red-500 bg-white rounded hover:bg-red-500 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
                         >
                             삭제
                         </button>

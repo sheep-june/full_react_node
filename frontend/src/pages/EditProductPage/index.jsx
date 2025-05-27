@@ -23,7 +23,9 @@ const EditProductPage = () => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const res = await axiosInstance.get(`/products/${productId}?type=single`);
+                const res = await axiosInstance.get(
+                    `/products/${productId}?type=single`
+                );
                 setProduct(res.data[0]);
             } catch (err) {
                 console.error("상품 정보 불러오기 실패:", err);
@@ -59,7 +61,11 @@ const EditProductPage = () => {
     };
 
     if (!product || !product.images) {
-        return <p className="text-center mt-10">상품 정보를 불러오는 중입니다...</p>;
+        return (
+            <p className="text-center mt-10">
+                상품 정보를 불러오는 중입니다...
+            </p>
+        );
     }
 
     return (
@@ -69,7 +75,10 @@ const EditProductPage = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="mt-6">
-                <FileUpload images={product.images} onImageChange={handleImages} />
+                <FileUpload
+                    images={product.images}
+                    onImageChange={handleImages}
+                />
 
                 <div className="mt-4">
                     <label htmlFor="title">상품명</label>
@@ -126,7 +135,7 @@ const EditProductPage = () => {
                 <div className="mt-4">
                     <button
                         type="submit"
-                        className="w-full px-4 py-2 text-white bg-black rounded-md hover:bg-gray-700"
+                        className="w-full px-4 py-2 text-[#00C4C4] border border-[#00C4C4] bg-white rounded-md hover:bg-[#00C4C4] hover:text-white transition-colors duration-200"
                     >
                         수정하기
                     </button>
