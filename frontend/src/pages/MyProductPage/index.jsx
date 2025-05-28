@@ -23,7 +23,6 @@ const MyProductsPage = () => {
 
     const handleDelete = async (id) => {
         if (!window.confirm("정말 삭제하시겠습니까?")) return;
-
         try {
             await axiosInstance.delete(`/products/${id}`, {
                 headers: {
@@ -31,7 +30,6 @@ const MyProductsPage = () => {
                         axiosInstance.defaults.headers.common["X-CSRF-Token"],
                 },
             });
-
             alert("삭제되었습니다.");
             fetchMyProducts();
         } catch (error) {
