@@ -45,7 +45,7 @@ const SliderSection = ({ title, sort }) => {
   };
 
   return (
-    <div className="my-10">
+    <div className="my-10 bg-[#fff5f8] px-4 py-6 rounded-md">
       <h2 className="text-xl font-semibold mb-4">{title}</h2>
       <Slider {...settings}>
         {products.map((product) => (

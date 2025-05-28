@@ -77,17 +77,16 @@ const AuthPage = () => {
         <div className="w-screen h-screen m-0 p-0 overflow-hidden bg-[#f6f5f7] font-[Montserrat] relative flex">
             {/* 회원가입 폼 */}
             <div
-                className={`absolute top-0 left-0 w-1/2 h-full transition-all duration-700 ease-in-out ${
-                    isRightPanelActive
-                        ? "translate-x-full opacity-100 z-20"
-                        : "opacity-0 z-10"
-                }`}
+                className={`absolute top-0 left-0 w-1/2 h-full transition-all duration-700 ease-in-out ${isRightPanelActive
+                    ? "translate-x-full opacity-100 z-20"
+                    : "opacity-0 z-10"
+                    }`}
             >
                 <form
                     onSubmit={handleRegisterSubmit(onRegister)}
                     className="bg-white flex flex-col items-center justify-center h-full px-10 text-center"
                 >
-                    <h1 className="text-2xl font-bold mb-2">회원가입</h1>
+                    <h1 className="text-2xl text-[#00C4C4] mb-2">회원가입</h1>
                     <input
                         type="text"
                         placeholder="Name"
@@ -113,29 +112,40 @@ const AuthPage = () => {
                         })}
                         className="bg-gray-200 px-4 py-2 mb-2 w-full max-w-[300px]"
                     />
-                    <button
-                        type="submit"
-                        className="mt-2 px-6 py-2 bg-[#00C4C4] text-white rounded-full"
-                    >
-                        회원가입
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => setIsRightPanelActive(false)}
-                        className="mt-4 text-sm text-[#00C4C4]"
-                    >
-                        로그인으로
-                    </button>
+
+
+                    <div className="flex flex-col items-center space-y-2">
+                        {/* 회원가입 버튼 */}
+                        <button
+                            type="submit"
+                            className="w-[120px] py-2 border border-[#00C4C4] text-[#00C4C4] bg-white rounded-full hover:bg-[#00C4C4] hover:text-white transition-colors duration-200"
+                        >
+                            회원가입
+                        </button>
+
+                        {/* 로그인으로 버튼 */}
+                        <button
+                            type="button"
+                            onClick={() => setIsRightPanelActive(false)}
+                            className="w-[120px] py-2 border border-pink-500 text-pink-500 bg-white rounded-full hover:bg-pink-500 hover:text-white transition-colors duration-200"
+                        >
+                            로그인으로
+                        </button>
+                    </div>
+
+
+
+
+
                 </form>
             </div>
 
             {/* 로그인 폼 */}
             <div
-                className={`absolute top-0 left-0 w-1/2 h-full transition-all duration-700 ease-in-out ${
-                    isRightPanelActive
-                        ? "translate-x-full opacity-0 z-10"
-                        : "opacity-100 z-20"
-                }`}
+                className={`absolute top-0 left-0 w-1/2 h-full transition-all duration-700 ease-in-out ${isRightPanelActive
+                    ? "translate-x-full opacity-0 z-10"
+                    : "opacity-100 z-20"
+                    }`}
             >
                 <form
                     onSubmit={handleLoginSubmit(onLogin)}
@@ -159,27 +169,28 @@ const AuthPage = () => {
                         })}
                         className="bg-gray-200 px-4 py-2 mb-2 w-full max-w-[300px]"
                     />
-                    <button
-                        type="submit"
-                        className="px-6 py-2 bg-[#00C4C4] text-white rounded-full"
-                    >
-                        로그인
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => setIsRightPanelActive(true)}
-                        className="mt-4 text-sm text-[#00C4C4]"
-                    >
-                        회원가입으로
-                    </button>
+                    <div className="flex flex-col items-center space-y-2">
+                        <button
+                            type="submit"
+                            className="w-[120px] py-2 border border-[#00C4C4] text-[#00C4C4] bg-white rounded-full hover:bg-[#00C4C4] hover:text-white transition-colors duration-200"
+                        >
+                            로그인
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setIsRightPanelActive(true)}
+                            className="w-[120px] py-2 border border-pink-500 text-pink-500 bg-white rounded-full hover:bg-pink-500 hover:text-white transition-colors duration-200"
+                        >
+                            회원가입으로
+                        </button>
+                    </div>
                 </form>
             </div>
 
             {/* 오버레이 패널 */}
             <div
-                className={`absolute top-0 left-1/2 w-1/2 h-full transition-transform duration-700 z-30 ${
-                    isRightPanelActive ? "-translate-x-full" : "translate-x-0"
-                }`}
+                className={`absolute top-0 left-1/2 w-1/2 h-full transition-transform duration-700 z-30 ${isRightPanelActive ? "-translate-x-full" : "translate-x-0"
+                    }`}
             >
                 <div className="w-full h-full bg-gradient-to-r from-[#00C4C4] to-[#00a8a8] text-white flex flex-col items-center justify-center px-10 text-center">
                     <h1 className="text-2xl font-bold mb-2">
@@ -188,7 +199,10 @@ const AuthPage = () => {
                             : "Hello, Friend!"}
                     </h1>
                     <p className="text-sm mb-4">
-                        개인 정보를 입력하고 여정을 시작하세요
+                        {/* 개인 정보를 입력하고 여정을 시작하세요 */}
+                        {isRightPanelActive
+                            ? "개인 정보를 입력하고 여정을 시작하세요"
+                            : "로그인하고 여정을 시작하세요"}
                     </p>
                 </div>
             </div>

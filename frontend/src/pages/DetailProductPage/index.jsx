@@ -156,10 +156,11 @@ const DetailProductPage = () => {
 
                     <button
                         type="submit"
-                        className="px-4 py-2 bg-black text-white rounded hover:bg-gray-700"
+                        className="px-4 py-2 border border-[#00C4C4] text-[#00C4C4] bg-white rounded hover:bg-[#00C4C4] hover:text-white transition-colors duration-200"
                     >
                         등록하기
                     </button>
+
                 </form>
             )}
         </section>

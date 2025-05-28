@@ -59,16 +59,18 @@ const ProductInfo = ({ product }) => {
             <div className="mt-3 flex space-x-2">
                 <button
                     onClick={handleCartClick}
-                    className="w-1/2 px-4 py-2 text-white bg-black rounded-md hover:bg-gray-700"
+                    className="w-1/2 px-4 py-2 border border-[#00C4C4] text-[#00C4C4] bg-white rounded-md hover:bg-[#00C4C4] hover:text-white transition-colors duration-200"
                 >
                     장바구니로
                 </button>
+
                 <button
                     onClick={handleWishlistClick}
-                    className="w-1/2 px-4 py-2 text-white bg-red-600 rounded-md hover:bg-red-700"
+                    className="w-1/2 px-4 py-2 border border-pink-500 text-pink-500 bg-white rounded-md hover:bg-pink-500 hover:text-white transition-colors duration-200"
                 >
                     찜하기
                 </button>
+
             </div>
         </div>
     );
