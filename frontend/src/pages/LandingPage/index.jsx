@@ -5,6 +5,7 @@ import { prices } from "../../utils/filterData";
 import AdSlider from "../../components/AdSlider/AdSlider";
 import { useNavigate } from "react-router-dom";
 import SliderSection from "../../components/SliderSection"; // 상단에 추가
+import AdVideoSlider from "../../components/AdSlider/AdVideoSlider";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -136,9 +137,10 @@ const LandingPage = () => {
         </button>
       </div>
       {/* <AdSlider /> */}
-      <SliderSection title="지금 가장 많이 팔린 베스트셀러! 놓치면 품절각!" sort="sold" />
+      <AdVideoSlider/>
+      <SliderSection title="지금 가장 많이 팔린 베스트셀러!" sort="sold" />
       <SliderSection title="사람들이 가장 많이 클릭한 인기 상품!" sort="views" />
-      <SliderSection title="실사용자 별점 만점! 가장 후기가 좋은 상품은 여기!" sort="rating" />
+      <SliderSection title="가장 후기가 좋은 상품은 여기!" sort="rating" />
     </section>
   );
 };

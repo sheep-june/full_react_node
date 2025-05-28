@@ -68,36 +68,37 @@ const AuthPage = () => {
             console.error("회원가입 에러:", error);
         }
     };
-
     return (
-        <div className="w-screen h-screen m-0 p-0 overflow-hidden bg-[#f6f5f7] font-[Montserrat] relative flex">
+        // <div className="w-screen h-screen m-0 p-0 overflow-hidden bg-[#f6f5f7] font-[Montserrat] relative flex">
+        <div className="w-screen h-screen m-0 p-0 overflow-hidden bg-white font-[Montserrat] relative flex">
             {/* 회원가입 폼 */}
             <div
-                className={`absolute top-0 left-0 w-1/2 h-full transition-all duration-700 ease-in-out ${isRightPanelActive
-                    ? "translate-x-full opacity-100 z-20"
-                    : "opacity-0 z-10"
+                className={`absolute top-0 left-0 w-1/2 h-full transition-all duration-700 ease-in-out ${isRightPanelActive ? "translate-x-full opacity-100 z-20" : "opacity-0 z-10"
                     }`}
             >
                 <form
-                    onSubmit={handleRegisterSubmit(onRegister)}
+                    onSubmit={handleRegisterSubmit((data) => {
+                        if (data.password !== data.confirmPassword) {
+                            alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+                            return;
+                        }
+                        onRegister(data);
+                    })}
                     className="bg-white flex flex-col items-center justify-center h-full px-10 text-center"
                 >
                     <h1 className="text-2xl text-[#00C4C4] mb-2">회원가입</h1>
+
                     <input
                         type="text"
                         placeholder="Name"
-                        {...registerRegister("name", {
-                            required: "이름은 필수입니다.",
-                        })}
-                        className="bg-gray-200 px-4 py-2 mb-2 w-full max-w-[300px]"
+                        {...registerRegister("name", { required: "이름은 필수입니다." })}
+                        className="bg-white border border-[#00C4C4] px-4 py-2 mb-2 w-full max-w-[300px] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00C4C4]"
                     />
                     <input
                         type="email"
                         placeholder="Email"
-                        {...registerRegister("email", {
-                            required: "이메일은 필수입니다.",
-                        })}
-                        className="bg-gray-200 px-4 py-2 mb-2 w-full max-w-[300px]"
+                        {...registerRegister("email", { required: "이메일은 필수입니다." })}
+                        className="bg-white border border-[#00C4C4] px-4 py-2 mb-2 w-full max-w-[300px] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00C4C4]"
                     />
                     <input
                         type="password"
@@ -106,20 +107,24 @@ const AuthPage = () => {
                             required: "비밀번호는 필수입니다.",
                             minLength: { value: 6, message: "최소 6자입니다." },
                         })}
-                        className="bg-gray-200 px-4 py-2 mb-2 w-full max-w-[300px]"
+                        className="bg-white border border-[#00C4C4] px-4 py-2 mb-2 w-full max-w-[300px] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00C4C4]"
+                    />
+                    <input
+                        type="password"
+                        placeholder="비밀번호 확인"
+                        {...registerRegister("confirmPassword", {
+                            required: "비밀번호 확인은 필수입니다.",
+                        })}
+                        className="bg-white border border-[#00C4C4] px-4 py-2 mb-2 w-full max-w-[300px] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00C4C4]"
                     />
 
-
                     <div className="flex flex-col items-center space-y-2">
-                        {/* 회원가입 버튼 */}
                         <button
                             type="submit"
                             className="w-[120px] py-2 border border-[#00C4C4] text-[#00C4C4] bg-white rounded-full hover:bg-[#00C4C4] hover:text-white transition-colors duration-200"
                         >
                             회원가입
                         </button>
-
-                        {/* 로그인으로 버튼 */}
                         <button
                             type="button"
                             onClick={() => setIsRightPanelActive(false)}
@@ -133,9 +138,7 @@ const AuthPage = () => {
 
             {/* 로그인 폼 */}
             <div
-                className={`absolute top-0 left-0 w-1/2 h-full transition-all duration-700 ease-in-out ${isRightPanelActive
-                    ? "translate-x-full opacity-0 z-10"
-                    : "opacity-100 z-20"
+                className={`absolute top-0 left-0 w-1/2 h-full transition-all duration-700 ease-in-out ${isRightPanelActive ? "translate-x-full opacity-0 z-10" : "opacity-100 z-20"
                     }`}
             >
                 <form
@@ -146,10 +149,8 @@ const AuthPage = () => {
                     <input
                         type="email"
                         placeholder="Email"
-                        {...loginRegister("email", {
-                            required: "이메일은 필수입니다.",
-                        })}
-                        className="bg-gray-200 px-4 py-2 mb-2 w-full max-w-[300px]"
+                        {...loginRegister("email", { required: "이메일은 필수입니다." })}
+                        className="bg-white border border-[#00C4C4] px-4 py-2 mb-2 w-full max-w-[300px] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00C4C4]"
                     />
                     <input
                         type="password"
@@ -158,8 +159,9 @@ const AuthPage = () => {
                             required: "비밀번호는 필수입니다.",
                             minLength: { value: 6, message: "최소 6자입니다." },
                         })}
-                        className="bg-gray-200 px-4 py-2 mb-2 w-full max-w-[300px]"
+                        className="bg-white border border-[#00C4C4] px-4 py-2 mb-2 w-full max-w-[300px] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00C4C4]"
                     />
+
                     <div className="flex flex-col items-center space-y-2">
                         <button
                             type="submit"
@@ -183,14 +185,18 @@ const AuthPage = () => {
                 className={`absolute top-0 left-1/2 w-1/2 h-full transition-transform duration-700 z-30 ${isRightPanelActive ? "-translate-x-full" : "translate-x-0"
                     }`}
             >
-                <div className="w-full h-full bg-gradient-to-r from-[#00C4C4] to-[#00a8a8] text-white flex flex-col items-center justify-center px-10 text-center">
+                <div
+                    className={`w-full h-full text-white flex flex-col items-center justify-center px-10 text-center transition-[background,border-radius] duration-500 delay-700 ${isRightPanelActive
+                            ? "bg-gradient-to-l from-[#66d1d1] to-[#3cbcbc] rounded-tr-[100px] rounded-br-[100px]"
+                            : "bg-gradient-to-r from-[#66d1d1] to-[#3cbcbc] rounded-tl-[100px] rounded-bl-[100px]"
+                        }`}
+                >
+
+
                     <h1 className="text-2xl font-bold mb-2">
-                        {isRightPanelActive
-                            ? "Hello, Friend!"
-                            : "Welcome Back!"}
+                        {isRightPanelActive ? "Hello, Friend!" : "Welcome Back!"}
                     </h1>
                     <p className="text-sm mb-4">
-                        {/* 개인 정보를 입력하고 여정을 시작하세요 */}
                         {isRightPanelActive
                             ? "회원가입을 하고 여정을 시작하세요"
                             : "로그인하고 여정을 시작하세요"}
@@ -199,6 +205,10 @@ const AuthPage = () => {
             </div>
         </div>
     );
+
+
+
+
 };
 
 export default AuthPage;
