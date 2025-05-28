@@ -132,11 +132,6 @@ const AuthPage = () => {
                             로그인으로
                         </button>
                     </div>
-
-
-
-
-
                 </form>
             </div>
 
@@ -195,13 +190,13 @@ const AuthPage = () => {
                 <div className="w-full h-full bg-gradient-to-r from-[#00C4C4] to-[#00a8a8] text-white flex flex-col items-center justify-center px-10 text-center">
                     <h1 className="text-2xl font-bold mb-2">
                         {isRightPanelActive
-                            ? "Welcome Back!"
-                            : "Hello, Friend!"}
+                            ? "Hello, Friend!"
+                            : "Welcome Back!"}
                     </h1>
                     <p className="text-sm mb-4">
                         {/* 개인 정보를 입력하고 여정을 시작하세요 */}
                         {isRightPanelActive
-                            ? "개인 정보를 입력하고 여정을 시작하세요"
+                            ? "회원가입을 하고 여정을 시작하세요"
                             : "로그인하고 여정을 시작하세요"}
                     </p>
                 </div>

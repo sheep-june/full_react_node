@@ -160,21 +160,21 @@ const CartPage = () => {
                         </div>
                         <div className="flex gap-2">
                             <button
-    onClick={handleDeleteSelected}
-    disabled={selected.length === 0}
-    className="border border-red-500 text-red-500 bg-white hover:bg-red-500 hover:text-white px-4 py-2 rounded disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
->
-    삭제
-</button>
+                                onClick={handleDeleteSelected}
+                                disabled={selected.length === 0}
+                                className="border border-red-500 text-red-500 bg-white hover:bg-red-500 hover:text-white px-4 py-2 rounded disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                            >
+                                삭제
+                            </button>
 
 
-                           <button
-    onClick={handlePaymentClick}
-    disabled={selected.length === 0}
-    className="px-4 py-2 border border-[#00C4C4] text-[#00C4C4] bg-white rounded hover:bg-[#00C4C4] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
->
-    결제하기
-</button>
+                            <button
+                                onClick={handlePaymentClick}
+                                disabled={selected.length === 0}
+                                className="px-4 py-2 border border-[#00C4C4] text-[#00C4C4] bg-white rounded hover:bg-[#00C4C4] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                            >
+                                결제하기
+                            </button>
 
 
                         </div>

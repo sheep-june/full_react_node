@@ -147,7 +147,7 @@ const LandingPage = () => {
 
       </div>
 
-      <AdSlider />
+      {/* <AdSlider /> */}
 
       <SliderSection title="🔥 판매순 TOP 10" sort="sold" />
       <SliderSection title="👀 조회순 TOP 10" sort="views" />

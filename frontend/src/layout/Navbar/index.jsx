@@ -14,7 +14,7 @@ const Navbar = () => {
             <div className="w-full">
                 <div className="flex items-center justify-between mx-5 sm:mx-10 lg:mx-20">
                     <div className="flex items-center text-2xl h-14 font-bold">
-                        <Link to="/">買い物テスト</Link>
+                        <Link to="/">買う売る</Link>
                     </div>
 
                     <div className="text-2xl sm:hidden">
