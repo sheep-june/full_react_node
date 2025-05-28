@@ -18,20 +18,20 @@ let auth = async (req, res, next) => {
 
     let user;
     if (decoded.role === 1) {
-      user = await Admin.findById(decoded.id); // 관리자
+      user = await Admin.findById(decoded.id);
     } else {
-      user = await User.findById(decoded.id); // 일반 사용자
+      user = await User.findById(decoded.id);
     }
 
     if (!user) {
-      console.warn("❌ 유저가 존재하지 않음, decoded.id =", decoded.id);
+      console.warn(" 유저가 존재하지 않음, decoded.id =", decoded.id);
       return res.status(401).json({ message: "유저 없음 또는 잘못된 토큰" });
     }
 
     req.user = {
-      ...user.toObject(),               // ✅ 평범한 JS 객체로 변환
-      id: user._id.toString(),         // ✅ id 필드 명시적으로 추가
-      role: decoded.role               // ✅ 토큰에서 role 그대로 유지
+      ...user.toObject(),
+      id: user._id.toString(),
+      role: decoded.role
     };
 
     next();

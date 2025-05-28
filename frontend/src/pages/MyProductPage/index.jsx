@@ -131,11 +131,10 @@ const MyProductsPage = () => {
                             <button
                                 key={i}
                                 onClick={() => setCurrentPage(i + 1)}
-                                className={`px-3 py-1 border rounded transition-colors duration-200 ${
-                                    currentPage === i + 1
+                                className={`px-3 py-1 border rounded transition-colors duration-200 ${currentPage === i + 1
                                         ? "bg-[#00C4C4] text-white border-[#00C4C4]"
                                         : "text-[#00C4C4] border-[#00C4C4] hover:bg-[#00C4C4] hover:text-white"
-                                }`}
+                                    }`}
                             >
                                 {i + 1}
                             </button>

@@ -14,7 +14,6 @@ const CartPage = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        // 프론트용 로컬 복사본 유지
         setCartItems(JSON.parse(JSON.stringify(cartDetail)));
     }, [cartDetail]);
 

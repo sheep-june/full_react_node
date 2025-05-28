@@ -10,9 +10,7 @@ const RegisterPage = () => {
         formState: { errors },
         reset,
     } = useForm({ mode: "onChange" });
-
     const dispatch = useDispatch();
-
     const onSubmit = ({ email, password, name }) => {
         const body = {
             email,
@@ -20,20 +18,15 @@ const RegisterPage = () => {
             name,
             image: "https://via.placeholder.com/600x400?text=no+user+image",
         };
-
         dispatch(registerUser(body));
-
         reset();
     };
-
     const userEmail = {
         required: "필수 필드 입니다.",
     };
-
     const userName = {
         required: "필수 필드 입니다.",
     };
-
     const userPassword = {
         required: "필수 필드입니다.",
         minLength: {
@@ -41,7 +34,6 @@ const RegisterPage = () => {
             message: "최소 6자입니다.",
         },
     };
-
     return (
         <section className="flex flex-col justify-center mt-20 max-w-[400px] m-auto">
             <div className="p-6 bg-white rounded-md shadow-md">

@@ -6,7 +6,6 @@ const Product = require("../models/Product");
 const jwt = require("jsonwebtoken");
 const adminAuth = require("../middleware/adminAuth");
 
-// ✅ 관리자 로그인 (JWT 발급)
 router.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
@@ -19,7 +18,7 @@ router.post("/login", async (req, res) => {
 
         const payload = {
             id: admin._id,
-            role: 1, // ✅ role은 1로 고정
+            role: 1,
             name: admin.name,
         };
 
@@ -34,7 +33,6 @@ router.post("/login", async (req, res) => {
     }
 });
 
-// ✅ 회원 목록 조회 (관리자만)
 router.get("/users", adminAuth, async (req, res) => {
     try {
         const users = await User.find({}, "_id name email");
@@ -54,7 +52,6 @@ router.get("/posts", adminAuth, async (req, res) => {
     }
 });
 
-// ✅ 회원 강제 삭제 (관리자만)
 router.delete("/users/:id", adminAuth, async (req, res) => {
     try {
         await User.findByIdAndDelete(req.params.id);
@@ -64,7 +61,6 @@ router.delete("/users/:id", adminAuth, async (req, res) => {
     }
 });
 
-// ✅ 게시글 강제 삭제 (관리자만)
 router.delete("/posts/:id", adminAuth, async (req, res) => {
     try {
         await Product.findByIdAndDelete(req.params.id);

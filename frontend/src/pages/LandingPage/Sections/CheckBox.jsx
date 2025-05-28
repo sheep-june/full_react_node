@@ -5,13 +5,11 @@ const CheckBox = ({ items, checkedItems, onFilters }) => {
     const newChecked = checkedItems.includes(itemId)
       ? checkedItems.filter((id) => id !== itemId)
       : [...checkedItems, itemId];
-
     onFilters(newChecked);
   };
 
   return (
-    // <div className="p-4 mb-3 border border-[#00C4C4] rounded-md ml-4">
-<div className="w-full max-w-[256px] p-4 mb-3 border border-[#00C4C4] rounded-md ml-4">
+    <div className="w-full max-w-[256px] p-4 mb-3 border border-[#00C4C4] rounded-md ml-4">
 
       <div className="grid grid-cols-2 gap-x-4 gap-y-2">
         {items?.map((item) => (

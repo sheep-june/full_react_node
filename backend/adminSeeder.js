@@ -7,7 +7,7 @@ dotenv.config();
 mongoose
   .connect(process.env.MONGO_URI)
   .then(async () => {
-    console.log("✅ DB 연결됨");
+    console.log("DB 연결됨");
 
     await Admin.deleteMany({}); 
 
@@ -16,7 +16,7 @@ mongoose
       password: 'admin123', 
     });
 
-    console.log("✅ 관리자 계정 생성 완료!");
+    console.log("관리자 계정 생성 완료!");
     process.exit();
   })
   .catch((err) => {

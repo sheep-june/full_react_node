@@ -5,14 +5,12 @@ const Product = require("../models/Product");
 const multer = require("multer");
 const Review = require("../models/Review");
 
-// 이미지 업로드 설정
 const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, "uploads/"),
     filename: (req, file, cb) => cb(null, `${Date.now()}_${file.originalname}`),
 });
 const upload = multer({ storage }).single("file");
 
-// 이미지 업로드 API
 router.post("/image", auth, (req, res) => {
     upload(req, res, (err) => {
         if (err) return res.status(500).send(err);
@@ -20,42 +18,8 @@ router.post("/image", auth, (req, res) => {
     });
 });
 
-// // ✅ 상품 상세 조회 (+ 조회수 증가)
-// router.get("/:id", async (req, res, next) => {
-//     try {
-//         // 조회수 증가
-//         await Product.findByIdAndUpdate(req.params.id, { $inc: { views: 1 } });
-
-//         const product = await Product.findById(req.params.id).populate("writer");
-//         const reviews = await Review.find({ product: req.params.id }).populate("user", "name");
-
-//         const averageRating = reviews.length
-//             ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length
-//             : 0;
-
-//         // ✅ 단일 상품 요청일 경우 배열로 감싸서 반환
-//         if (req.query.type === "single") {
-//             return res.status(200).json([{
-//                 ...product.toObject(),
-//                 reviews,
-//                 averageRating,
-//             }]);
-//         }
-
-//         // 일반 조회
-//         res.status(200).json({
-//             product,
-//             reviews,
-//             averageRating,
-//         });
-//     } catch (error) {
-//         next(error);
-//     }
-// });
-// ✅ 상품 상세 조회 (+ 조회수 증가)
 router.get("/:id", async (req, res, next) => {
     try {
-        // 조회수 증가
         await Product.findByIdAndUpdate(req.params.id, { $inc: { views: 1 } });
 
         const product = await Product.findById(req.params.id).populate("writer");
@@ -65,7 +29,6 @@ router.get("/:id", async (req, res, next) => {
             ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length
             : 0;
 
-        // ✅ 프론트에서 type=single 쿼리가 있을 경우 → 배열로 감싸서 반환 (EditProduct용)
         if (req.query.type === "single") {
             return res.status(200).json([{
                 ...product.toObject(),
@@ -74,7 +37,6 @@ router.get("/:id", async (req, res, next) => {
             }]);
         }
 
-        // ✅ 그 외 기본 상품 상세 페이지용 → 객체로 반환
         return res.status(200).json({
             product,
             reviews,
@@ -85,8 +47,6 @@ router.get("/:id", async (req, res, next) => {
     }
 });
 
-
-// 상품 목록 조회
 router.get("/", async (req, res) => {
     try {
         const { skip = 0, limit = 20, searchTerm = "", sort } = req.query;
@@ -163,12 +123,11 @@ router.get("/", async (req, res) => {
             totalCount,
         });
     } catch (err) {
-        console.error("❌ 상품 목록 조회 실패:", err);
+        console.error(" 상품 목록 조회 실패:", err);
         res.status(400).send("상품 목록 조회 실패");
     }
 });
 
-// 상품 등록
 router.post("/", auth, async (req, res, next) => {
     try {
         const product = new Product(req.body);
@@ -179,7 +138,6 @@ router.post("/", auth, async (req, res, next) => {
     }
 });
 
-// 상품 삭제
 router.delete("/:id", auth, async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
@@ -196,7 +154,6 @@ router.delete("/:id", auth, async (req, res) => {
     }
 });
 
-// 상품 수정
 router.put("/:id", auth, async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);

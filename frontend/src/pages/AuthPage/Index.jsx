@@ -10,9 +10,7 @@ const AuthPage = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const mode = searchParams.get("mode");
-
     const [isRightPanelActive, setIsRightPanelActive] = useState(false);
-
     const fromRef = useRef(sessionStorage.getItem("redirectAfterLogin") || "/");
 
     useEffect(() => {
@@ -37,7 +35,6 @@ const AuthPage = () => {
     const onLogin = async ({ email, password }) => {
         try {
             const result = await dispatch(loginUser({ email, password }));
-
             if (loginUser.fulfilled.match(result)) {
                 resetLogin();
                 const target = fromRef.current || "/";
@@ -61,7 +58,6 @@ const AuthPage = () => {
                     image: "https://via.placeholder.com/600x400?text=no+user+image",
                 })
             );
-
             if (registerUser.fulfilled.match(result)) {
                 resetRegister();
                 setIsRightPanelActive(false);

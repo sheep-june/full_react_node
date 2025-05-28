@@ -10,7 +10,6 @@ const ProductInfo = ({ product }) => {
     const user = useSelector((state) => state.user);
 
     const handleCartClick = () => {
-        // ✅ 로그인 안된 경우 로그인 페이지로 이동
         if (!user.isAuth) {
             alert("로그인이 필요합니다.");
             navigate("/auth");
@@ -20,7 +19,6 @@ const ProductInfo = ({ product }) => {
     };
 
     const handleWishlistClick = async () => {
-        // ✅ 로그인 안된 경우 로그인 페이지로 이동
         if (!user.isAuth) {
             alert("로그인이 필요합니다.");
             navigate("/auth");
@@ -55,7 +53,6 @@ const ProductInfo = ({ product }) => {
                     {product.sold} 개
                 </li>
             </ul>
-
             <div className="mt-3 flex space-x-2">
                 <button
                     onClick={handleCartClick}
@@ -63,14 +60,12 @@ const ProductInfo = ({ product }) => {
                 >
                     장바구니로
                 </button>
-
                 <button
                     onClick={handleWishlistClick}
                     className="w-1/2 px-4 py-2 border border-pink-500 text-pink-500 bg-white rounded-md hover:bg-pink-500 hover:text-white transition-colors duration-200"
                 >
                     찜하기
                 </button>
-
             </div>
         </div>
     );

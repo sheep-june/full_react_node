@@ -6,7 +6,6 @@ const ProductImage = ({ product }) => {
     useEffect(() => {
         if (product?.images?.length > 0) {
             let images = [];
-
             product.images.map((imageName) => {
                 return images.push({
                     original: `${import.meta.env.VITE_SERVER_URL
@@ -15,7 +14,6 @@ const ProductImage = ({ product }) => {
                         }/uploads/${imageName}`,
                 });
             });
-
             setImages(images);
         }
     }, [product]);

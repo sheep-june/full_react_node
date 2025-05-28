@@ -9,7 +9,6 @@ const QuestionPage = () => {
   const [questions, setQuestions] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [newQuestion, setNewQuestion] = useState({ title: "", content: "" });
-
   const fetchQuestions = async () => {
     try {
       const res = await axiosInstance.get("/api/question");
@@ -21,14 +20,11 @@ const QuestionPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    await setCsrfToken(); // ✅ CSRF 토큰 받아옴
-    await new Promise((r) => setTimeout(r, 100)); // ✅ 쿠키와 헤더 동기화 대기
-
+    await setCsrfToken(); 
+    await new Promise((r) => setTimeout(r, 100)); 
     if (!newQuestion.title || !newQuestion.content) {
       return toast.warn("제목과 내용을 모두 입력해주세요.");
     }
-
     try {
       const res = await axiosInstance.post("/api/question", newQuestion);
       toast.success("질문이 등록되었습니다.");
@@ -57,7 +53,6 @@ const QuestionPage = () => {
           >
             {showForm ? "작성 닫기" : "질문 작성"}
           </button>
-
           {showForm && (
             <form onSubmit={handleSubmit} className="space-y-2 mb-6">
               <input
@@ -87,7 +82,6 @@ const QuestionPage = () => {
           )}
         </>
       )}
-
       {questions.length === 0 ? (
         <p className="text-gray-500">등록된 질문이 없습니다.</p>
       ) : (

@@ -11,15 +11,12 @@ const CardItem = ({ product, refreshWishlist, wishlist }) => {
 
     const user = useSelector((state) => state.user);
     const navigate = useNavigate();
-
     const [wished, setWished] = useState(false);
     const [ready, setReady] = useState(false);
-
     const imageUrls =
         product.images?.map(
             (imageName) => `${serverUrl}/uploads/${imageName}`
         ) || [];
-
     useEffect(() => {
         if (user.isAuth && Array.isArray(user.userData?.wishlist)) {
             setWished(user.userData.wishlist.includes(product._id));
@@ -27,21 +24,14 @@ const CardItem = ({ product, refreshWishlist, wishlist }) => {
         setReady(true);
     }, [user.userData?.wishlist, user.isAuth, product._id]);
 
-
-
-
     const handleToggleWish = async (e) => {
         e.preventDefault();
-
         if (!ready) return;
-
         if (!user.isAuth) {
             return navigate("/auth");
         }
-
         try {
             await setCsrfToken();
-
             if (wished) {
                 await axiosInstance.delete("/users/wishlist", {
                     params: { productId: product._id },
@@ -53,7 +43,6 @@ const CardItem = ({ product, refreshWishlist, wishlist }) => {
                 });
                 setWished(true);
             }
-
             if (refreshWishlist) refreshWishlist();
         } catch (err) {
             const msg = err.response?.data?.message || err.message;
@@ -69,8 +58,8 @@ const CardItem = ({ product, refreshWishlist, wishlist }) => {
     return (
         <Link
             to={`/product/${product._id}`}
-             className="block relative bg-white border-2 border-[#a0f0f0] rounded-md overflow-hidden w-full max-w-[230px] mx-auto hover:border-[#00C4C4] transition-colors duration-200"
-             >
+            className="block relative bg-white border-2 border-[#a0f0f0] rounded-md overflow-hidden w-full max-w-[230px] mx-auto hover:border-[#00C4C4] transition-colors duration-200"
+        >
             <div className="w-full h-[180px]">
                 <ImageSlider
                     images={imageUrls}
@@ -81,7 +70,7 @@ const CardItem = ({ product, refreshWishlist, wishlist }) => {
             {ready && (
                 <button
                     onClick={(e) => {
-                        e.preventDefault(); // ✅ 링크 클릭 막고 찜만 처리
+                        e.preventDefault();
                         handleToggleWish(e);
                     }}
                     disabled={!ready}
@@ -90,7 +79,6 @@ const CardItem = ({ product, refreshWishlist, wishlist }) => {
                     {wished ? <FaHeart /> : <FaRegHeart />}
                 </button>
             )}
-
             <div className="p-2 space-y-1">
                 <p className="font-semibold truncate">{product.title}</p>
                 <div className="flex items-center gap-1 text-yellow-500 text-sm">

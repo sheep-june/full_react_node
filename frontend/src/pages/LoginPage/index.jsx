@@ -52,14 +52,12 @@ const LoginPage = () => {
                         >
                             Email
                         </label>
-
                         <input
                             type="email"
                             id="email"
                             className="w-full px-4 py-2 mt-2 bg-white border rounded-md"
                             {...register("email", userEmail)}
                         />
-
                         {errors?.email && (
                             <div>
                                 <span className="text-red-500">
@@ -68,7 +66,6 @@ const LoginPage = () => {
                             </div>
                         )}
                     </div>
-
                     <div className="mb-2">
                         <label
                             htmlFor="password"
@@ -76,14 +73,12 @@ const LoginPage = () => {
                         >
                             Password
                         </label>
-
                         <input
                             type="password"
                             id="password"
                             className="w-full px-4 py-2 mt-2 bg-white border rounded-md"
                             {...register("password", userPassword)}
                         />
-
                         {errors?.password && (
                             <div>
                                 <span className="text-red-500">
@@ -92,7 +87,6 @@ const LoginPage = () => {
                             </div>
                         )}
                     </div>
-
                     <div className="mt-6">
                         <button
                             type="submit"
@@ -101,7 +95,6 @@ const LoginPage = () => {
                             로그인
                         </button>
                     </div>
-
                     <p className="mt-8 text-xs font-light text-center text-gray-700">
                         {" "}
                         아이디가 없다면?{" "}

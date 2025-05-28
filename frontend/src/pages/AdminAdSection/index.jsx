@@ -80,11 +80,9 @@ const AdminAdSection = () => {
         reordered.splice(toIndex, 0, moved);
 
         try {
-            // 디버깅용 로그 (토큰 제대로 들어갔는지 확인)
-            console.log("💬 adminToken:", localStorage.getItem("adminToken"));
-            console.log("💬 csrfToken:", localStorage.getItem("csrfToken"));
+            console.log("adminToken:", localStorage.getItem("adminToken"));
+            console.log("csrfToken:", localStorage.getItem("csrfToken"));
 
-            // axiosInstance 사용 + CSRF, Authorization 자동 주입
             await axiosInstance.post("/api/admin/ads/reorder", {
                 ads: reordered.map((ad) => ad._id),
             });
@@ -122,8 +120,8 @@ const AdminAdSection = () => {
                         <div
                             key={product._id}
                             className={`p-2 cursor-pointer border rounded ${selectedProduct?._id === product._id
-                                    ? "bg-blue-100 border-blue-500"
-                                    : "hover:bg-gray-100"
+                                ? "bg-blue-100 border-blue-500"
+                                : "hover:bg-gray-100"
                                 }`}
                             onClick={() => setSelectedProduct(product)}
                         >
@@ -157,7 +155,6 @@ const AdminAdSection = () => {
             </form>
 
             <hr className="my-6" />
-
             <h3 className="text-lg font-bold mb-2">등록된 광고</h3>
             <ul className="space-y-3">
                 {ads.map((ad, idx) => (

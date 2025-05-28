@@ -50,7 +50,6 @@ router.post("/", auth, async (req, res) => {
     }
 });
 
-// GET /reviews/:productId - 리뷰 목록 조회
 router.get("/:productId", async (req, res) => {
     try {
         const { productId } = req.params;

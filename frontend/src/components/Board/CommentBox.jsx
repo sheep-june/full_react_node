@@ -13,17 +13,14 @@ const CommentBox = ({ questionId, onFinish, onClose }) => {
     }
 
     try {
-      // ✅ CSRF 토큰 요청 및 헤더 동기화
       await setCsrfToken();
       await new Promise((r) => setTimeout(r, 100));
-
-      // ✅ 안전한 axios 인스턴스 사용
       await axiosInstance.post(`/api/question/${questionId}/comment`, { content });
 
       toast.success("댓글이 등록되었습니다.");
       setContent("");
-      if (onFinish) onFinish(); // 목록 새로고침
-      if (onClose) onClose();   // 폼 닫기
+      if (onFinish) onFinish();
+      if (onClose) onClose();
     } catch (err) {
       toast.error("댓글 등록 실패");
     }

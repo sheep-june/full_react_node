@@ -13,12 +13,12 @@ const faqSchema = new mongoose.Schema(
     },
     admin: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Admin", // 작성자는 관리자만 가능
+      ref: "Admin",
       required: true,
     },
   },
   {
-    timestamps: true, // createdAt, updatedAt 자동 추가
+    timestamps: true,
   }
 );
 

@@ -86,7 +86,6 @@ const SearchPage = () => {
                     limit: ITEMS_PER_PAGE,
                 },
             });
-
             setProducts(res.data.products);
             setTotalPages(Math.ceil(res.data.totalCount / ITEMS_PER_PAGE));
         } catch (err) {
@@ -128,14 +127,12 @@ const SearchPage = () => {
                     검색
                 </button>
             </form>
-
             <div className="flex gap-6">
                 <div className="w-[250px] space-y-4">
                     <div>
                         <h3 className="text-[#00C4C4] font-semibold mb-1 text-center">
                             카테고리
                         </h3>
-
                         <CheckBox
                             items={categories}
                             checkedItems={filters.continents}
@@ -161,35 +158,30 @@ const SearchPage = () => {
                         />
                     </div>
                 </div>
-
                 <div className="flex-1">
                     <div className="flex gap-4 mb-4 border-b pb-2">
                         {sortOptions.map((option) => (
                             <button
                                 key={option.id}
                                 onClick={() => handleSortChange(option.id)}
-                                className={`text-sm px-2 py-1 rounded border-b-2 transition-all duration-150 ${
-                                    sortBy === option.id
+                                className={`text-sm px-2 py-1 rounded border-b-2 transition-all duration-150 ${sortBy === option.id
                                         ? "border-black font-semibold"
                                         : "border-transparent text-gray-500"
-                                }`}
+                                    }`}
                             >
                                 {option.label}
                             </button>
                         ))}
                     </div>
-
-                    {/* <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3"> */}
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
                         {products.map((product) => (
                             <CardItem
                                 key={product._id}
                                 product={product}
-                                refreshWishlist={() => {}}
+                                refreshWishlist={() => { }}
                             />
                         ))}
                     </div>
-
                     {/* 페이지네이션: 숫자 버튼 */}
                     <div className="flex justify-center mt-8 space-x-2">
                         <button
@@ -206,21 +198,18 @@ const SearchPage = () => {
                         >
                             이전
                         </button>
-
                         {[...Array(totalPages)].map((_, index) => {
                             const pageNum = index + 1;
                             const isActive = currentPage === pageNum;
-
                             return (
                                 <button
                                     key={pageNum}
                                     onClick={() => changePage(pageNum)}
                                     className={`px-3 py-1 border border-[#00C4C4] rounded transition-all
-          ${
-              isActive
-                  ? "bg-[#00C4C4] text-white"
-                  : "text-[#00C4C4] hover:bg-[#00C4C4] hover:text-white"
-          }`}
+                                        ${isActive
+                                            ? "bg-[#00C4C4] text-white"
+                                            : "text-[#00C4C4] hover:bg-[#00C4C4] hover:text-white"
+                                        }`}
                                 >
                                     {pageNum}
                                 </button>

@@ -13,12 +13,12 @@ const questionSchema = new mongoose.Schema(
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // 질문 작성자는 일반 사용자만 가능
+      ref: "User",
       required: true,
     },
   },
   {
-    timestamps: true, // createdAt, updatedAt 포함
+    timestamps: true,
   }
 );
 

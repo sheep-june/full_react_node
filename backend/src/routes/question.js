@@ -15,7 +15,6 @@ const csrfProtection = csrf({
     value: (req) => req.headers["x-xsrf-token"],
 });
 
-// ✅ 모든 사용자: 질문 목록 조회 (댓글 포함)
 router.get("/", async (req, res) => {
     try {
         const questions = await Question.find()
@@ -40,7 +39,6 @@ router.get("/", async (req, res) => {
     }
 });
 
-// ✅ 일반 유저만: 질문 작성
 router.post("/", auth, csrfProtection, async (req, res) => {
     try {
         const user = req.user;
@@ -62,13 +60,12 @@ router.post("/", auth, csrfProtection, async (req, res) => {
         await question.save();
         res.status(201).json(question);
     } catch (err) {
-        console.error("❌ 질문 작성 실패:", err); // ← 이거 추가
+        console.error("질문 작성 실패:", err);
         res.status(500).json({ message: "질문 작성 실패" });
 
     }
 });
 
-// ✅ 관리자만: 댓글 작성
 router.post("/:id/comment", adminAuth, csrfProtection, async (req, res) => {
     try {
         const admin = req.admin;
@@ -84,12 +81,11 @@ router.post("/:id/comment", adminAuth, csrfProtection, async (req, res) => {
         await comment.save();
         res.status(201).json(comment);
     } catch (err) {
-        console.error("❌ 댓글 저장 실패:", err);
+        console.error("댓글 저장 실패:", err);
         res.status(500).json({ message: "댓글 작성 실패" });
     }
 });
 
-// ✅ 관리자만: 댓글 수정
 router.put("/reply/:replyId", adminAuth, csrfProtection, async (req, res) => {
     try {
         const { content } = req.body;
@@ -105,7 +101,6 @@ router.put("/reply/:replyId", adminAuth, csrfProtection, async (req, res) => {
     }
 });
 
-// ✅ 관리자만: 댓글 삭제
 router.delete("/reply/:replyId", adminAuth, csrfProtection, async (req, res) => {
     try {
         const deleted = await Comment.findByIdAndDelete(req.params.replyId);
@@ -116,13 +111,11 @@ router.delete("/reply/:replyId", adminAuth, csrfProtection, async (req, res) => 
     }
 });
 
-// ✅ 관리자만: 질문 삭제
 router.delete("/:id", adminAuth, csrfProtection, async (req, res) => {
     try {
         const deleted = await Question.findByIdAndDelete(req.params.id);
         if (!deleted) return res.status(404).json({ message: "질문 없음" });
 
-        // 질문 삭제 시 관련 댓글도 같이 삭제
         await Comment.deleteOne({ question: req.params.id });
 
         res.status(200).json({ message: "질문 삭제 완료" });

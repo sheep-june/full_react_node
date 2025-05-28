@@ -4,7 +4,7 @@ const commentSchema = new mongoose.Schema(
   {
     question: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Question", // 어떤 질문에 대한 댓글인지
+      ref: "Question",
       required: true,
     },
     content: {
@@ -13,13 +13,12 @@ const commentSchema = new mongoose.Schema(
     },
     admin: {
       type: mongoose.Schema.Types.ObjectId,
-      // ref: "Admin", // 댓글 작성자는 관리자만
       ref: "Admin",
       required: true,
     },
   },
   {
-    timestamps: true, // createdAt, updatedAt 자동 포함
+    timestamps: true,
   }
 );
 

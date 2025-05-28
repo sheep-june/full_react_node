@@ -54,7 +54,7 @@ const BoardSection = () => {
 
               {q.comment ? (
                 <div className="mt-4 bg-gray-50 p-3 rounded text-sm">
-                  <p className="font-medium">💬 답변</p>
+                  <p className="font-medium">답변</p>
                   <p className="mt-1">{q.comment.content}</p>
                   <p className="text-xs text-gray-400 text-right mt-2">
                     {q.comment.admin?.name} / {" "}

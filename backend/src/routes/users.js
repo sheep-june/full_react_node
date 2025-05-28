@@ -200,7 +200,7 @@ router.post("/payment", auth, async (req, res) => {
         if (!user) return res.status(404).send("유저 없음");
 
         const history = [];
-        const paidIds = []; // ✅ 결제한 상품 ID 모음
+        const paidIds = [];
 
         cartDetail.forEach((item) => {
             history.push({
@@ -211,7 +211,7 @@ router.post("/payment", auth, async (req, res) => {
                 quantity: item.quantity,
                 paymentId: crypto.randomUUID(),
             });
-            paidIds.push(item._id); // ✅ 추적
+            paidIds.push(item._id);
         });
 
         const transactionData = {
@@ -223,7 +223,6 @@ router.post("/payment", auth, async (req, res) => {
             product: history,
         };
 
-        // ✅ 결제한 상품만 cart에서 제거
         await User.findByIdAndUpdate(
             req.user._id,
             {
@@ -233,11 +232,9 @@ router.post("/payment", auth, async (req, res) => {
             { new: true }
         );
 
-        // ✅ 결제 내역 저장
         const payment = new Payment(transactionData);
         const saved = await payment.save();
 
-        // ✅ 판매량 증가
         await Promise.all(
             saved.product.map((item) =>
                 Product.updateOne(
@@ -249,7 +246,7 @@ router.post("/payment", auth, async (req, res) => {
 
         res.sendStatus(200);
     } catch (err) {
-        console.error("❌ 결제 오류:", err);
+        console.error("결제 오류:", err);
         res.status(500).send("결제 처리 중 오류 발생");
     }
 });

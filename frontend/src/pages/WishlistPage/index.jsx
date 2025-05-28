@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance, { setCsrfToken } from "../../utils/axios";
 import { Link } from "react-router-dom";
-// import { Link, useNavigate } from "react-router-dom";
 
 const WishlistPage = () => {
     const [wishlist, setWishlist] = useState([]);
     const [selected, setSelected] = useState([]);
-    // const navigate = useNavigate();
-
     const fetchWishlist = async () => {
         try {
             const res = await axiosInstance.get("/users/wishlist");
@@ -60,7 +57,6 @@ const WishlistPage = () => {
             <h2 className="text-2xl font-semibold mb-6 text-center">
                 찜한 상품
             </h2>
-
             {wishlist.length === 0 ? (
                 <p className="text-center text-gray-500">
                     찜한 상품이 없습니다.
@@ -84,7 +80,6 @@ const WishlistPage = () => {
                             삭제
                         </button>
                     </div>
-
                     <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                         {wishlist.map((product) => (
                             <li

@@ -41,7 +41,7 @@ const QuestionItem = ({ question, isAdmin, refresh }) => {
           )}
         </>
       ) : (
-        <p className="mt-3 text-sm text-gray-400">※ 답변 대기 중</p>
+        <p className="mt-3 text-sm text-gray-400"> ※ 답변 대기 중</p>
       )}
     </div>
   );

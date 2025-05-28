@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axiosInstance from "../../utils/axios";
-import ProductImage from "./Sections/Productimage";
+import ProductImage from "./Sections/ProductImage";
 import ProductInfo from "./Sections/ProductInfo";
 import { useSelector } from "react-redux";
 import { FaStar } from "react-icons/fa";
@@ -19,16 +19,10 @@ const DetailProductPage = () => {
     useEffect(() => {
         async function fetchProduct() {
             try {
-                // const response = await axiosInstance.get(
-                //     `/products/${productId}?type=single`
-                // );
-                // setProduct(response.data.product);
                 const response = await axiosInstance.get(`/products/${productId}`);
-                setProduct(response.data.product); // ← 이제 제대로 들어옴
+                setProduct(response.data.product);
                 setReviews(response.data.reviews);
                 setAverageRating(response.data.averageRating);
-
-
                 const reviewRes = await axiosInstance.get(
                     `/reviews/${productId}`
                 );
@@ -38,7 +32,6 @@ const DetailProductPage = () => {
                 console.error(error);
             }
         }
-
         fetchProduct();
     }, [productId]);
 
@@ -47,7 +40,6 @@ const DetailProductPage = () => {
         if (!comment || rating === 0) {
             return alert("별점과 내용을 모두 입력해주세요.");
         }
-
         try {
             await axiosInstance.post("/reviews", {
                 productId: product._id,
@@ -99,7 +91,7 @@ const DetailProductPage = () => {
             {/* 리뷰 평균 + 목록 */}
             <div className="mt-10">
                 <h2 className="text-xl font-bold mb-2">
-                    리뷰 ⭐ {averageRating.toFixed(1)} / 5
+                    리뷰  {averageRating.toFixed(1)} / 5
                 </h2>
 
                 {reviews.length === 0 ? (
@@ -145,7 +137,6 @@ const DetailProductPage = () => {
                             </button>
                         ))}
                     </div>
-
                     <textarea
                         className="w-full border p-2 rounded mb-2"
                         rows="4"
@@ -153,14 +144,12 @@ const DetailProductPage = () => {
                         value={comment}
                         onChange={(e) => setComment(e.target.value)}
                     ></textarea>
-
                     <button
                         type="submit"
                         className="px-4 py-2 border border-[#00C4C4] text-[#00C4C4] bg-white rounded hover:bg-[#00C4C4] hover:text-white transition-colors duration-200"
                     >
                         등록하기
                     </button>
-
                 </form>
             )}
         </section>

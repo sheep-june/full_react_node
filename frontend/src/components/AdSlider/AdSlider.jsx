@@ -21,11 +21,6 @@ const AdSlider = () => {
     }, []);
 
     useEffect(() => {
-        // if (ads.length === 0) return;
-        // const timer = setInterval(() => {
-        //     setCurrentIndex((prev) => (prev + 1) % ads.length);
-        // }, 15000);
-        // return () => clearInterval(timer);
     }, [ads]);
 
     const handlePrev = () => {
@@ -70,25 +65,15 @@ const AdSlider = () => {
                         className="relative w-full h-full flex-shrink-0 bg-black cursor-pointer"
                         onClick={() => navigate(`/product/${ad.product?._id}`)}
                     >
-                        {/* <video
-              src={`${import.meta.env.VITE_SERVER_URL}/ads/${ad.video}`}
-              muted
-              autoPlay
-              loop
-              playsInline
-              preload="auto"
-              className="max-w-full max-h-full object-contain"
-            /> */}
                         <video
-                            src={`${import.meta.env.VITE_SERVER_URL}/ads/${
-                                ad.video
-                            }`}
+                            src={`${import.meta.env.VITE_SERVER_URL}/ads/${ad.video
+                                }`}
                             muted
                             autoPlay
                             playsInline
                             preload="auto"
                             onEnded={() => {
-                                console.log("✅ 영상 재생 완료됨");
+                                console.log("영상 재생 완료됨");
                                 handleNext();
                             }}
                             className="w-full h-full object-contain bg-black"

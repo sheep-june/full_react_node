@@ -2,7 +2,6 @@ import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-// CSRF 토큰 쿠키에서 꺼내기
 const getCookie = (name) => {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -32,7 +31,7 @@ const FaqItem = ({ faq, onUpdate }) => {
         },
       });
       toast.success("삭제 완료");
-      onUpdate(); // 삭제 후 목록 새로고침
+      onUpdate();
     } catch (err) {
       toast.error("삭제 실패");
     }
@@ -52,7 +51,7 @@ const FaqItem = ({ faq, onUpdate }) => {
       });
       toast.success("수정 완료");
       setIsEditing(false);
-      onUpdate(); // 수정 후 목록 새로고침
+      onUpdate();
     } catch (err) {
       toast.error("수정 실패");
     }

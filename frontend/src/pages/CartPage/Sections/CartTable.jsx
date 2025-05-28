@@ -7,7 +7,6 @@ const CartTable = ({ products, onRemoveItem }) => {
             return `${import.meta.env.VITE_SERVER_URL}/uploads/${image}`;
         }
     };
-
     const renderItems =
         products.length > 0 &&
         products.map((product) => (

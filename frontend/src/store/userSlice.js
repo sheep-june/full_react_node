@@ -19,7 +19,7 @@ const initialState = {
         name: "",
         role: 0,
         image: "",
-        cart: [], // ✅ 이것도 잊지 마
+        cart: [],
     },
     isAuth: false,
     isLoading: false,
@@ -170,13 +170,11 @@ const userSlice = createSlice({
                         JSON.stringify(action.payload.cart)
                     );
                 }
-
                 state.cartDetail = JSON.parse(
                     JSON.stringify(action.payload.cartDetail)
                 );
                 state.loading = false;
             })
-
             .addCase(fetchUserCart.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;

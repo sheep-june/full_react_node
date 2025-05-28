@@ -7,9 +7,7 @@ const RadioBox = ({ prices, checkedPrice, onFilters }) => {
   };
 
   return (
-    // <div className="p-2 mb-3 bg-white border border-[#00C4C4] rounded-md">
-<div className="w-full max-w-[256px] p-4 mb-3 border border-[#00C4C4] rounded-md ml-4">
-
+    <div className="w-full max-w-[256px] p-4 mb-3 border border-[#00C4C4] rounded-md ml-4">
       {prices?.map((price) => (
         <div key={price._id} className="flex items-center">
           <input

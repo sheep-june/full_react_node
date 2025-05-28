@@ -62,7 +62,6 @@ const auth = require("../middleware/auth");
 const mongoose = require("mongoose");
 const csrf = require("csurf");
 
-// ✅ CSRF 미들웨어 설정
 const csrfProtection = csrf({
   cookie: {
     httpOnly: false,
@@ -72,7 +71,6 @@ const csrfProtection = csrf({
   value: (req) => req.headers["x-xsrf-token"],
 });
 
-// ✅ 모든 사용자: FAQ 목록 조회
 router.get("/", async (req, res) => {
   try {
     const faqs = await Faq.find().populate("admin", "name");

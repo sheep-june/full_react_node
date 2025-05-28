@@ -9,7 +9,6 @@ const HistoryPage = () => {
     const sortedHistory = [...(userData?.history || [])].sort(
         (a, b) => new Date(b.dateOfPurchase) - new Date(a.dateOfPurchase)
     );
-
     const [currentPage, setCurrentPage] = useState(1);
     const totalPages = Math.ceil(sortedHistory.length / ITEMS_PER_PAGE);
     const paginated = sortedHistory.slice(
@@ -50,23 +49,21 @@ const HistoryPage = () => {
             </table>
 
             {/* 페이지네이션 */}
-<div className="flex justify-center mt-4 space-x-2">
-  {[...Array(totalPages)].map((_, i) => (
-    <button
-      key={i}
-      onClick={() => setCurrentPage(i + 1)}
-      className={`px-3 py-1 border rounded 
-        ${
-          currentPage === i + 1
-            ? "bg-[#00C4C4] text-white border-[#00C4C4]"
-            : "bg-white text-[#00C4C4] border-[#00C4C4] hover:bg-[#00C4C4] hover:text-white"
-        }`}
-    >
-      {i + 1}
-    </button>
-  ))}
-</div>
-
+            <div className="flex justify-center mt-4 space-x-2">
+                {[...Array(totalPages)].map((_, i) => (
+                    <button
+                        key={i}
+                        onClick={() => setCurrentPage(i + 1)}
+                        className={`px-3 py-1 border rounded 
+        ${currentPage === i + 1
+                                ? "bg-[#00C4C4] text-white border-[#00C4C4]"
+                                : "bg-white text-[#00C4C4] border-[#00C4C4] hover:bg-[#00C4C4] hover:text-white"
+                            }`}
+                    >
+                        {i + 1}
+                    </button>
+                ))}
+            </div>
         </section>
     );
 };

@@ -8,7 +8,6 @@ import SliderSection from "../../components/SliderSection"; // 상단에 추가
 
 const LandingPage = () => {
   const navigate = useNavigate();
-
   const limit = 4;
   const [searchTerm, setSearchTerm] = useState("");
   const [products, setProducts] = useState([]);
@@ -36,13 +35,11 @@ const LandingPage = () => {
     try {
       const params = { skip, limit, filters, searchTerm };
       const response = await axiosInstance.get("/products", { params });
-
       if (loadMore) {
         setProducts((prev) => [...prev, ...response.data.products]);
       } else {
         setProducts(response.data.products);
       }
-
       setHasMore(response.data.hasMore);
     } catch (error) {
       console.error(error);
@@ -57,7 +54,6 @@ const LandingPage = () => {
       filters,
       searchTerm,
     };
-
     fetchProducts(body);
     setSkip(skip + limit);
   };
@@ -65,25 +61,21 @@ const LandingPage = () => {
   const handleFilters = (newFilteredData, category) => {
     const newFilters = { ...filters };
     newFilters[category] = newFilteredData;
-
     if (category === "price") {
       const priceValues = handlePrice(newFilteredData);
       newFilters[category] = priceValues;
     }
-
     showFilteredResults(newFilters);
     setFilters(newFilters);
   };
 
   const handlePrice = (value) => {
     let array = [];
-
     for (let key in prices) {
       if (prices[key]._id === parseInt(value, 10)) {
         array = prices[key].array;
       }
     }
-
     return array;
   };
 
@@ -94,7 +86,6 @@ const LandingPage = () => {
       filters,
       searchTerm,
     };
-
     fetchProducts(body);
     setSkip(0);
   };
@@ -106,7 +97,6 @@ const LandingPage = () => {
       filters,
       searchTerm: event.target.value,
     };
-
     setSkip(0);
     setSearchTerm(event.target.value);
     fetchProducts(body);
@@ -144,31 +134,11 @@ const LandingPage = () => {
         >
           검색
         </button>
-
       </div>
-
       {/* <AdSlider /> */}
-
-      <SliderSection title="🔥 판매순 TOP 10" sort="sold" />
-      <SliderSection title="👀 조회순 TOP 10" sort="views" />
-      <SliderSection title="⭐️ 별점순 TOP 10" sort="rating" />
-      {/* <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        {products.map((product) => (
-          <CardItem product={product} key={product._id} />
-        ))}
-      </div> */}
-
-      {/* {hasMore && (
-        <div className="flex justify-center mt-5">
-          <button
-            onClick={handleLoadMore}
-            className="px-4 py-2 mt-5 text-white bg-black rounded-md hover:bg-gray-500"
-          >
-            더 보기
-          </button>
-        </div>
-      )} */}
-
+      <SliderSection title="지금 가장 많이 팔린 베스트셀러! 놓치면 품절각!" sort="sold" />
+      <SliderSection title="사람들이 가장 많이 클릭한 인기 상품!" sort="views" />
+      <SliderSection title="실사용자 별점 만점! 가장 후기가 좋은 상품은 여기!" sort="rating" />
     </section>
   );
 };

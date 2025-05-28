@@ -57,7 +57,7 @@ const UploadProductPage = () => {
             title: product.title,
             description: product.description,
             price: product.price,
-            category: product.continents, // ✅ 여기서 category로 보냄
+            category: product.continents, 
             images: product.images,
         };
 
@@ -80,7 +80,6 @@ const UploadProductPage = () => {
                 className="mt-6"
                 onSubmit={handleSubmit}
                 onKeyDown={(e) => {
-                    // 엔터키로 submit 방지 (textarea 제외)
                     if (e.key === "Enter" && e.target.tagName !== "TEXTAREA") {
                         e.preventDefault();
                     }
@@ -91,59 +90,6 @@ const UploadProductPage = () => {
                     onImageChange={handleImages}
                 />
 
-                {/* <div className="mt-4">
-                    <label htmlFor="title">상품명</label>
-                    <input
-                        className="w-full px-4 py-2 bg-white border rounded-md"
-                        name="title"
-                        id="title"
-                        onChange={handleChange}
-                        value={product.title}
-                    />
-                </div>
-
-                <div className="mt-4">
-                    <label htmlFor="price">가격</label>
-                    <input
-                        className="w-full px-4 py-2 bg-white border rounded-md"
-                        type="number"
-                        name="price"
-                        id="price"
-                        onChange={handleChange}
-                        value={product.price}
-                    />
-                </div>
-
-                <div className="mt-4">
-                    <label htmlFor="continents">카테고리</label>
-                    <select
-                        className="w-full px-4 py-2 mt-2 bg-white border rounded-md"
-                        name="continents"
-                        id="continents"
-                        onChange={handleChange}
-                        value={product.continents}
-                    >
-                        {continents.map((item) => (
-                            <option key={item.key} value={item.key}>
-                                {item.value}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                <div className="mt-4">
-                    <label htmlFor="description">상품 설명</label>
-                    <textarea
-                        id="description"
-                        name="description"
-                        className="w-full px-4 py-2 mt-2 bg-white border rounded-md"
-                        rows={10}
-                        placeholder="상품에 대한 설명을 입력하세요"
-                        onChange={handleChange}
-                        value={product.description}
-                    />
-                </div>
-                 */}
                 <div className="mt-4">
                     <label htmlFor="title">상품명</label>
                     <input
@@ -154,7 +100,6 @@ const UploadProductPage = () => {
                         value={product.title}
                     />
                 </div>
-
                 <div className="mt-4">
                     <label htmlFor="price">가격</label>
                     <input
@@ -166,7 +111,6 @@ const UploadProductPage = () => {
                         value={product.price}
                     />
                 </div>
-
                 <div className="mt-4">
                     <label htmlFor="continents">카테고리</label>
                     <select
@@ -183,7 +127,6 @@ const UploadProductPage = () => {
                         ))}
                     </select>
                 </div>
-
                 <div className="mt-4">
                     <label htmlFor="description">상품 설명</label>
                     <textarea

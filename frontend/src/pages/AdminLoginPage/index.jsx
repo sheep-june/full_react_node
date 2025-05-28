@@ -22,17 +22,10 @@ const AdminLoginPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // ✅ 1. 관리자 로그인 요청
             const res = await axiosInstance.post("/api/admin/login", form);
             const { token } = res.data;
-
-            // ✅ 2. 토큰 저장
             localStorage.setItem("adminToken", token);
-
-            // ✅ 3. CSRF 토큰 요청 및 저장
             await setCsrfToken();
-
-            // ✅ 4. 관리자 대시보드 이동
             navigate("/admin/dashboard");
         } catch (err) {
             setError(err.response?.data || "로그인 실패");
