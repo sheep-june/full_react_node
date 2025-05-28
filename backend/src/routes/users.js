@@ -180,7 +180,6 @@ router.put("/cart/quantity", auth, async (req, res) => {
 
         const cartItemIds = user.cart.map((item) => item.id);
         const productList = await Product.find({ _id: { $in: cartItemIds } });
-
         const cartDetail = productList.map((product) => {
             const match = user.cart.find((item) => item.id.toString() === product._id.toString());
             return { ...product.toObject(), quantity: match?.quantity || 0 };

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axiosInstance, { setCsrfToken } from "../../utils/axios";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserCart } from "../../store/userSlice";
+import { Minus, Plus } from "lucide-react";
 
 const CartPage = () => {
     const dispatch = useDispatch();
@@ -130,7 +131,7 @@ const CartPage = () => {
                                     <td>
                                         <div className="flex items-center justify-center gap-2">
                                             <button
-                                                className="px-2"
+                                                className="p-1 border border-pink-500 text-pink-500 bg-transparent rounded hover:bg-pink-500 hover:text-white transition-colors duration-200"
                                                 onClick={() =>
                                                     handleQuantity(
                                                         product._id,
@@ -138,11 +139,11 @@ const CartPage = () => {
                                                     )
                                                 }
                                             >
-                                                🔽
+                                                <Minus size={16} />
                                             </button>
                                             {product.quantity} 개
                                             <button
-                                                className="px-2"
+                                                className="p-1 border border-[#00C4C4] text-[#00C4C4] bg-transparent rounded hover:bg-[#00C4C4] hover:text-white transition-colors duration-200"
                                                 onClick={() =>
                                                     handleQuantity(
                                                         product._id,
@@ -150,7 +151,7 @@ const CartPage = () => {
                                                     )
                                                 }
                                             >
-                                                🔼
+                                                <Plus size={16} />
                                             </button>
                                         </div>
                                     </td>
