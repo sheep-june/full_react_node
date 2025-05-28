@@ -21,14 +21,11 @@ router.post("/image", auth, (req, res) => {
 router.get("/:id", async (req, res, next) => {
     try {
         await Product.findByIdAndUpdate(req.params.id, { $inc: { views: 1 } });
-
         const product = await Product.findById(req.params.id).populate("writer");
         const reviews = await Review.find({ product: req.params.id }).populate("user", "name");
-
         const averageRating = reviews.length
             ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length
             : 0;
-
         if (req.query.type === "single") {
             return res.status(200).json([{
                 ...product.toObject(),
@@ -36,7 +33,6 @@ router.get("/:id", async (req, res, next) => {
                 averageRating,
             }]);
         }
-
         return res.status(200).json({
             product,
             reviews,

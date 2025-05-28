@@ -40,9 +40,12 @@ const CartPage = () => {
     const handlePaymentClick = async () => {
         try {
             await setCsrfToken();
-            const selectedItems = cartItems.filter((item) =>
-                selected.includes(item._id)
-            );
+            const selectedItems = cartItems
+                .filter((item) => selected.includes(item._id))
+                .map((item) => ({
+                    ...item,
+                    totalPrice: item.price * item.quantity, // 👈 수량 반영한 가격 추가
+                }));
 
             if (!selectedItems.length) {
                 alert("결제할 상품을 선택하세요.");
@@ -104,15 +107,16 @@ const CartPage = () => {
                         </thead>
                         <tbody>
                             {cartItems.map((product) => (
-                                <tr
-                                    key={product._id}
-                                    className="border-b"
-                                >
+                                <tr key={product._id} className="border-b">
                                     <td>
                                         <input
                                             type="checkbox"
-                                            checked={selected.includes(product._id)}
-                                            onChange={() => handleCheck(product._id)}
+                                            checked={selected.includes(
+                                                product._id
+                                            )}
+                                            onChange={() =>
+                                                handleCheck(product._id)
+                                            }
                                         />
                                     </td>
                                     <td className="p-2">
@@ -128,7 +132,10 @@ const CartPage = () => {
                                             <button
                                                 className="px-2"
                                                 onClick={() =>
-                                                    handleQuantity(product._id, "dec")
+                                                    handleQuantity(
+                                                        product._id,
+                                                        "dec"
+                                                    )
                                                 }
                                             >
                                                 🔽
@@ -137,7 +144,10 @@ const CartPage = () => {
                                             <button
                                                 className="px-2"
                                                 onClick={() =>
-                                                    handleQuantity(product._id, "inc")
+                                                    handleQuantity(
+                                                        product._id,
+                                                        "inc"
+                                                    )
                                                 }
                                             >
                                                 🔼
@@ -146,7 +156,10 @@ const CartPage = () => {
                                     </td>
 
                                     <td>
-                                        {(product.price * product.quantity).toLocaleString()} 원
+                                        {(
+                                            product.price * product.quantity
+                                        ).toLocaleString()}{" "}
+                                        원
                                     </td>
                                 </tr>
                             ))}
@@ -166,7 +179,6 @@ const CartPage = () => {
                                 삭제
                             </button>
 
-
                             <button
                                 onClick={handlePaymentClick}
                                 disabled={selected.length === 0}
@@ -174,8 +186,6 @@ const CartPage = () => {
                             >
                                 결제하기
                             </button>
-
-
                         </div>
                     </div>
                 </>

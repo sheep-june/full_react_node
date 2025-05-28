@@ -36,13 +36,20 @@ const PostSection = () => {
         fetchPosts();
     }, []);
 
-    const filteredPosts = posts.filter((post) =>
-        post.title.toLowerCase().includes(search.toLowerCase())
+    const filteredPosts = posts.filter(
+        (post) =>
+            (post.title &&
+                post.title.toLowerCase().includes(search.toLowerCase())) ||
+            (post.description &&
+                post.description.toLowerCase().includes(search.toLowerCase()))
     );
 
     const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
     const startIdx = (currentPage - 1) * POSTS_PER_PAGE;
-    const currentPosts = filteredPosts.slice(startIdx, startIdx + POSTS_PER_PAGE);
+    const currentPosts = filteredPosts.slice(
+        startIdx,
+        startIdx + POSTS_PER_PAGE
+    );
 
     return (
         <div>
@@ -50,7 +57,7 @@ const PostSection = () => {
             <div className="mb-4">
                 <input
                     type="text"
-                    placeholder="제목으로 검색"
+                    placeholder="검색"
                     value={search}
                     onChange={(e) => {
                         setSearch(e.target.value);
@@ -85,7 +92,6 @@ const PostSection = () => {
                 ))}
             </ul>
 
-
             {/* 페이지네이션 */}
             {totalPages > 1 && (
                 <div className="flex justify-center mt-6 space-x-2">
@@ -93,10 +99,11 @@ const PostSection = () => {
                         <button
                             key={i + 1}
                             onClick={() => setCurrentPage(i + 1)}
-                            className={`px-3 py-1 border rounded transition-colors duration-200 ${currentPage === i + 1
-                                ? "bg-[#00C4C4] text-white border-[#00C4C4]"
-                                : "bg-white text-[#00C4C4] border-[#00C4C4] hover:bg-[#00C4C4] hover:text-white"
-                                }`}
+                            className={`px-3 py-1 border rounded transition-colors duration-200 ${
+                                currentPage === i + 1
+                                    ? "bg-[#00C4C4] text-white border-[#00C4C4]"
+                                    : "bg-white text-[#00C4C4] border-[#00C4C4] hover:bg-[#00C4C4] hover:text-white"
+                            }`}
                         >
                             {i + 1}
                         </button>

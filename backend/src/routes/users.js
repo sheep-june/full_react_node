@@ -207,7 +207,7 @@ router.post("/payment", auth, async (req, res) => {
                 dateOfPurchase: new Date().toISOString(),
                 name: item.title,
                 id: item._id,
-                price: item.price,
+                price: item.price * item.quantity,
                 quantity: item.quantity,
                 paymentId: crypto.randomUUID(),
             });
