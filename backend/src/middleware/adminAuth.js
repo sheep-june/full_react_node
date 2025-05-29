@@ -8,11 +8,9 @@ module.exports = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
         if (decoded.role !== 1) {
             return res.status(403).json("관리자 권한이 필요합니다.");
         }
-
         req.admin = decoded;
         next();
     } catch (err) {

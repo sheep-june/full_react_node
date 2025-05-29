@@ -4,12 +4,10 @@ const paymentSchema = mongoose.Schema(
         user: {
             type: Object,
         },
-
         data: {
             type: Array,
             default: [],
         },
-
         product: {
             type: Array,
             default: [],
@@ -19,5 +17,4 @@ const paymentSchema = mongoose.Schema(
 );
 
 const Payment = mongoose.model("Payment", paymentSchema);
-
 module.exports = Payment;
