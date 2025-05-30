@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import axiosInstance from "../../utils/axios";
 import { useNavigate } from "react-router-dom";
 import FileUpload from "../../components/FileUpload";
+import { toast } from "react-toastify";
 
 const continents = [
     { key: 1, value: "패션의류/잡화" },
@@ -57,15 +58,23 @@ const UploadProductPage = () => {
             title: product.title,
             description: product.description,
             price: product.price,
-            category: product.continents, 
+            category: product.continents,
             images: product.images,
         };
 
+        // try {
+        //     await axiosInstance.post("/products", body);
+        //     navigate("/");
+        // } catch (error) {
+        //     console.error(error);
+        // }
         try {
             await axiosInstance.post("/products", body);
+            toast.success("상품 업로드에 성공했습니다.");
             navigate("/");
         } catch (error) {
             console.error(error);
+            toast.error("상품 업로드에 실패했습니다. 다시 시도해 주세요.");
         }
     };
 

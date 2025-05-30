@@ -4,6 +4,8 @@ import { useDispatch } from "react-redux";
 import { loginUser, registerUser } from "../../store/thunkFunctions";
 import { setCsrfToken } from "../../utils/axios";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
+
 
 const AuthPage = () => {
     const dispatch = useDispatch();
@@ -41,12 +43,14 @@ const AuthPage = () => {
                 sessionStorage.removeItem("redirectAfterLogin");
                 navigate(target, { replace: true });
             } else {
-                alert("로그인 실패");
+                console.error("로그인에 실패했습니다");
             }
         } catch (error) {
             console.error("로그인 에러:", error);
         }
     };
+    
+
 
     const onRegister = async ({ name, email, password }) => {
         try {
@@ -69,7 +73,6 @@ const AuthPage = () => {
         }
     };
     return (
-        // <div className="w-screen h-screen m-0 p-0 overflow-hidden bg-[#f6f5f7] font-[Montserrat] relative flex">
         <div className="w-screen h-screen m-0 p-0 overflow-hidden bg-white font-[Montserrat] relative flex">
             {/* 회원가입 폼 */}
             <div
@@ -187,8 +190,8 @@ const AuthPage = () => {
             >
                 <div
                     className={`w-full h-full text-white flex flex-col items-center justify-center px-10 text-center transition-[background,border-radius] duration-500 delay-700 ${isRightPanelActive
-                            ? "bg-gradient-to-l from-[#66d1d1] to-[#3cbcbc] rounded-tr-[100px] rounded-br-[100px]"
-                            : "bg-gradient-to-r from-[#66d1d1] to-[#3cbcbc] rounded-tl-[100px] rounded-bl-[100px]"
+                        ? "bg-gradient-to-l from-[#66d1d1] to-[#3cbcbc] rounded-tr-[100px] rounded-br-[100px]"
+                        : "bg-gradient-to-r from-[#66d1d1] to-[#3cbcbc] rounded-tl-[100px] rounded-bl-[100px]"
                         }`}
                 >
 

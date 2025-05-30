@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axiosInstance, { setCsrfToken } from "../../utils/axios";
 import FileUpload from "../../components/FileUpload";
-
+import { toast } from "react-toastify";
 import { categories } from "../../utils/filterData";
 
 const EditProductPage = () => {
@@ -42,6 +42,23 @@ const EditProductPage = () => {
         setProduct((prev) => ({ ...prev, images: newImages }));
     };
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     try {
+    //         await setCsrfToken();
+    //         await axiosInstance.put(`/products/${productId}`, {
+    //             ...product,
+    //             writer: userData.id,
+    //         });
+    //         alert("상품이 수정되었습니다.");
+    //         navigate("/user/myproducts");
+    //     } catch (err) {
+    //         console.error("수정 실패:", err);
+    //         alert("수정 중 오류 발생");
+    //     }
+    // };
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -50,13 +67,16 @@ const EditProductPage = () => {
                 ...product,
                 writer: userData.id,
             });
-            alert("상품이 수정되었습니다.");
-            navigate("/user/myproducts");
+            toast.success("상품이 수정되었습니다.");
+            setTimeout(() => {
+                navigate("/user/myproducts");
+            }, 2000);
         } catch (err) {
             console.error("수정 실패:", err);
-            alert("수정 중 오류 발생");
+            toast.error("수정 중 오류 발생");
         }
     };
+
 
     if (!product || !product.images) {
         return (

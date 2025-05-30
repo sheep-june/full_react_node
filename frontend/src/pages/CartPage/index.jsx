@@ -3,6 +3,7 @@ import axiosInstance, { setCsrfToken } from "../../utils/axios";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserCart } from "../../store/userSlice";
 import { Minus, Plus } from "lucide-react";
+import { toast } from "react-toastify";
 
 const CartPage = () => {
     const dispatch = useDispatch();
@@ -38,46 +39,100 @@ const CartPage = () => {
         setCartItems(updatedItems);
     };
 
+    // const handlePaymentClick = async () => {
+    //     try {
+    //         await setCsrfToken();
+    //         const selectedItems = cartItems
+    //             .filter((item) => selected.includes(item._id))
+    //             .map((item) => ({
+    //                 ...item,
+    //                 totalPrice: item.price * item.quantity, // 👈 수량 반영한 가격 추가
+    //             }));
+
+    //         if (!selectedItems.length) {
+    //             alert("결제할 상품을 선택하세요.");
+    //             return;
+    //         }
+
+    //         await axiosInstance.post("/users/payment", {
+    //             cartDetail: selectedItems,
+    //         });
+    //         alert("결제가 완료되었습니다.");
+    //         dispatch(fetchUserCart());
+    //         setSelected([]);
+    //     } catch (err) {
+    //         console.error("결제 실패:", err);
+    //         alert("결제 중 오류 발생");
+    //     }
+    // };
+
+
     const handlePaymentClick = async () => {
         try {
             await setCsrfToken();
+
             const selectedItems = cartItems
                 .filter((item) => selected.includes(item._id))
                 .map((item) => ({
                     ...item,
-                    totalPrice: item.price * item.quantity, // 👈 수량 반영한 가격 추가
+                    totalPrice: item.price * item.quantity,
                 }));
 
             if (!selectedItems.length) {
-                alert("결제할 상품을 선택하세요.");
+                toast.warn("결제할 상품을 선택하세요.");
                 return;
             }
 
             await axiosInstance.post("/users/payment", {
                 cartDetail: selectedItems,
             });
-            alert("결제가 완료되었습니다.");
+
+            toast.success("결제가 완료되었습니다.");
             dispatch(fetchUserCart());
             setSelected([]);
         } catch (err) {
             console.error("결제 실패:", err);
-            alert("결제 중 오류 발생");
+            toast.error("결제 중 오류 발생");
         }
     };
 
+
+    // const handleDeleteSelected = async () => {
+    //     try {
+    //         await setCsrfToken();
+    //         for (const productId of selected) {
+    //             await axiosInstance.delete("/users/cart", {
+    //                 params: { productId },
+    //             });
+    //         }
+    //         dispatch(fetchUserCart());
+    //         setSelected([]);
+    //     } catch (err) {
+    //         console.error("삭제 실패:", err);
+    //         alert("삭제 중 오류 발생");
+    //     }
+    // };
     const handleDeleteSelected = async () => {
         try {
             await setCsrfToken();
+
+            if (!selected.length) {
+                toast.warn("삭제할 상품을 선택하세요.");
+                return;
+            }
+
             for (const productId of selected) {
                 await axiosInstance.delete("/users/cart", {
                     params: { productId },
                 });
             }
+
+            toast.success("선택한 상품이 삭제되었습니다.");
             dispatch(fetchUserCart());
             setSelected([]);
         } catch (err) {
             console.error("삭제 실패:", err);
-            alert("삭제 중 오류 발생");
+            toast.error("삭제 중 오류 발생");
         }
     };
 
