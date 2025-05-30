@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { loginUser, registerUser } from "../../store/thunkFunctions";
 import { setCsrfToken } from "../../utils/axios";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 
 
 const AuthPage = () => {
