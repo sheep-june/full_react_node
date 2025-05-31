@@ -5,12 +5,12 @@ import axiosInstance, { setCsrfToken } from "../../utils/axios";
 import FileUpload from "../../components/FileUpload";
 import { toast } from "react-toastify";
 import { categories } from "../../utils/filterData";
+import usePageTitle from "../../hooks/usePageTitle";
 
 const EditProductPage = () => {
     const { productId } = useParams();
     const navigate = useNavigate();
     const userData = useSelector((state) => state.user?.userData);
-
     const [product, setProduct] = useState({
         title: "",
         description: "",
@@ -18,6 +18,8 @@ const EditProductPage = () => {
         category: 1,
         images: [],
     });
+
+    usePageTitle('상품수정');
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -42,21 +44,6 @@ const EditProductPage = () => {
         setProduct((prev) => ({ ...prev, images: newImages }));
     };
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     try {
-    //         await setCsrfToken();
-    //         await axiosInstance.put(`/products/${productId}`, {
-    //             ...product,
-    //             writer: userData.id,
-    //         });
-    //         alert("상품이 수정되었습니다.");
-    //         navigate("/user/myproducts");
-    //     } catch (err) {
-    //         console.error("수정 실패:", err);
-    //         alert("수정 중 오류 발생");
-    //     }
-    // };
 
 
     const handleSubmit = async (e) => {

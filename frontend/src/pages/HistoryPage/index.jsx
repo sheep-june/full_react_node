@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
+import usePageTitle from "../../hooks/usePageTitle";
 
 const ITEMS_PER_PAGE = 20;
 
@@ -15,6 +16,7 @@ const HistoryPage = () => {
         (currentPage - 1) * ITEMS_PER_PAGE,
         currentPage * ITEMS_PER_PAGE
     );
+    usePageTitle('주문 내역');
 
     return (
         <section>

@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import QuestionItem from "../../components/Board/QuestionItem";
 import { toast } from "react-toastify";
 import axiosInstance, { setCsrfToken } from "../../utils/axios";
+import usePageTitle from './../../hooks/usePageTitle';
 
 const QuestionPage = () => {
     const user = useSelector((state) => state.user?.userData);
@@ -17,6 +18,7 @@ const QuestionPage = () => {
             toast.error("질문 목록을 불러올 수 없습니다.");
         }
     };
+    usePageTitle('질문을 작성해 주세요!');
 
     const handleSubmit = async (e) => {
         e.preventDefault();

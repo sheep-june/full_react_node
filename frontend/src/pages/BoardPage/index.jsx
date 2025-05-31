@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router-dom";
+import usePageTitle from "../../hooks/usePageTitle";
 
 const BoardPage = () => {
   const navigate = useNavigate();
+  usePageTitle('게시판');
 
   return (
     <div className="p-6 max-w-4xl mx-auto">

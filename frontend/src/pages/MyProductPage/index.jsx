@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../utils/axios";
 import { Link } from "react-router-dom";
+import usePageTitle from "../../hooks/usePageTitle";
+import { useSelector } from "react-redux";
 
 const MyProductsPage = () => {
     const [products, setProducts] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 20;
+    const user = useSelector((state) => state.user);
+
+    usePageTitle(user?.userData?.name && `${user.userData.name}님의 상품`);
 
     const fetchMyProducts = async () => {
         try {

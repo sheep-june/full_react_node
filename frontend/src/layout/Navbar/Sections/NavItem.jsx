@@ -5,6 +5,7 @@ import { logoutUser } from "../../../store/thunkFunctions";
 import { AiOutlineShoppingCart, AiOutlineUser } from "react-icons/ai";
 import { setCsrfToken } from "../../../utils/axios";
 import { isProtectedPath } from "../../../utils/protectedPaths";
+import usePageTitle from "../../../hooks/usePageTitle";
 
 const NavItem = ({ mobile }) => {
     const isAuth = useSelector((state) => state.user?.isAuth);
@@ -14,6 +15,9 @@ const NavItem = ({ mobile }) => {
     const navigate = useNavigate();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const location = useLocation();
+    const user = useSelector((state) => state.user);
+
+    usePageTitle(user?.userData?.name && `${user.userData.name}님의 상품`);
 
     const handleLogout = async () => {
         try {
@@ -96,7 +100,7 @@ const NavItem = ({ mobile }) => {
                 {dropdownOpen && (
                     <ul className="absolute top-full right-0 z-20 w-40 py-2 bg-white border rounded shadow-lg text-black text-sm">
                         <li className="px-4 py-2 hover:bg-gray-100">
-                            <Link to="/history">주문 목록</Link>
+                            <Link to="/history">주문 내역</Link>
                         </li>
                         <li className="px-4 py-2 hover:bg-gray-100">
                             <Link to="/product/upload">업로드</Link>

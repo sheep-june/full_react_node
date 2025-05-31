@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance, { setCsrfToken } from "../../utils/axios";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import usePageTitle from "../../hooks/usePageTitle";
 
 const WishlistPage = () => {
     const [wishlist, setWishlist] = useState([]);
@@ -13,6 +15,10 @@ const WishlistPage = () => {
             console.error("찜 목록 불러오기 실패:", error);
         }
     };
+    const user = useSelector((state) => state.user);
+
+    usePageTitle(user?.userData?.name && `${user.userData.name}님의 찜한상품`);
+
 
     useEffect(() => {
         fetchWishlist();

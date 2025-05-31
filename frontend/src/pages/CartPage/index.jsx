@@ -4,12 +4,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUserCart } from "../../store/userSlice";
 import { Minus, Plus } from "lucide-react";
 import { toast } from "react-toastify";
+import usePageTitle from "../../hooks/usePageTitle";
 
 const CartPage = () => {
     const dispatch = useDispatch();
     const cartDetail = useSelector((state) => state.user.cartDetail);
     const [cartItems, setCartItems] = useState([]);
     const [selected, setSelected] = useState([]);
+
+    usePageTitle('장바구니');
 
     useEffect(() => {
         dispatch(fetchUserCart());

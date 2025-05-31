@@ -5,16 +5,18 @@ import ProductImage from "./Sections/ProductImage";
 import ProductInfo from "./Sections/ProductInfo";
 import { useSelector } from "react-redux";
 import { FaStar } from "react-icons/fa";
+import usePageTitle from "../../hooks/usePageTitle";
 
 const DetailProductPage = () => {
     const { productId } = useParams();
     const [product, setProduct] = useState(null);
     const [reviews, setReviews] = useState([]);
     const [averageRating, setAverageRating] = useState(0);
-
     const [comment, setComment] = useState("");
     const [rating, setRating] = useState(0);
     const user = useSelector((state) => state.user);
+
+    usePageTitle(product?.title);
 
     useEffect(() => {
         async function fetchProduct() {

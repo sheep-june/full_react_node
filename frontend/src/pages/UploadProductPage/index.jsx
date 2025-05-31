@@ -4,6 +4,7 @@ import axiosInstance from "../../utils/axios";
 import { useNavigate } from "react-router-dom";
 import FileUpload from "../../components/FileUpload";
 import { toast } from "react-toastify";
+import usePageTitle from "../../hooks/usePageTitle";
 
 const continents = [
     { key: 1, value: "패션의류/잡화" },
@@ -24,6 +25,7 @@ const continents = [
 ];
 
 const UploadProductPage = () => {
+    usePageTitle('상품업로드를 해주세요!');
     const [product, setProduct] = useState({
         title: "",
         description: "",

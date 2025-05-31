@@ -5,6 +5,7 @@ import RadioBox from "../LandingPage/Sections/RadioBox";
 import CardItem from "../LandingPage/Sections/CardItem";
 import { categories, prices } from "../../utils/filterData";
 import axiosInstance from "../../utils/axios";
+import usePageTitle from "../../hooks/usePageTitle";
 
 const sortOptions = [
     { id: "views", label: "조회순" },
@@ -27,6 +28,9 @@ const SearchPage = () => {
     const [sortBy, setSortBy] = useState("views");
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+
+    usePageTitle(searchTerm ? `${searchTerm} 검색 결과` : "검색 결과");
+
 
     useEffect(() => {
         if (initialSearch) {
@@ -103,6 +107,7 @@ const SearchPage = () => {
         setCurrentPage(1);
         fetchSearchResults(searchTerm, filters, sortId, 1);
     };
+
 
     return (
         <section className="w-full px-4">

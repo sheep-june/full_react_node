@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import CardItem from "./Sections/CardItem";
+// import CardItem from "./Sections/CardItem";
 import axiosInstance, { setCsrfToken } from "../../utils/axios";
 import { prices } from "../../utils/filterData";
-import AdSlider from "../../components/AdSlider/AdSlider";
+// import AdSlider from "../../components/AdSlider/AdSlider";
 import { useNavigate } from "react-router-dom";
 import SliderSection from "../../components/SliderSection"; // 상단에 추가
 import AdVideoSlider from "../../components/AdSlider/AdVideoSlider";
+import usePageTitle from "../../hooks/usePageTitle";
+
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -18,8 +20,9 @@ const LandingPage = () => {
     categories: [],
     price: [],
   });
-
   const [quickSearch, setQuickSearch] = useState("");
+
+  usePageTitle('買う売る사고팔고')
 
   useEffect(() => {
     setCsrfToken();

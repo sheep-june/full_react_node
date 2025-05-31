@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { loginUser, registerUser } from "../../store/thunkFunctions";
 import { setCsrfToken } from "../../utils/axios";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import usePageTitle from "../../hooks/usePageTitle";
 // import { toast } from "react-toastify";
 
 
@@ -14,6 +15,8 @@ const AuthPage = () => {
     const mode = searchParams.get("mode");
     const [isRightPanelActive, setIsRightPanelActive] = useState(false);
     const fromRef = useRef(sessionStorage.getItem("redirectAfterLogin") || "/");
+
+    usePageTitle('Welcome買う売る');
 
     useEffect(() => {
         setCsrfToken();
