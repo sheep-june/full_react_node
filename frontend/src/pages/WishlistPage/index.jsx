@@ -3,6 +3,7 @@ import axiosInstance, { setCsrfToken } from "../../utils/axios";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import usePageTitle from "../../hooks/usePageTitle";
+import { toast } from "react-toastify";
 
 const WishlistPage = () => {
     const [wishlist, setWishlist] = useState([]);
@@ -36,7 +37,7 @@ const WishlistPage = () => {
             await axiosInstance.post("/users/cart/batch", {
                 productIds: selected,
             });
-            alert("장바구니에 추가되었습니다.");
+            toast.success("장바구니에 추가되었습니다.");
         } catch (err) {
             console.error(err);
         }
@@ -48,7 +49,7 @@ const WishlistPage = () => {
             await axiosInstance.delete("/users/wishlist/batch", {
                 data: { productIds: selected },
             });
-            alert("삭제 완료");
+            toast.success("삭제 완료");
             setWishlist((prev) =>
                 prev.filter((p) => !selected.includes(p._id))
             );

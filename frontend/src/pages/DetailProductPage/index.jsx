@@ -6,6 +6,8 @@ import ProductInfo from "./Sections/ProductInfo";
 import { useSelector } from "react-redux";
 import { FaStar } from "react-icons/fa";
 import usePageTitle from "../../hooks/usePageTitle";
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 const DetailProductPage = () => {
     const { productId } = useParams();
@@ -21,7 +23,9 @@ const DetailProductPage = () => {
     useEffect(() => {
         async function fetchProduct() {
             try {
-                const response = await axiosInstance.get(`/products/${productId}`);
+                const response = await axiosInstance.get(
+                    `/products/${productId}`
+                );
                 setProduct(response.data.product);
                 setReviews(response.data.reviews);
                 setAverageRating(response.data.averageRating);
@@ -39,9 +43,24 @@ const DetailProductPage = () => {
 
     const handleSubmitReview = async (e) => {
         e.preventDefault();
+        // if (!comment || rating === 0) {
+        //     return alert("별점과 내용을 모두 입력해주세요.");
+        // }
+
         if (!comment || rating === 0) {
-            return alert("별점과 내용을 모두 입력해주세요.");
+            await Swal.fire({
+                icon: "warning",
+                title: "입력값이 부족합니다",
+                text: "별점과 내용을 모두 입력해주세요.",
+                confirmButtonText: "확인",
+                customClass: {
+                    confirmButton: "tw-swal-cancel", // 민트 테두리 버튼
+                },
+                buttonsStyling: false,
+            });
+            return;
         }
+
         try {
             await axiosInstance.post("/reviews", {
                 productId: product._id,
@@ -49,7 +68,7 @@ const DetailProductPage = () => {
                 rating,
             });
 
-            alert("리뷰가 등록되었습니다.");
+            toast.success("리뷰가 등록되었습니다.");
             setComment("");
             setRating(0);
 
@@ -60,7 +79,7 @@ const DetailProductPage = () => {
             setAverageRating(reviewRes.data.averageRating);
         } catch (error) {
             console.error("리뷰 등록 오류:", error);
-            alert("리뷰 등록에 실패했습니다.");
+            toast.error("리뷰 등록에 실패했습니다.");
         }
     };
 
@@ -93,7 +112,7 @@ const DetailProductPage = () => {
             {/* 리뷰 평균 + 목록 */}
             <div className="mt-10">
                 <h2 className="text-xl font-bold mb-2">
-                    리뷰  {averageRating.toFixed(1)} / 5
+                    리뷰 {averageRating.toFixed(1)} / 5
                 </h2>
 
                 {reviews.length === 0 ? (

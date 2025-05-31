@@ -5,6 +5,7 @@ import { loginUser, registerUser } from "../../store/thunkFunctions";
 import { setCsrfToken } from "../../utils/axios";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import usePageTitle from "../../hooks/usePageTitle";
+import { toast } from "react-toastify";
 // import { toast } from "react-toastify";
 
 
@@ -46,10 +47,10 @@ const AuthPage = () => {
                 sessionStorage.removeItem("redirectAfterLogin");
                 navigate(target, { replace: true });
             } else {
-                console.error("로그인에 실패했습니다");
+                toast.error("로그인에 실패했습니다");
             }
         } catch (error) {
-            console.error("로그인 에러:", error);
+            toast.error("로그인 에러:", error);
         }
     };
     
@@ -69,10 +70,10 @@ const AuthPage = () => {
                 resetRegister();
                 setIsRightPanelActive(false);
             } else {
-                alert("회원가입 실패");
+                toast.error("회원가입 실패");
             }
         } catch (error) {
-            console.error("회원가입 에러:", error);
+            toast.error("회원가입 에러:", error);
         }
     };
     return (

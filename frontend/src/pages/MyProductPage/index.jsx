@@ -3,6 +3,10 @@ import axiosInstance from "../../utils/axios";
 import { Link } from "react-router-dom";
 import usePageTitle from "../../hooks/usePageTitle";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { useConfirmAlert } from "../../hooks/useConfirmAlert";
+
+
 
 const MyProductsPage = () => {
     const [products, setProducts] = useState([]);
@@ -10,6 +14,7 @@ const MyProductsPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 20;
     const user = useSelector((state) => state.user);
+    const { confirm } = useConfirmAlert();
 
     usePageTitle(user?.userData?.name && `${user.userData.name}님의 상품`);
 
@@ -26,20 +31,38 @@ const MyProductsPage = () => {
         fetchMyProducts();
     }, []);
 
+    // const handleDelete = async (id) => {
+    //     if (!window.confirm("정말 삭제하시겠습니까?")) return;
+    //     try {
+    //         await axiosInstance.delete(`/products/${id}`, {
+    //             headers: {
+    //                 "X-CSRF-Token":
+    //                     axiosInstance.defaults.headers.common["X-CSRF-Token"],
+    //             },
+    //         });
+    //         toast.success("삭제되었습니다.");
+    //         fetchMyProducts();
+    //     } catch (error) {
+    //         console.error("삭제 실패:", error);
+    //         toast.error("삭제 중 오류가 발생했습니다.");
+    //     }
+    // };
     const handleDelete = async (id) => {
-        if (!window.confirm("정말 삭제하시겠습니까?")) return;
+        const ok = await confirm({
+            title: "정말 삭제하시겠습니까?",
+            text: "삭제된 항목은 되돌릴 수 없습니다.",
+            confirmText: "삭제",
+            cancelText: "취소",
+        });
+
+        if (!ok) return;
+
         try {
-            await axiosInstance.delete(`/products/${id}`, {
-                headers: {
-                    "X-CSRF-Token":
-                        axiosInstance.defaults.headers.common["X-CSRF-Token"],
-                },
-            });
-            alert("삭제되었습니다.");
+            await axiosInstance.delete(`/products/${id}`);
+            toast.success("삭제되었습니다.");
             fetchMyProducts();
-        } catch (error) {
-            console.error("삭제 실패:", error);
-            alert("삭제 중 오류가 발생했습니다.");
+        } catch (err) {
+            toast.error("삭제 중 오류 발생");
         }
     };
 
@@ -118,7 +141,9 @@ const MyProductsPage = () => {
                                         수정
                                     </Link>
                                     <button
-                                        onClick={() => handleDelete(product._id)}
+                                        onClick={() =>
+                                            handleDelete(product._id)
+                                        }
                                         className="text-red-500 text-sm hover:underline"
                                     >
                                         삭제
@@ -134,10 +159,11 @@ const MyProductsPage = () => {
                             <button
                                 key={i}
                                 onClick={() => setCurrentPage(i + 1)}
-                                className={`px-3 py-1 border rounded transition-colors duration-200 ${currentPage === i + 1
+                                className={`px-3 py-1 border rounded transition-colors duration-200 ${
+                                    currentPage === i + 1
                                         ? "bg-[#00C4C4] text-white border-[#00C4C4]"
                                         : "text-[#00C4C4] border-[#00C4C4] hover:bg-[#00C4C4] hover:text-white"
-                                    }`}
+                                }`}
                             >
                                 {i + 1}
                             </button>

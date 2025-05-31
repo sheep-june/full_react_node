@@ -6,6 +6,7 @@ import CardItem from "../LandingPage/Sections/CardItem";
 import { categories, prices } from "../../utils/filterData";
 import axiosInstance from "../../utils/axios";
 import usePageTitle from "../../hooks/usePageTitle";
+import { toast } from "react-toastify";
 
 const sortOptions = [
     { id: "views", label: "조회순" },
@@ -93,7 +94,7 @@ const SearchPage = () => {
             setProducts(res.data.products);
             setTotalPages(Math.ceil(res.data.totalCount / ITEMS_PER_PAGE));
         } catch (err) {
-            console.error("검색 실패:", err);
+            toast.error("검색 실패:", err);
         }
     };
 

@@ -3,3 +3,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* 삭제 버튼 */
+.tw-swal-delete {
+  @apply border-2 border-red-500 text-red-500 bg-white px-4 py-2 rounded-md font-semibold transition-all duration-200;
+}
+.tw-swal-delete:hover {
+  @apply bg-red-500 text-white;
+}
+
+/* 취소 버튼 */
+.tw-swal-cancel {
+  @apply border-2 border-cyan-500 text-cyan-500 bg-white px-4 py-2 rounded-md font-semibold transition-all duration-200 ml-2;
+}
+.tw-swal-cancel:hover {
+  @apply bg-cyan-500 text-white;
+}
