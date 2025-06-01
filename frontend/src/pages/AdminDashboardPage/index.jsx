@@ -15,7 +15,9 @@ const AdminDashboardPage = () => {
     return (
         <section className="p-4">
             <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl border-[#00C4C4] text-[#00C4C4]">관리자 대시보드</h2>
+                <h2 className="text-xl border-[#00C4C4] text-[#00C4C4]">
+                    관리자 대시보드
+                </h2>
                 <button
                     onClick={handleAdminLogout}
                     className="text-sm px-3 py-1 border border-[#00C4C4] text-[#00C4C4] bg-white rounded hover:bg-[#00C4C4] hover:text-white transition-colors duration-200"
@@ -26,20 +28,22 @@ const AdminDashboardPage = () => {
 
             <div className="mb-6 space-x-2">
                 <button
-                    className={`px-4 py-2 rounded transition-colors duration-200 ${section === "users"
+                    className={`px-4 py-2 rounded transition-colors duration-200 ${
+                        section === "users"
                             ? "bg-[#00C4C4] text-white"
                             : "bg-white text-[#00C4C4] border border-[#00C4C4] hover:bg-[#00C4C4] hover:text-white"
-                        }`}
+                    }`}
                     onClick={() => setSection("users")}
                 >
                     전체 사용자 보기
                 </button>
 
                 <button
-                    className={`px-4 py-2 rounded transition-colors duration-200 ${section === "posts"
+                    className={`px-4 py-2 rounded transition-colors duration-200 ${
+                        section === "posts"
                             ? "bg-[#00C4C4] text-white"
                             : "bg-white text-[#00C4C4] border border-[#00C4C4] hover:bg-[#00C4C4] hover:text-white"
-                        }`}
+                    }`}
                     onClick={() => setSection("posts")}
                 >
                     전체 게시글 보기
@@ -47,6 +51,7 @@ const AdminDashboardPage = () => {
 
                 <Link
                     to="/admin/ads"
+                    // to="/admin/ad-image" 
                     className="px-4 py-2 border border-[#00C4C4] text-[#00C4C4] bg-white rounded hover:bg-[#00C4C4] hover:text-white transition-colors duration-200 inline-block"
                 >
                     광고 설정
@@ -77,7 +82,6 @@ const AdminDashboardPage = () => {
             {section === "users" && <UserSection />}
             {section === "posts" && <PostSection />}
         </section>
-
     );
 };
 

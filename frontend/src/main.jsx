@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import { store, persistor } from "./store";
 import { PersistGate } from "redux-persist/integration/react";
 
+
 ReactDOM.createRoot(document.getElementById("root")).render(
     <BrowserRouter>
         {/* 모든 라우팅 기능을 App 내부에서 사용할 수 있도록 최상단에 BrowserRouter로 감쌉니다 */}

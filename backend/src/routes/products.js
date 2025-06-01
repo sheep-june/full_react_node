@@ -21,17 +21,24 @@ router.post("/image", auth, (req, res) => {
 router.get("/:id", async (req, res, next) => {
     try {
         await Product.findByIdAndUpdate(req.params.id, { $inc: { views: 1 } });
-        const product = await Product.findById(req.params.id).populate("writer");
-        const reviews = await Review.find({ product: req.params.id }).populate("user", "name");
+        const product = await Product.findById(req.params.id).populate(
+            "writer"
+        );
+        const reviews = await Review.find({ product: req.params.id }).populate(
+            "user",
+            "name"
+        );
         const averageRating = reviews.length
             ? reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length
             : 0;
         if (req.query.type === "single") {
-            return res.status(200).json([{
-                ...product.toObject(),
-                reviews,
-                averageRating,
-            }]);
+            return res.status(200).json([
+                {
+                    ...product.toObject(),
+                    reviews,
+                    averageRating,
+                },
+            ]);
         }
         return res.status(200).json({
             product,
@@ -81,10 +88,14 @@ router.get("/", async (req, res) => {
         const productsWithRating = await Promise.all(
             rawProducts.map(async (product) => {
                 const reviews = await Review.find({ product: product._id });
-                const avg = reviews.reduce((acc, r) => acc + r.rating, 0) / (reviews.length || 1);
+                const avg =
+                    reviews.reduce((acc, r) => acc + r.rating, 0) /
+                    (reviews.length || 1);
                 return {
                     ...product._doc,
-                    averageRating: reviews.length ? parseFloat(avg.toFixed(1)) : 0,
+                    averageRating: reviews.length
+                        ? parseFloat(avg.toFixed(1))
+                        : 0,
                 };
             })
         );
@@ -107,7 +118,9 @@ router.get("/", async (req, res) => {
                 sorted.sort((a, b) => b.sold - a.sold);
                 break;
             default:
-                sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                sorted.sort(
+                    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+                );
         }
 
         const totalCount = await Product.countDocuments(query);

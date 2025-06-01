@@ -5,7 +5,6 @@ import { logoutUser } from "../../../store/thunkFunctions";
 import { AiOutlineShoppingCart, AiOutlineUser } from "react-icons/ai";
 import { setCsrfToken } from "../../../utils/axios";
 import { isProtectedPath } from "../../../utils/protectedPaths";
-import usePageTitle from "../../../hooks/usePageTitle";
 
 const NavItem = ({ mobile }) => {
     const isAuth = useSelector((state) => state.user?.isAuth);
@@ -15,9 +14,6 @@ const NavItem = ({ mobile }) => {
     const navigate = useNavigate();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const location = useLocation();
-    const user = useSelector((state) => state.user);
-
-    usePageTitle(user?.userData?.name && `${user.userData.name}님의 상품`);
 
     const handleLogout = async () => {
         try {
@@ -90,15 +86,13 @@ const NavItem = ({ mobile }) => {
                 onMouseEnter={() => setDropdownOpen(true)}
                 onMouseLeave={() => setDropdownOpen(false)}
             >
-                <Link
-                    to="/user/mypage"
-                    className="text-xl text-[#00C4C4] hover:underline flex items-center gap-1"
-                >
+                <div className="text-xl text-[#00C4C4] flex items-center gap-1 cursor-default">
                     <AiOutlineUser />
-                </Link>
+                </div>
 
                 {dropdownOpen && (
-                    <ul className="absolute top-full right-0 z-20 w-40 py-2 bg-white border rounded shadow-lg text-black text-sm">
+                    // <ul className="absolute top-full right-0 z-20 w-40 py-2 bg-white border rounded shadow-lg text-black text-sm">
+                    <ul className="absolute top-full left-1/2 -translate-x-1/2 z-20 w-40 py-2 bg-white border rounded shadow-lg text-black text-sm">
                         <li className="px-4 py-2 hover:bg-gray-100">
                             <Link to="/history">주문 내역</Link>
                         </li>
