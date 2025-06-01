@@ -6,8 +6,6 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useConfirmAlert } from "../../hooks/useConfirmAlert";
 
-
-
 const MyProductsPage = () => {
     const [products, setProducts] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
@@ -31,22 +29,6 @@ const MyProductsPage = () => {
         fetchMyProducts();
     }, []);
 
-    // const handleDelete = async (id) => {
-    //     if (!window.confirm("정말 삭제하시겠습니까?")) return;
-    //     try {
-    //         await axiosInstance.delete(`/products/${id}`, {
-    //             headers: {
-    //                 "X-CSRF-Token":
-    //                     axiosInstance.defaults.headers.common["X-CSRF-Token"],
-    //             },
-    //         });
-    //         toast.success("삭제되었습니다.");
-    //         fetchMyProducts();
-    //     } catch (error) {
-    //         console.error("삭제 실패:", error);
-    //         toast.error("삭제 중 오류가 발생했습니다.");
-    //     }
-    // };
     const handleDelete = async (id) => {
         const ok = await confirm({
             title: "정말 삭제하시겠습니까?",

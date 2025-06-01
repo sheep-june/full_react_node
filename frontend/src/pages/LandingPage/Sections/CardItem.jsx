@@ -8,7 +8,6 @@ import { useSelector } from "react-redux";
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 const CardItem = ({ product, refreshWishlist, wishlist }) => {
-
     const user = useSelector((state) => state.user);
     const navigate = useNavigate();
     const [wished, setWished] = useState(false);
@@ -54,7 +53,6 @@ const CardItem = ({ product, refreshWishlist, wishlist }) => {
         }
     };
 
-
     return (
         <Link
             to={`/product/${product._id}`}
@@ -90,9 +88,7 @@ const CardItem = ({ product, refreshWishlist, wishlist }) => {
                 </p>
             </div>
         </Link>
-
     );
-
 };
 
 export default CardItem;

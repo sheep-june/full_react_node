@@ -12,7 +12,7 @@ const CartPage = () => {
     const [cartItems, setCartItems] = useState([]);
     const [selected, setSelected] = useState([]);
 
-    usePageTitle('장바구니');
+    usePageTitle("장바구니");
 
     useEffect(() => {
         dispatch(fetchUserCart());
@@ -41,34 +41,6 @@ const CartPage = () => {
         });
         setCartItems(updatedItems);
     };
-
-    // const handlePaymentClick = async () => {
-    //     try {
-    //         await setCsrfToken();
-    //         const selectedItems = cartItems
-    //             .filter((item) => selected.includes(item._id))
-    //             .map((item) => ({
-    //                 ...item,
-    //                 totalPrice: item.price * item.quantity, // 👈 수량 반영한 가격 추가
-    //             }));
-
-    //         if (!selectedItems.length) {
-    //             alert("결제할 상품을 선택하세요.");
-    //             return;
-    //         }
-
-    //         await axiosInstance.post("/users/payment", {
-    //             cartDetail: selectedItems,
-    //         });
-    //         alert("결제가 완료되었습니다.");
-    //         dispatch(fetchUserCart());
-    //         setSelected([]);
-    //     } catch (err) {
-    //         console.error("결제 실패:", err);
-    //         alert("결제 중 오류 발생");
-    //     }
-    // };
-
 
     const handlePaymentClick = async () => {
         try {
@@ -99,22 +71,6 @@ const CartPage = () => {
         }
     };
 
-
-    // const handleDeleteSelected = async () => {
-    //     try {
-    //         await setCsrfToken();
-    //         for (const productId of selected) {
-    //             await axiosInstance.delete("/users/cart", {
-    //                 params: { productId },
-    //             });
-    //         }
-    //         dispatch(fetchUserCart());
-    //         setSelected([]);
-    //     } catch (err) {
-    //         console.error("삭제 실패:", err);
-    //         alert("삭제 중 오류 발생");
-    //     }
-    // };
     const handleDeleteSelected = async () => {
         try {
             await setCsrfToken();

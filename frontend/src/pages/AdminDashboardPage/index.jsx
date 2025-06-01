@@ -51,7 +51,7 @@ const AdminDashboardPage = () => {
 
                 <Link
                     to="/admin/ads"
-                    // to="/admin/ad-image" 
+                    // to="/admin/ad-image"
                     className="px-4 py-2 border border-[#00C4C4] text-[#00C4C4] bg-white rounded hover:bg-[#00C4C4] hover:text-white transition-colors duration-200 inline-block"
                 >
                     광고 설정

@@ -42,7 +42,10 @@ const UserSection = () => {
 
     const totalPages = Math.ceil(filteredUsers.length / USERS_PER_PAGE);
     const startIdx = (currentPage - 1) * USERS_PER_PAGE;
-    const currentUsers = filteredUsers.slice(startIdx, startIdx + USERS_PER_PAGE);
+    const currentUsers = filteredUsers.slice(
+        startIdx,
+        startIdx + USERS_PER_PAGE
+    );
 
     return (
         <div>
@@ -69,7 +72,9 @@ const UserSection = () => {
                     >
                         <div>
                             <p className="font-semibold">이름: {user.name}</p>
-                            <p className="text-gray-700">이메일: {user.email}</p>
+                            <p className="text-gray-700">
+                                이메일: {user.email}
+                            </p>
                         </div>
                         <button
                             className="px-3 py-1 border border-red-500 text-red-500 bg-white rounded hover:bg-red-500 hover:text-white transition-colors duration-200"
@@ -88,10 +93,11 @@ const UserSection = () => {
                         <button
                             key={i + 1}
                             onClick={() => setCurrentPage(i + 1)}
-                            className={`px-3 py-1 border rounded transition-colors duration-200 ${currentPage === i + 1
+                            className={`px-3 py-1 border rounded transition-colors duration-200 ${
+                                currentPage === i + 1
                                     ? "bg-[#00C4C4] text-white border-[#00C4C4]"
                                     : "bg-white text-[#00C4C4] border-[#00C4C4] hover:bg-[#00C4C4] hover:text-white"
-                                }`}
+                            }`}
                         >
                             {i + 1}
                         </button>

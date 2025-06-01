@@ -2,7 +2,7 @@ export const protectedPrefixes = [
     "/product/upload",
     "/product/edit",
     "/user",
-    "/history"
+    "/history",
 ];
 
 export const isProtectedPath = (pathname) =>

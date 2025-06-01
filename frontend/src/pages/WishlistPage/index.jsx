@@ -20,7 +20,6 @@ const WishlistPage = () => {
 
     usePageTitle(user?.userData?.name && `${user.userData.name}님의 찜한상품`);
 
-
     useEffect(() => {
         fetchWishlist();
     }, []);

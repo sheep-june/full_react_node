@@ -42,7 +42,6 @@ router.get("/users", adminAuth, async (req, res) => {
     }
 });
 
-// ✅ 게시글 목록 조회 (관리자만)
 router.get("/posts", adminAuth, async (req, res) => {
     try {
         const posts = await Product.find({}, "_id title description");

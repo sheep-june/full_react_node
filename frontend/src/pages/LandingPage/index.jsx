@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 // import CardItem from "./Sections/CardItem";
 import axiosInstance, { setCsrfToken } from "../../utils/axios";
-import { prices } from "../../utils/filterData";
+// import { prices } from "../../utils/filterData";
 // import AdSlider from "../../components/AdSlider/AdSlider";
 import { useNavigate } from "react-router-dom";
 import SliderSection from "../../components/SliderSection";
@@ -11,14 +11,17 @@ import AdImageSlider from "../../components/AdSlider/AdImageSlider";
 const LandingPage = () => {
     const navigate = useNavigate();
     const limit = 4;
-    const [searchTerm, setSearchTerm] = useState("");
-    const [products, setProducts] = useState([]);
-    const [skip, setSkip] = useState(0);
-    const [hasMore, setHasMore] = useState(false);
-    const [filters, setFilters] = useState({
-        categories: [],
-        price: [],
-    });
+    // const [searchTerm, setSearchTerm] = useState("");
+    const [setProducts] = useState([]);
+    // const [products, setProducts] = useState([]);
+    const [skip] = useState(0);
+    // const [skip, setSkip] = useState(0);
+    const [setHasMore] = useState(false);
+    // const [hasMore, setHasMore] = useState(false);
+    // const [filters, setFilters] = useState({
+    //     categories: [],
+    //     price: [],
+    // });
     const [quickSearch, setQuickSearch] = useState("");
 
     usePageTitle("買う売る사고팔고");
@@ -49,61 +52,61 @@ const LandingPage = () => {
         }
     };
 
-    const handleLoadMore = () => {
-        const body = {
-            skip: skip + limit,
-            limit,
-            loadMore: true,
-            filters,
-            searchTerm,
-        };
-        fetchProducts(body);
-        setSkip(skip + limit);
-    };
+    // const handleLoadMore = () => {
+    //     const body = {
+    //         skip: skip + limit,
+    //         limit,
+    //         loadMore: true,
+    //         filters,
+    //         searchTerm,
+    //     };
+    //     fetchProducts(body);
+    //     setSkip(skip + limit);
+    // };
 
-    const handleFilters = (newFilteredData, category) => {
-        const newFilters = { ...filters };
-        newFilters[category] = newFilteredData;
-        if (category === "price") {
-            const priceValues = handlePrice(newFilteredData);
-            newFilters[category] = priceValues;
-        }
-        showFilteredResults(newFilters);
-        setFilters(newFilters);
-    };
+    // const handleFilters = (newFilteredData, category) => {
+    //     const newFilters = { ...filters };
+    //     newFilters[category] = newFilteredData;
+    //     if (category === "price") {
+    //         const priceValues = handlePrice(newFilteredData);
+    //         newFilters[category] = priceValues;
+    //     }
+    //     showFilteredResults(newFilters);
+    //     setFilters(newFilters);
+    // };
 
-    const handlePrice = (value) => {
-        let array = [];
-        for (let key in prices) {
-            if (prices[key]._id === parseInt(value, 10)) {
-                array = prices[key].array;
-            }
-        }
-        return array;
-    };
+    // const handlePrice = (value) => {
+    //     let array = [];
+    //     for (let key in prices) {
+    //         if (prices[key]._id === parseInt(value, 10)) {
+    //             array = prices[key].array;
+    //         }
+    //     }
+    //     return array;
+    // };
 
-    const showFilteredResults = (filters) => {
-        const body = {
-            skip: 0,
-            limit,
-            filters,
-            searchTerm,
-        };
-        fetchProducts(body);
-        setSkip(0);
-    };
+    // const showFilteredResults = (filters) => {
+    //     const body = {
+    //         skip: 0,
+    //         limit,
+    //         filters,
+    //         searchTerm,
+    //     };
+    //     fetchProducts(body);
+    //     setSkip(0);
+    // };
 
-    const handleSearchTerm = (event) => {
-        const body = {
-            skip: 0,
-            limit,
-            filters,
-            searchTerm: event.target.value,
-        };
-        setSkip(0);
-        setSearchTerm(event.target.value);
-        fetchProducts(body);
-    };
+    // const handleSearchTerm = (event) => {
+    //     const body = {
+    //         skip: 0,
+    //         limit,
+    //         filters,
+    //         searchTerm: event.target.value,
+    //     };
+    //     setSkip(0);
+    //     setSearchTerm(event.target.value);
+    //     fetchProducts(body);
+    // };
 
     const handleQuickSearch = (e) => {
         if (e.key === "Enter" && quickSearch.trim()) {

@@ -36,49 +36,67 @@ router.get("/auth", auth, async (req, res) => {
     });
 });
 
-router.post("/register", authLimiter, [
-    body("email").isEmail().withMessage("유효한 이메일을 입력하세요."),
-    body("password").isLength({ min: 6 }).withMessage("비밀번호는 최소 6자 이상이어야 합니다."),
-    body("name").notEmpty().withMessage("이름을 입력하세요."),
-], async (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+router.post(
+    "/register",
+    authLimiter,
+    [
+        body("email").isEmail().withMessage("유효한 이메일을 입력하세요."),
+        body("password")
+            .isLength({ min: 6 })
+            .withMessage("비밀번호는 최소 6자 이상이어야 합니다."),
+        body("name").notEmpty().withMessage("이름을 입력하세요."),
+    ],
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        try {
+            const user = new User(req.body);
+            await user.save();
+            return res.sendStatus(200);
+        } catch (error) {
+            next(error);
+        }
     }
+);
 
-    try {
-        const user = new User(req.body);
-        await user.save();
-        return res.sendStatus(200);
-    } catch (error) {
-        next(error);
+router.post(
+    "/login",
+    authLimiter,
+    [
+        body("email").isEmail().withMessage("유효한 이메일을 입력하세요."),
+        body("password").notEmpty().withMessage("비밀번호를 입력하세요."),
+    ],
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        try {
+            const user = await User.findOne({ email: req.body.email });
+            if (!user)
+                return res.status(400).send("Auth failed, email not found");
+
+            const isMatch = await user.comparePassword(req.body.password);
+            if (!isMatch) return res.status(400).send("Wrong password");
+
+            const payload = {
+                id: user._id.toHexString(),
+                role: Number(user.role),
+            };
+            const accessToken = jwt.sign(payload, process.env.JWT_SECRET, {
+                expiresIn: "1h",
+            });
+
+            return res.json({ user, accessToken });
+        } catch (error) {
+            next(error);
+        }
     }
-});
-
-router.post("/login", authLimiter, [
-    body("email").isEmail().withMessage("유효한 이메일을 입력하세요."),
-    body("password").notEmpty().withMessage("비밀번호를 입력하세요."),
-], async (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-
-    try {
-        const user = await User.findOne({ email: req.body.email });
-        if (!user) return res.status(400).send("Auth failed, email not found");
-
-        const isMatch = await user.comparePassword(req.body.password);
-        if (!isMatch) return res.status(400).send("Wrong password");
-
-        const payload = { id: user._id.toHexString(), role: Number(user.role) };
-        const accessToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
-
-        return res.json({ user, accessToken });
-    } catch (error) {
-        next(error);
-    }
-});
+);
 
 router.post("/logout", auth, async (req, res, next) => {
     try {
@@ -133,7 +151,9 @@ router.delete("/cart", auth, async (req, res, next) => {
         );
         const cart = userInfo.cart;
         const array = cart.map((item) => item.id);
-        const productInfo = await Product.find({ _id: { $in: array } }).populate("writer");
+        const productInfo = await Product.find({
+            _id: { $in: array },
+        }).populate("writer");
 
         return res.json({ productInfo, cart });
     } catch (error) {
@@ -149,7 +169,9 @@ router.get("/cart", auth, async (req, res) => {
         const cartDetail = await Product.find({ _id: { $in: cartItemIds } });
 
         const merged = cartDetail.map((product) => {
-            const matched = cart.find((item) => item.id.toString() === product._id.toString());
+            const matched = cart.find(
+                (item) => item.id.toString() === product._id.toString()
+            );
             return { ...product.toObject(), quantity: matched?.quantity || 0 };
         });
 
@@ -164,9 +186,12 @@ router.put("/cart/quantity", auth, async (req, res) => {
     try {
         const { productId, type, quantity } = req.body;
         const user = await User.findById(req.user._id);
-        const cartItem = user.cart.find((item) => item.id.toString() === productId.toString());
+        const cartItem = user.cart.find(
+            (item) => item.id.toString() === productId.toString()
+        );
 
-        if (!cartItem) return res.status(404).send("상품이 장바구니에 없습니다.");
+        if (!cartItem)
+            return res.status(404).send("상품이 장바구니에 없습니다.");
 
         if (type === "inc") {
             cartItem.quantity += 1;
@@ -181,7 +206,9 @@ router.put("/cart/quantity", auth, async (req, res) => {
         const cartItemIds = user.cart.map((item) => item.id);
         const productList = await Product.find({ _id: { $in: cartItemIds } });
         const cartDetail = productList.map((product) => {
-            const match = user.cart.find((item) => item.id.toString() === product._id.toString());
+            const match = user.cart.find(
+                (item) => item.id.toString() === product._id.toString()
+            );
             return { ...product.toObject(), quantity: match?.quantity || 0 };
         });
 
@@ -250,7 +277,6 @@ router.post("/payment", auth, async (req, res) => {
     }
 });
 
-
 router.post("/wishlist", auth, async (req, res, next) => {
     try {
         const user = await User.findById(req.user._id);
@@ -273,7 +299,9 @@ router.delete("/wishlist", auth, async (req, res, next) => {
         const user = await User.findById(req.user._id);
         const productId = req.query.productId;
 
-        user.wishlist = user.wishlist.filter((id) => id.toString() !== productId);
+        user.wishlist = user.wishlist.filter(
+            (id) => id.toString() !== productId
+        );
         await user.save();
         return res.status(200).json({ wishlist: user.wishlist });
     } catch (error) {
@@ -298,7 +326,9 @@ router.post("/cart/batch", auth, async (req, res) => {
     try {
         const { productIds } = req.body;
         if (!Array.isArray(productIds)) {
-            return res.status(400).json({ message: "상품 ID 배열이 필요합니다." });
+            return res
+                .status(400)
+                .json({ message: "상품 ID 배열이 필요합니다." });
         }
 
         const user = await User.findById(req.user.id);
@@ -321,11 +351,15 @@ router.delete("/wishlist/batch", auth, async (req, res) => {
     try {
         const { productIds } = req.body;
         if (!Array.isArray(productIds)) {
-            return res.status(400).json({ message: "상품 ID 배열이 필요합니다." });
+            return res
+                .status(400)
+                .json({ message: "상품 ID 배열이 필요합니다." });
         }
 
         const user = await User.findById(req.user.id);
-        user.wishlist = user.wishlist.filter((pid) => !productIds.includes(String(pid)));
+        user.wishlist = user.wishlist.filter(
+            (pid) => !productIds.includes(String(pid))
+        );
 
         await user.save();
         res.send("삭제 성공");

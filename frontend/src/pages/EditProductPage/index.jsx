@@ -19,7 +19,7 @@ const EditProductPage = () => {
         images: [],
     });
 
-    usePageTitle('상품수정');
+    usePageTitle("상품수정");
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -44,8 +44,6 @@ const EditProductPage = () => {
         setProduct((prev) => ({ ...prev, images: newImages }));
     };
 
-
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -63,7 +61,6 @@ const EditProductPage = () => {
             toast.error("수정 중 오류 발생");
         }
     };
-
 
     if (!product || !product.images) {
         return (

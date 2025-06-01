@@ -25,7 +25,7 @@ const continents = [
 ];
 
 const UploadProductPage = () => {
-    usePageTitle('상품업로드를 해주세요!');
+    usePageTitle("상품업로드를 해주세요!");
     const [product, setProduct] = useState({
         title: "",
         description: "",
@@ -64,12 +64,6 @@ const UploadProductPage = () => {
             images: product.images,
         };
 
-        // try {
-        //     await axiosInstance.post("/products", body);
-        //     navigate("/");
-        // } catch (error) {
-        //     console.error(error);
-        // }
         try {
             await axiosInstance.post("/products", body);
             toast.success("상품 업로드에 성공했습니다.");
@@ -79,7 +73,6 @@ const UploadProductPage = () => {
             toast.error("상품 업로드에 실패했습니다. 다시 시도해 주세요.");
         }
     };
-
 
     return (
         <section>
@@ -150,7 +143,6 @@ const UploadProductPage = () => {
                         value={product.description}
                     />
                 </div>
-
 
                 <div className="mt-4">
                     <button

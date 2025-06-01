@@ -31,9 +31,14 @@ export default function AdImageSlider() {
                 modules={[Autoplay, Navigation, Pagination]}
                 navigation={true}
                 pagination={{ type: "progressbar" }}
-                autoplay={{ delay: 3000, disableOnInteraction: false }}
+                autoplay={{
+                    delay: 7000,
+                    disableOnInteraction: false,
+                    pauseOnMouseEnter: true,
+                }}
                 loop={true}
                 className="w-full h-full"
+                speed={2000}
             >
                 {ads.map((ad) => (
                     <SwiperSlide key={ad._id}>

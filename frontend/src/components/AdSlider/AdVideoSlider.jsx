@@ -1,3 +1,5 @@
+//막아둠
+
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import axiosInstance from "../../utils/axios";

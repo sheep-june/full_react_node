@@ -43,9 +43,6 @@ const DetailProductPage = () => {
 
     const handleSubmitReview = async (e) => {
         e.preventDefault();
-        // if (!comment || rating === 0) {
-        //     return alert("별점과 내용을 모두 입력해주세요.");
-        // }
 
         if (!comment || rating === 0) {
             await Swal.fire({
@@ -54,7 +51,7 @@ const DetailProductPage = () => {
                 text: "별점과 내용을 모두 입력해주세요.",
                 confirmButtonText: "확인",
                 customClass: {
-                    confirmButton: "tw-swal-cancel", // 민트 테두리 버튼
+                    confirmButton: "tw-swal-cancel",
                 },
                 buttonsStyling: false,
             });

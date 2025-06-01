@@ -19,7 +19,7 @@ const FAQPage = () => {
         }
     };
 
-    usePageTitle('FAQ를 확인해주세요!');
+    usePageTitle("FAQ를 확인해주세요!");
 
     const handleSubmit = async (e) => {
         e.preventDefault();

@@ -10,18 +10,9 @@ const ProductInfo = ({ product }) => {
     const navigate = useNavigate();
     const user = useSelector((state) => state.user);
 
-    // const handleCartClick = () => {
-    //     if (!user.isAuth) {
-    //         alert("로그인이 필요합니다.");
-    //         navigate("/auth");
-    //         return;
-    //     }
-    //     dispatch(addToCart({ productId: product._id }));
-    // };
     const handleCartClick = () => {
         if (!user.isAuth) {
             toast.warn("로그인이 필요합니다.");
-            // 바로 이동하면 토스트 안 보일 수 있어서 살짝 지연
             setTimeout(() => {
                 navigate("/auth");
             }, 2000); // 1초 정도 후 이동
@@ -29,26 +20,6 @@ const ProductInfo = ({ product }) => {
         }
         dispatch(addToCart({ productId: product._id }));
     };
-
-    // const handleWishlistClick = async () => {
-    //     if (!user.isAuth) {
-    //         alert("로그인이 필요합니다.");
-    //         navigate("/auth");
-    //         return;
-    //     }
-    //     try {
-    //         const res = await axiosInstance.post("/users/wishlist", {
-    //             productId: product._id,
-    //         });
-    //         alert("찜 목록에 추가되었습니다.");
-    //     } catch (error) {
-    //         if (error.response?.data?.message) {
-    //             alert(error.response.data.message);
-    //         } else {
-    //             alert("찜하기에 실패했습니다.");
-    //         }
-    //     }
-    // };
 
     const handleWishlistClick = async () => {
         if (!user.isAuth) {
@@ -72,7 +43,6 @@ const ProductInfo = ({ product }) => {
             }
         }
     };
-
 
     return (
         <div>

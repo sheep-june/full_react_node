@@ -16,7 +16,7 @@ const HistoryPage = () => {
         (currentPage - 1) * ITEMS_PER_PAGE,
         currentPage * ITEMS_PER_PAGE
     );
-    usePageTitle('주문 내역');
+    usePageTitle("주문 내역");
 
     return (
         <section>
@@ -57,10 +57,11 @@ const HistoryPage = () => {
                         key={i}
                         onClick={() => setCurrentPage(i + 1)}
                         className={`px-3 py-1 border rounded 
-        ${currentPage === i + 1
-                                ? "bg-[#00C4C4] text-white border-[#00C4C4]"
-                                : "bg-white text-[#00C4C4] border-[#00C4C4] hover:bg-[#00C4C4] hover:text-white"
-                            }`}
+        ${
+            currentPage === i + 1
+                ? "bg-[#00C4C4] text-white border-[#00C4C4]"
+                : "bg-white text-[#00C4C4] border-[#00C4C4] hover:bg-[#00C4C4] hover:text-white"
+        }`}
                     >
                         {i + 1}
                     </button>

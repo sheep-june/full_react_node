@@ -11,7 +11,9 @@ exports.authAdmin = (req, res, next) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         if (decoded.role !== 1) {
-            return res.status(403).json({ message: "관리자 권한이 필요합니다." });
+            return res
+                .status(403)
+                .json({ message: "관리자 권한이 필요합니다." });
         }
 
         req.admin = decoded;

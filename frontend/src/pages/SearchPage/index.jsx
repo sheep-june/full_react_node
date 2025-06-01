@@ -32,7 +32,6 @@ const SearchPage = () => {
 
     usePageTitle(searchTerm ? `${searchTerm} 검색 결과` : "검색 결과");
 
-
     useEffect(() => {
         if (initialSearch) {
             fetchSearchResults(initialSearch, filters, sortBy, 1);
@@ -109,7 +108,6 @@ const SearchPage = () => {
         fetchSearchResults(searchTerm, filters, sortId, 1);
     };
 
-
     return (
         <section className="w-full px-4">
             {/* 검색창 */}
@@ -148,7 +146,9 @@ const SearchPage = () => {
                         />
                     </div>
                     <div>
-                        <h3 className="text-[#00C4C4] font-semibold text-center mb-1">가격</h3>
+                        <h3 className="text-[#00C4C4] font-semibold text-center mb-1">
+                            가격
+                        </h3>
                         <RadioBox
                             prices={prices}
                             checkedPrice={
@@ -170,10 +170,11 @@ const SearchPage = () => {
                             <button
                                 key={option.id}
                                 onClick={() => handleSortChange(option.id)}
-                                className={`text-sm px-2 py-1 rounded border-b-2 transition-all duration-150 ${sortBy === option.id
+                                className={`text-sm px-2 py-1 rounded border-b-2 transition-all duration-150 ${
+                                    sortBy === option.id
                                         ? "border-black font-semibold"
                                         : "border-transparent text-gray-500"
-                                    }`}
+                                }`}
                             >
                                 {option.label}
                             </button>
@@ -184,7 +185,7 @@ const SearchPage = () => {
                             <CardItem
                                 key={product._id}
                                 product={product}
-                                refreshWishlist={() => { }}
+                                refreshWishlist={() => {}}
                             />
                         ))}
                     </div>
@@ -212,9 +213,10 @@ const SearchPage = () => {
                                     key={pageNum}
                                     onClick={() => changePage(pageNum)}
                                     className={`px-3 py-1 border border-[#00C4C4] rounded transition-all
-                                        ${isActive
-                                            ? "bg-[#00C4C4] text-white"
-                                            : "text-[#00C4C4] hover:bg-[#00C4C4] hover:text-white"
+                                        ${
+                                            isActive
+                                                ? "bg-[#00C4C4] text-white"
+                                                : "text-[#00C4C4] hover:bg-[#00C4C4] hover:text-white"
                                         }`}
                                 >
                                     {pageNum}

@@ -94,7 +94,6 @@ const AdminAdSection = () => {
         }
     };
 
-
     const filteredProducts = products.filter((p) =>
         p.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -119,10 +118,11 @@ const AdminAdSection = () => {
                     {filteredProducts.map((product) => (
                         <div
                             key={product._id}
-                            className={`p-2 cursor-pointer border rounded ${selectedProduct?._id === product._id
-                                ? "bg-blue-100 border-blue-500"
-                                : "hover:bg-gray-100"
-                                }`}
+                            className={`p-2 cursor-pointer border rounded ${
+                                selectedProduct?._id === product._id
+                                    ? "bg-blue-100 border-blue-500"
+                                    : "hover:bg-gray-100"
+                            }`}
                             onClick={() => setSelectedProduct(product)}
                         >
                             {product.title}
@@ -137,7 +137,9 @@ const AdminAdSection = () => {
                 )}
 
                 <div>
-                    <label className="block mb-1 font-medium">광고 영상 (최대 15초)</label>
+                    <label className="block mb-1 font-medium">
+                        광고 영상 (최대 15초)
+                    </label>
                     <input
                         type="file"
                         accept="video/*"
